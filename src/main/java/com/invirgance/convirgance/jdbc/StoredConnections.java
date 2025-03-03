@@ -29,11 +29,11 @@ import java.util.Iterator;
  *
  * @author jbanes
  */
-public class JDBCStoredConnections implements Iterable<JDBCStoredConnection>
+public class StoredConnections implements Iterable<StoredConnection>
 {
-    private static JDBCConnectionDatabase database = new JDBCConnectionDatabase();
+    private static ConnectionDatabase database = new ConnectionDatabase();
     
-    static StoredConnectionBuilder createConnection(JDBCAutomaticDriver driver, String name)
+    static StoredConnectionBuilder createConnection(AutomaticDriver driver, String name)
     {
         JSONObject record = new JSONObject();
         
@@ -46,11 +46,11 @@ public class JDBCStoredConnections implements Iterable<JDBCStoredConnection>
     }
     
     @Override
-    public Iterator<JDBCStoredConnection> iterator()
+    public Iterator<StoredConnection> iterator()
     {
-        Iterator<JSONObject> connections = new JDBCConnectionDatabase().iterator();
+        Iterator<JSONObject> connections = new ConnectionDatabase().iterator();
         
-        return new Iterator<JDBCStoredConnection>() {
+        return new Iterator<StoredConnection>() {
             
             @Override
             public boolean hasNext()
@@ -59,9 +59,9 @@ public class JDBCStoredConnections implements Iterable<JDBCStoredConnection>
             }
 
             @Override
-            public JDBCStoredConnection next()
+            public StoredConnection next()
             {
-                return new JDBCStoredConnection(connections.next(), database);
+                return new StoredConnection(connections.next(), database);
             }
         };
     }
@@ -75,9 +75,9 @@ public class JDBCStoredConnections implements Iterable<JDBCStoredConnection>
             this.record = record;
         }
         
-        public JDBCStoredConnection build()
+        public StoredConnection build()
         {
-            return new JDBCStoredConnection(record, database);
+            return new StoredConnection(record, database);
         }
         
         public DriverConfigBuilder driver()
@@ -99,7 +99,7 @@ public class JDBCStoredConnections implements Iterable<JDBCStoredConnection>
             this.config = config;
         }
         
-        public JDBCStoredConnection build()
+        public StoredConnection build()
         {
             if(config.isNull("url") || config.isNull("password"))
             {

@@ -37,7 +37,7 @@ import org.junit.jupiter.api.BeforeAll;
  *
  * @author jbanes
  */
-public class JDBCStoredConnectionTest
+public class StoredConnectionTest
 {
     private static String url = "jdbc:hsqldb:file:target/unit-test-work/dbms/testdb/;hsqldb.lock_file=false";
     
@@ -89,8 +89,8 @@ public class JDBCStoredConnectionTest
     @Test
     public void testCreateConnection() throws Exception
     {
-        JDBCAutomaticDriver driver = JDBCAutomaticDrivers.getDriverByName("HSQLDB");
-        JDBCStoredConnection connection = driver
+        AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
+        StoredConnection connection = driver
                                             .createConnection("test")
                                             .driver()
                                             .url(url)
@@ -102,7 +102,7 @@ public class JDBCStoredConnectionTest
         
         driver.save();
         
-        for(JDBCStoredConnection stored : new JDBCStoredConnections())
+        for(StoredConnection stored : new StoredConnections())
         {
             assertEquals("test", stored.getName());
             assertEquals("HSQLDB", stored.getDriver().getName());

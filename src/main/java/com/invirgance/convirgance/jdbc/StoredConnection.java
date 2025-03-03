@@ -32,12 +32,12 @@ import javax.sql.DataSource;
  *
  * @author jbanes
  */
-public class JDBCStoredConnection
+public class StoredConnection
 {
     private JSONObject record;
-    private JDBCConnectionDatabase database;
+    private ConnectionDatabase database;
 
-    JDBCStoredConnection(JSONObject record, JDBCConnectionDatabase database)
+    StoredConnection(JSONObject record, ConnectionDatabase database)
     {
         this.record = record;
         this.database = database;
@@ -48,9 +48,9 @@ public class JDBCStoredConnection
         return record.getString("name");
     }
     
-    public JDBCAutomaticDriver getDriver()
+    public AutomaticDriver getDriver()
     {
-        return JDBCAutomaticDrivers.getDriverByName(record.getString("driver"));
+        return AutomaticDrivers.getDriverByName(record.getString("driver"));
     }
     
     public DriverConfig getDriverConfig()

@@ -23,7 +23,7 @@
  */
 package com.invirgance.convirgance.jdbc.datasource;
 
-import com.invirgance.convirgance.jdbc.JDBCAutomaticDrivers;
+import com.invirgance.convirgance.jdbc.AutomaticDrivers;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -96,7 +96,7 @@ public class DriverDataSource implements DataSource
         properties.put("user", this.username);
         if(this.password != null) properties.put("password", this.password);
         
-        return JDBCAutomaticDrivers.getDriverByURL(url).getDriver().connect(url, properties);
+        return AutomaticDrivers.getDriverByURL(url).getDriver().connect(url, properties);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class DriverDataSource implements DataSource
         properties.put("user", username);
         properties.put("password", password);
         
-        return JDBCAutomaticDrivers.getDriverByURL(url).getDriver().connect(url, properties);
+        return AutomaticDrivers.getDriverByURL(url).getDriver().connect(url, properties);
     }
 
     @Override

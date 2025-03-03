@@ -43,11 +43,11 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
  *
  * @author jbanes
  */
-class JDBCDriverDatabase implements Iterable<JSONObject>
+class DriverDatabase implements Iterable<JSONObject>
 {
     private Config config;
 
-    public JDBCDriverDatabase()
+    public DriverDatabase()
     {
         PrintStream err = System.err;
         String property = System.getProperty("convirgance.jdbc.drivers");

@@ -35,7 +35,7 @@ import org.junit.jupiter.api.BeforeAll;
  *
  * @author jbanes
  */
-public class JDBCAutomaticDriversTest
+public class AutomaticDriversTest
 {
     private static void delete(File file)
     {
@@ -79,7 +79,7 @@ public class JDBCAutomaticDriversTest
                                              "    ]\n" +
                                              "}");
         
-        JDBCAutomaticDriver driver = JDBCAutomaticDrivers
+        AutomaticDriver driver = AutomaticDrivers
                                         .createDriver("Bob")
                                         .artifact("org.hsqldb:hsqldb:2.7.4")
                                         .driver("org.hsqldb.jdbc.JDBCDriver")
@@ -92,19 +92,19 @@ public class JDBCAutomaticDriversTest
         
         driver.save(); // Attempt to persist the driver
         
-        assertEquals(expected, new JSONObject(JDBCAutomaticDrivers.getDriverByName("Bob").toString()));
+        assertEquals(expected, new JSONObject(AutomaticDrivers.getDriverByName("Bob").toString()));
         
         // Validate that save() replaces the record
         expected.put("examples", new JSONArray<String>("dud", "dud2"));
         driver.setExamples("dud", "dud2");
         driver.save();
         
-        assertEquals(expected, new JSONObject(JDBCAutomaticDrivers.getDriverByName("Bob").toString()));
+        assertEquals(expected, new JSONObject(AutomaticDrivers.getDriverByName("Bob").toString()));
         
         // Validate deletion
         driver.delete();
 
-        assertNull(JDBCAutomaticDrivers.getDriverByName("Bob"));
+        assertNull(AutomaticDrivers.getDriverByName("Bob"));
     }
     
     @Test
@@ -112,7 +112,7 @@ public class JDBCAutomaticDriversTest
     {
         try
         {
-            JDBCAutomaticDrivers.createDriver("HSQLDB").build();
+            AutomaticDrivers.createDriver("HSQLDB").build();
             
             fail("Expected a duplicate driver to cause a failure");
         }
@@ -125,7 +125,7 @@ public class JDBCAutomaticDriversTest
     @Test
     public void testNullDriver()
     {
-        JDBCAutomaticDriver driver = JDBCAutomaticDrivers
+        AutomaticDriver driver = AutomaticDrivers
                                         .createDriver("NoDriver")
                                         .build();
         

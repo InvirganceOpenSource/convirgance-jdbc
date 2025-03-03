@@ -31,12 +31,12 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * @author jbanes
  */
-public class JDBCAutomaticDriverTest
+public class AutomaticDriverTest
 {
     @Test
     public void testSymmetry()
     {
-        JDBCAutomaticDriver driver = JDBCAutomaticDrivers.getDriverByName("HSQLDB");
+        AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         
         String driverClass = driver.getDriver().getClass().getName();
         String datasourceClass = driver.getDataSource().getClass().getName();
@@ -74,7 +74,7 @@ public class JDBCAutomaticDriverTest
     {
         int count = 0;
         
-        for(JDBCAutomaticDriver database : new JDBCAutomaticDrivers())
+        for(AutomaticDriver database : new AutomaticDrivers())
         {
             new JSONObject(database.toString()); // Ensure the output is valid JSON
             

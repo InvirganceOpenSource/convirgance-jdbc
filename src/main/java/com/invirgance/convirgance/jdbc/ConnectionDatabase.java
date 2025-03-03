@@ -36,11 +36,11 @@ import java.util.Iterator;
  *
  * @author jbanes
  */
-class JDBCConnectionDatabase implements Iterable<JSONObject>
+class ConnectionDatabase implements Iterable<JSONObject>
 {
     private Config config;
 
-    public JDBCConnectionDatabase()
+    public ConnectionDatabase()
     {
         PrintStream err = System.err;
         String property = System.getProperty("convirgance.jdbc.connections");

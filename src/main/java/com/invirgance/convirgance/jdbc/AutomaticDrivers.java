@@ -31,9 +31,9 @@ import java.util.Iterator;
  *
  * @author jbanes
  */
-public class JDBCAutomaticDrivers implements Iterable<JDBCAutomaticDriver>
+public class AutomaticDrivers implements Iterable<AutomaticDriver>
 {
-    private static final JDBCDriverDatabase database = new JDBCDriverDatabase();
+    private static final DriverDatabase database = new DriverDatabase();
     
     public static AutomaticDriverBuilder createDriver(String name) throws ConvirganceException
     {
@@ -42,30 +42,30 @@ public class JDBCAutomaticDrivers implements Iterable<JDBCAutomaticDriver>
         return new AutomaticDriverBuilder(name);
     }
     
-    public static JDBCAutomaticDriver getDriverByName(String name)
+    public static AutomaticDriver getDriverByName(String name)
     {
         JSONObject descriptor = database.findDescriptorByName(name);
         
         if(descriptor == null) return null;
         
-        return new JDBCAutomaticDriver(descriptor, database);
+        return new AutomaticDriver(descriptor, database);
     }
     
-    public static JDBCAutomaticDriver getDriverByURL(String url)
+    public static AutomaticDriver getDriverByURL(String url)
     {
         JSONObject descriptor = database.findDescriptorByURL(url);
         
         if(descriptor == null) return null;
         
-        return new JDBCAutomaticDriver(descriptor, database);
+        return new AutomaticDriver(descriptor, database);
     }
     
     @Override
-    public Iterator<JDBCAutomaticDriver> iterator()
+    public Iterator<AutomaticDriver> iterator()
     {
-        Iterator<JSONObject> drivers = new JDBCDriverDatabase().iterator();
+        Iterator<JSONObject> drivers = new DriverDatabase().iterator();
         
-        return new Iterator<JDBCAutomaticDriver>() {
+        return new Iterator<AutomaticDriver>() {
             
             @Override
             public boolean hasNext()
@@ -74,9 +74,9 @@ public class JDBCAutomaticDrivers implements Iterable<JDBCAutomaticDriver>
             }
 
             @Override
-            public JDBCAutomaticDriver next()
+            public AutomaticDriver next()
             {
-                return new JDBCAutomaticDriver(drivers.next(), database);
+                return new AutomaticDriver(drivers.next(), database);
             }
         };
     }
@@ -95,9 +95,9 @@ public class JDBCAutomaticDrivers implements Iterable<JDBCAutomaticDriver>
             this.record.put("examples", new JSONArray());
         }
 
-        public JDBCAutomaticDriver build()
+        public AutomaticDriver build()
         {
-            return new JDBCAutomaticDriver(record, database);
+            return new AutomaticDriver(record, database);
         }
 
         public AutomaticDriverBuilder artifact(String... artifacts)

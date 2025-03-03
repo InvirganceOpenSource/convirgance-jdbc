@@ -22,7 +22,7 @@ SOFTWARE.
 package com.invirgance.convirgance.jdbc;
 
 import com.invirgance.convirgance.ConvirganceException;
-import com.invirgance.convirgance.jdbc.JDBCStoredConnections.StoredConnectionBuilder;
+import com.invirgance.convirgance.jdbc.StoredConnections.StoredConnectionBuilder;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import java.sql.Driver;
@@ -33,12 +33,12 @@ import javax.sql.DataSource;
  *
  * @author jbanes
  */
-public class JDBCAutomaticDriver
+public class AutomaticDriver
 {
     private JSONObject record;
-    private JDBCDriverDatabase database;
+    private DriverDatabase database;
     
-    JDBCAutomaticDriver(JSONObject record, JDBCDriverDatabase database)
+    AutomaticDriver(JSONObject record, DriverDatabase database)
     {
         this.record = record;
         this.database = database;
@@ -101,7 +101,7 @@ public class JDBCAutomaticDriver
     
     public StoredConnectionBuilder createConnection(String name)
     {
-        return JDBCStoredConnections.createConnection(this, name);
+        return StoredConnections.createConnection(this, name);
     }
     
     /**
