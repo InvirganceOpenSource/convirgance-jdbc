@@ -60,6 +60,11 @@ public class AutomaticDrivers implements Iterable<AutomaticDriver>
         return new AutomaticDriver(descriptor, database);
     }
     
+    public static Iterable<AutomaticDriver> list()
+    {
+        return new AutomaticDrivers();
+    }
+    
     @Override
     public Iterator<AutomaticDriver> iterator()
     {

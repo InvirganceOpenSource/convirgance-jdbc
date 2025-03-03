@@ -74,7 +74,7 @@ public class AutomaticDriverTest
     {
         int count = 0;
         
-        for(AutomaticDriver database : new AutomaticDrivers())
+        for(AutomaticDriver database : AutomaticDrivers.list())
         {
             new JSONObject(database.toString()); // Ensure the output is valid JSON
             

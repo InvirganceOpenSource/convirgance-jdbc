@@ -103,7 +103,7 @@ public class StoredConnectionTest
         
         connection.save();
         
-        for(StoredConnection stored : new StoredConnections())
+        for(StoredConnection stored : StoredConnections.list())
         {
             assertEquals("test", stored.getName());
             assertEquals("HSQLDB", stored.getDriver().getName());

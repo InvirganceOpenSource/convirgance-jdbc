@@ -57,6 +57,11 @@ public class StoredConnections implements Iterable<StoredConnection>
         return new StoredConnection(descriptor, database);
     }
     
+    public static Iterable<StoredConnection> list()
+    {
+        return new StoredConnections();
+    }
+    
     @Override
     public Iterator<StoredConnection> iterator()
     {
