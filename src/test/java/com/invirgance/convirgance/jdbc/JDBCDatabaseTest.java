@@ -46,8 +46,8 @@ public class JDBCDatabaseTest
             
             assertTrue(database.getDriver().getClass().getName().contains("Driver"));
             assertTrue(database.getDataSource().getClass().getName().contains("DataSource"));
-            assertTrue(database.getPrefixes()[0].startsWith("jdbc:"));
-            assertTrue(database.getExamples()[0].startsWith("jdbc:"));
+            assertTrue(database.getPrefixes()[0].startsWith("jdbc:"), "Failed prefix: " + database.getPrefixes()[0]);
+            assertTrue(database.getExamples()[0].startsWith("jdbc:"), "Failed example: " + database.getExamples()[0]);
             
             assertTrue(database.getArtifacts().length > 0);
             assertTrue(database.getArtifacts()[0].length() > 0);
