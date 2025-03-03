@@ -23,10 +23,7 @@
  */
 package com.invirgance.convirgance.jdbc;
 
-import com.invirgance.convirgance.ConvirganceException;
-import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
-import com.invirgance.convirgance.source.ClasspathSource;
 import com.invirgance.convirgance.storage.Config;
 import java.io.File;
 import java.io.PrintStream;

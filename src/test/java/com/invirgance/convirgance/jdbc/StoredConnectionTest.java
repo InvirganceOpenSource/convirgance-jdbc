@@ -110,6 +110,10 @@ public class StoredConnectionTest
             assertEquals("", stored.getDriverConfig().getPassword());
             assertEquals(url, stored.getDriverConfig().getURL());
         }
+        
+        driver.delete();
+        
+        assertFalse(new StoredConnections().iterator().hasNext());
     }
     
 }
