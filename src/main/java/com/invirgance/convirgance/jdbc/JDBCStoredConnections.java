@@ -21,6 +21,8 @@ SOFTWARE.
  */
 package com.invirgance.convirgance.jdbc;
 
+import com.invirgance.convirgance.ConvirganceException;
+import com.invirgance.convirgance.json.JSONObject;
 import java.util.Iterator;
 
 /**
@@ -29,11 +31,114 @@ import java.util.Iterator;
  */
 public class JDBCStoredConnections implements Iterable<JDBCStoredConnection>
 {
-
+    private static JDBCConnectionDatabase database = new JDBCConnectionDatabase();
+    
+    static StoredConnectionBuilder createConnection(JDBCAutomaticDriver driver, String name)
+    {
+        JSONObject record = new JSONObject();
+        
+        record.put("driver", driver.getName());
+        record.put("name", name);
+        
+        //TODO: Verify the name isn't already taken
+        
+        return new StoredConnectionBuilder(record);
+    }
+    
     @Override
     public Iterator<JDBCStoredConnection> iterator()
     {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Iterator<JSONObject> connections = new JDBCConnectionDatabase().iterator();
+        
+        return new Iterator<JDBCStoredConnection>() {
+            
+            @Override
+            public boolean hasNext()
+            {
+                return connections.hasNext();
+            }
+
+            @Override
+            public JDBCStoredConnection next()
+            {
+                return new JDBCStoredConnection(connections.next(), database);
+            }
+        };
     }
     
+    public static class StoredConnectionBuilder
+    {
+        private JSONObject record;
+
+        StoredConnectionBuilder(JSONObject record)
+        {
+            this.record = record;
+        }
+        
+        public JDBCStoredConnection build()
+        {
+            return new JDBCStoredConnection(record, database);
+        }
+        
+        public DriverConfigBuilder driver()
+        {
+            record.put("driverConfig", new JSONObject());
+            
+            return new DriverConfigBuilder(this, record.getJSONObject("driverConfig"));
+        }
+    }
+    
+    public static class DriverConfigBuilder
+    {
+        private StoredConnectionBuilder parent;
+        private JSONObject config;
+        
+        DriverConfigBuilder(StoredConnectionBuilder parent, JSONObject config)
+        {
+            this.parent = parent;
+            this.config = config;
+        }
+        
+        public JDBCStoredConnection build()
+        {
+            if(config.isNull("url") || config.isNull("password"))
+            {
+                throw new ConvirganceException("Both Username and URL are required when configuring a JDBC Driver connection");
+            }
+            
+            return parent.build();
+        }
+        
+        public StoredConnectionBuilder done()
+        {
+            if(config.isNull("url") || config.isNull("password"))
+            {
+                throw new ConvirganceException("Both Username and URL are required when configuring a JDBC Driver connection");
+            }
+            
+            return parent;
+        }
+        
+        public DriverConfigBuilder password(String password)
+        {
+            config.put("password", password);
+            
+            return this;
+        }
+        
+        public DriverConfigBuilder username(String username)
+        {
+            config.put("username", username);
+            
+            return this;
+        }
+        
+        public DriverConfigBuilder url(String url)
+        {
+            config.put("url", url);
+            
+            return this;
+        }
+    }
+            
 }

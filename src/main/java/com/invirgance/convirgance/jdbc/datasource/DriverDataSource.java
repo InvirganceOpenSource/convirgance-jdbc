@@ -53,7 +53,7 @@ public class DriverDataSource implements DataSource
         this.password = password;
     }
     
-    public static DataSource getDataSource(String url, String username, String password)
+    public static DriverDataSource getDataSource(String url, String username, String password)
     {
         return new DriverDataSource(url, username, password);
     }

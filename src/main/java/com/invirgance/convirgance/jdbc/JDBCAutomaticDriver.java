@@ -22,6 +22,7 @@ SOFTWARE.
 package com.invirgance.convirgance.jdbc;
 
 import com.invirgance.convirgance.ConvirganceException;
+import com.invirgance.convirgance.jdbc.JDBCStoredConnections.StoredConnectionBuilder;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import java.sql.Driver;
@@ -96,6 +97,11 @@ public class JDBCAutomaticDriver
     public void setExamples(String... examples)
     {
         record.put("examples", new JSONArray(Arrays.asList(examples)));
+    }
+    
+    public StoredConnectionBuilder createConnection(String name)
+    {
+        return JDBCStoredConnections.createConnection(this, name);
     }
     
     /**
