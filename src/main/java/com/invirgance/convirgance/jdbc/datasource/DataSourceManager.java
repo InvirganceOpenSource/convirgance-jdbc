@@ -166,7 +166,6 @@ public class DataSourceManager
             
             try
             {
-                //TODO: Need to coerce the value
                 value = coerceValue(value.getClass(), descriptor.getPropertyType(), value);
                 
                 descriptor.getWriteMethod().invoke(source, value);
