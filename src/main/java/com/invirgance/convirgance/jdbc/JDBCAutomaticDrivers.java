@@ -44,12 +44,20 @@ public class JDBCAutomaticDrivers implements Iterable<JDBCAutomaticDriver>
     
     public static JDBCAutomaticDriver getDriverByName(String name)
     {
-        return new JDBCAutomaticDriver(database.findDescriptorByName(name), database);
+        JSONObject descriptor = database.findDescriptorByName(name);
+        
+        if(descriptor == null) return null;
+        
+        return new JDBCAutomaticDriver(descriptor, database);
     }
     
     public static JDBCAutomaticDriver getDriverByURL(String url)
     {
-        return new JDBCAutomaticDriver(database.findDescriptorByURL(url), database);
+        JSONObject descriptor = database.findDescriptorByURL(url);
+        
+        if(descriptor == null) return null;
+        
+        return new JDBCAutomaticDriver(descriptor, database);
     }
     
     @Override

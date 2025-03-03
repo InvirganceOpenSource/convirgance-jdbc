@@ -100,6 +100,11 @@ public class JDBCAutomaticDriversTest
         driver.save();
         
         assertEquals(expected, new JSONObject(JDBCAutomaticDrivers.getDriverByName("Bob").toString()));
+        
+        // Validate deletion
+        driver.delete();
+
+        assertNull(JDBCAutomaticDrivers.getDriverByName("Bob"));
     }
     
     @Test
