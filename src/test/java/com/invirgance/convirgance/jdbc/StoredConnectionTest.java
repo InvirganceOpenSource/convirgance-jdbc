@@ -23,6 +23,7 @@
  */
 package com.invirgance.convirgance.jdbc;
 
+import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.dbms.QueryOperation;
@@ -91,16 +92,16 @@ public class StoredConnectionTest
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         StoredConnection connection = driver
-                                            .createConnection("test")
-                                            .driver()
-                                            .url(url)
-                                            .username("SA")
-                                            .password("")
-                                            .build();
+                                        .createConnection("test")
+                                        .driver()
+                                        .url(url)
+                                        .username("SA")
+                                        .password("")
+                                        .build();
         
         assertNotNull(connection.getConnection());
         
-        driver.save();
+        connection.save();
         
         for(StoredConnection stored : new StoredConnections())
         {
@@ -111,9 +112,43 @@ public class StoredConnectionTest
             assertEquals(url, stored.getDriverConfig().getURL());
         }
         
-        driver.delete();
+        connection.delete();
         
         assertFalse(new StoredConnections().iterator().hasNext());
+    }
+    
+    @Test
+    public void testDuplicate()
+    {
+        AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
+        StoredConnection connection = driver
+                                        .createConnection("test")
+                                        .driver()
+                                        .url(url)
+                                        .username("SA")
+                                        .password("")
+                                        .build();
+        
+        connection.save();
+        
+        try
+        {
+            driver
+                .createConnection("test")
+                .driver()
+                .url(url)
+                .username("SA")
+                .password("")
+                .build();
+            
+            fail("Expected duplicate connection");
+        }
+        catch(ConvirganceException e) 
+        {
+            assertEquals("Connection test already exists", e.getMessage());
+        }
+        
+        connection.delete();
     }
     
 }

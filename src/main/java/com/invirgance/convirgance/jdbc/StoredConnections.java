@@ -40,9 +40,21 @@ public class StoredConnections implements Iterable<StoredConnection>
         record.put("driver", driver.getName());
         record.put("name", name);
         
-        //TODO: Verify the name isn't already taken
+        if(getConnection(name) != null)
+        {
+            throw new ConvirganceException("Connection " + name + " already exists");
+        }
         
         return new StoredConnectionBuilder(record);
+    }
+    
+    public static StoredConnection getConnection(String name)
+    {
+        JSONObject descriptor = database.findDescriptorByName(name);
+        
+        if(descriptor == null) return null;
+        
+        return new StoredConnection(descriptor, database);
     }
     
     @Override
