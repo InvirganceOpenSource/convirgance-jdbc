@@ -1,0 +1,117 @@
+[
+    {
+        "name": "Oracle Thin Driver",
+        "artifact": [
+            "com.oracle.database.jdbc:ojdbc11:23.6.0.24.10"
+        ],
+        "driver": "oracle.jdbc.driver.OracleDriver",
+        "datasource": "oracle.jdbc.pool.OracleDataSource",
+        "prefixes": [
+            "jdbc:oracle:thin:"
+        ],
+        "examples": [
+            "jdbc:oracle:thin:@[HOST][:PORT]:SID",
+            "jdbc:oracle:thin:@//[HOST][:PORT]/SERVICE"
+        ]
+    },
+    {
+        "name": "Derby Network Client",
+        "artifact": [
+            "org.apache.derby:derbytools:10.17.1.0",
+            "org.apache.derby:derbyclient:10.17.1.0"
+        ],
+        "driver": "org.apache.derby.jdbc.ClientDriver",
+        "datasource": "org.apache.derby.jdbc.ClientDataSource",
+        "prefixes": [
+            "jdbc:derby:"
+        ],
+        "examples": [
+            "jdbc:derby://<host>[/databaseName][;attribute=value]",
+            "jdbc:derby:[subsubprotocol:][databaseName][;attribute=value]",
+            "jdbc:derby:directory:[databaseName][;attribute=value]",
+            "jdbc:derby:memory:[databaseName][;attribute=value]",
+            "jdbc:derby:classpath:[databaseName][;attribute=value]",
+            "jdbc:derby:jar:<pathToArchive>/<databaseName>[;attribute=value]"
+        ]
+    },
+    {
+        "name": "SQL Server (jTDS)",
+        "artifact": [
+            "net.sourceforge.jtds:jtds:1.3.1"
+        ],
+        "driver": "net.sourceforge.jtds.jdbc.Driver",
+        "datasource": "net.sourceforge.jtds.jdbcx.JtdsDataSource",
+        "prefixes": [
+            "jdbc:jtds:"
+        ],
+        "examples": [
+            "jdbc:jtds:sqlserver://<server>[:<port>][/<database>][;<property>=<value>[;...]]"
+        ]
+    },
+    {
+        "name": "HSQLDB",
+        "artifact": [
+            "org.hsqldb:hsqldb:2.7.4"
+        ],
+        "driver": "org.hsqldb.jdbc.JDBCDriver",
+        "datasource": "org.hsqldb.jdbc.JDBCDataSource",
+        "prefixes": [
+            "jdbc:hsqldb:"
+        ],
+        "examples": [
+            "jdbc:hsqldb:hsql://<serverName>[:port][/databaseName]",
+            "jdbc:hsqldb:hsqls://<serverName>[:port][/databaseName]",
+            "jdbc:hsqldb:http://<serverName>[:port][/databaseName]",
+            "jdbc:hsqldb:https://<serverName>[:port][/databaseName]",
+            "jdbc:hsqldb:file:/<directory>[;shutdown=true]",
+            "jdbc:hsqldb:res:/<jarDirectory>"
+        ]
+    },
+    {
+        "name": "PostgreSQL",
+        "artifact": [
+            "org.postgresql:postgresql:42.7.5"
+        ],
+        "driver": "org.postgresql.Driver",
+        "datasource": "org.postgresql.ds.PGSimpleDataSource",
+        "prefixes": [
+            "jdbc:postgresql:"
+        ],
+        "examples": [
+            "jdbc:postgresql://<host>[:<port>][/<database>]",
+            "jdbc:postgresql:<database>",
+            "jdbc:postgresql:/"
+        ]
+    },
+    {
+        "name": "MariaDB/MySQL",
+        "artifact": [
+            "org.mariadb.jdbc:mariadb-java-client:3.5.2"
+        ],
+        "driver": "org.mariadb.jdbc.Driver",
+        "datasource": "org.mariadb.jdbc.MariaDbDataSource",
+        "prefixes": [
+            "jdbc:mariadb:",
+            "jdbc:mysql:"
+        ],
+         "examples": [
+            "jdbc:mariadb://<host>[<:port>]/[/<database>]",
+            "jdbc:mysql://<host>[<:port>]/[/<database>]?permitMysqlScheme"
+        ]
+    },
+    {
+        "name": "DB2",
+        "artifact": [
+            "com.ibm.db2:jcc:12.1.0.0"
+        ],
+        "driver": "com.ibm.db2.jcc.DB2Driver",
+        "datasource": "com.ibm.db2.jcc.DB2DataSource",
+        "prefixes": [
+            "jdbc:db2:"
+        ],
+         "examples": [
+            "jdbc:db2://<host>[:<port>]/<database>",
+            "jdbc:db2://localhost:50000/sample"
+        ]
+    }
+]
