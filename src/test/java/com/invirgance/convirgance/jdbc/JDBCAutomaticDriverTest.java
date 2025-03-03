@@ -23,6 +23,7 @@
  */
 package com.invirgance.convirgance.jdbc;
 
+import com.invirgance.convirgance.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -66,6 +67,37 @@ public class JDBCAutomaticDriverTest
         assertEquals(artifacts.length, driver.getArtifacts().length);
         assertEquals(prefixes.length, driver.getPrefixes().length);
         assertEquals(examples.length, driver.getExamples().length);
+    }
+
+    @Test
+    public void testDrivers()
+    {
+        int count = 0;
+        
+        for(JDBCAutomaticDriver database : new JDBCAutomaticDrivers())
+        {
+            new JSONObject(database.toString()); // Ensure the output is valid JSON
+            
+            assertNotNull(database.getName());
+            assertNotNull(database.getDriver());
+            assertNotNull(database.getDataSource());
+            
+            assertTrue(database.getDriver().getClass().getName().contains("Driver"));
+            assertTrue(database.getDataSource().getClass().getName().contains("DataSource"));
+            assertTrue(database.getPrefixes()[0].startsWith("jdbc:"), "Failed prefix: " + database.getPrefixes()[0]);
+            assertTrue(database.getExamples()[0].startsWith("jdbc:"), "Failed example: " + database.getExamples()[0]);
+            
+            assertTrue(database.getArtifacts().length > 0);
+            assertTrue(database.getArtifacts()[0].length() > 0);
+            assertTrue(database.getPrefixes().length > 0);
+            assertTrue(database.getPrefixes()[0].length() > 0);
+            assertTrue(database.getExamples().length > 0);
+            assertTrue(database.getExamples()[0].length() > 0);
+            
+            count++;
+        }
+        
+        assertTrue(count > 0);
     }
     
 }
