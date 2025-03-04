@@ -174,5 +174,20 @@ public class StoredConnectionTest
         config.setProperty("password", "");
         
         assertEquals(driver.getDataSource().getClass().getName(), connection.getDataSource().getClass().getName());
+        
+        connection = driver
+                        .createConnection("test")
+                        .driver()
+                            .url(url)
+                            .username("SA")
+                            .password("")
+                        .done()
+                        .datasource()
+                            .property("url", url)
+                            .property("user", "SA")
+                            .property("password", "")
+                        .build();
+        
+        assertEquals(driver.getDataSource().getClass().getName(), connection.getDataSource().getClass().getName());
     }
 }

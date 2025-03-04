@@ -22,8 +22,10 @@ SOFTWARE.
 package com.invirgance.convirgance.jdbc;
 
 import com.invirgance.convirgance.ConvirganceException;
+import com.invirgance.convirgance.jdbc.datasource.DataSourceManager;
 import com.invirgance.convirgance.json.JSONObject;
 import java.util.Iterator;
+import javax.sql.DataSource;
 
 /**
  *
@@ -45,7 +47,7 @@ public class StoredConnections implements Iterable<StoredConnection>
             throw new ConvirganceException("Connection " + name + " already exists");
         }
         
-        return new StoredConnectionBuilder(record);
+        return new StoredConnectionBuilder(record, driver);
     }
     
     public static StoredConnection getConnection(String name)
@@ -86,10 +88,12 @@ public class StoredConnections implements Iterable<StoredConnection>
     public static class StoredConnectionBuilder
     {
         private JSONObject record;
+        private AutomaticDriver driver;
 
-        StoredConnectionBuilder(JSONObject record)
+        StoredConnectionBuilder(JSONObject record, AutomaticDriver driver)
         {
             this.record = record;
+            this.driver = driver;
         }
         
         public StoredConnection build()
@@ -102,6 +106,16 @@ public class StoredConnections implements Iterable<StoredConnection>
             record.put("driverConfig", new JSONObject());
             
             return new DriverConfigBuilder(this, record.getJSONObject("driverConfig"));
+        }
+        
+        public DataSourceConfigBuilder datasource()
+        {
+            DataSource source = driver.getDataSource();
+
+            if(source == null) throw new ConvirganceException("DataSource is not configured on automatic driver " + record.getString("driver"));
+            if(record.isNull("datasourceConfig")) record.put("datasourceConfig", new DataSourceManager(source).getConfig());
+            
+            return new DataSourceConfigBuilder(this, record.getJSONObject("datasourceConfig"));
         }
     }
     
@@ -153,6 +167,35 @@ public class StoredConnections implements Iterable<StoredConnection>
         public DriverConfigBuilder url(String url)
         {
             config.put("url", url);
+            
+            return this;
+        }
+    }
+    
+    public static class DataSourceConfigBuilder
+    {
+        private StoredConnectionBuilder parent;
+        private JSONObject config;
+        
+        DataSourceConfigBuilder(StoredConnectionBuilder parent, JSONObject config)
+        {
+            this.parent = parent;
+            this.config = config;
+        }
+        
+        public StoredConnection build()
+        {
+            return parent.build();
+        }
+        
+        public StoredConnectionBuilder done()
+        {
+            return parent;
+        }
+        
+        public DataSourceConfigBuilder property(String name, Object value)
+        {
+            config.put(name, value);
             
             return this;
         }
