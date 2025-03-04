@@ -15,6 +15,18 @@ DataSource source = DriverDataSource.getDataSource(url, username, password);
 DBMS dbms = new DBMS(source);
 ```
 
+## Installation
+
+Add the following dependency to your Maven `pom.xml` file:
+
+```xml
+<dependency>
+    <groupId>com.invirgance</groupId>
+    <artifactId>convirgance-jdbc</artifactId>
+    <version>0.1.0</version>
+</dependency>
+```
+
 ## Documentation
 
 - [JavaDocs](https://docs.invirgance.com/javadocs/convirgance-jdbc/0.1.0-SNAPSHOT/) (Work in Progress)
