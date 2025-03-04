@@ -27,6 +27,7 @@ import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.dbms.QueryOperation;
+import com.invirgance.convirgance.jdbc.datasource.DataSourceManager;
 import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
 import java.io.File;
 import javax.sql.DataSource;
@@ -151,4 +152,27 @@ public class StoredConnectionTest
         connection.delete();
     }
     
+    @Test
+    public void testDataSource() throws Exception
+    {
+        AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
+        StoredConnection.DataSourceConfig config;
+        StoredConnection connection = driver
+                                        .createConnection("test")
+                                        .driver()
+                                        .url(url)
+                                        .username("SA")
+                                        .password("")
+                                        .build();
+        
+        assertEquals(DriverDataSource.class, connection.getDataSource().getClass());
+                
+        config = connection.getDataSourceConfig();
+        
+        config.setProperty("url", url);
+        config.setProperty("user", "SA");
+        config.setProperty("password", "");
+        
+        assertEquals(driver.getDataSource().getClass().getName(), connection.getDataSource().getClass().getName());
+    }
 }

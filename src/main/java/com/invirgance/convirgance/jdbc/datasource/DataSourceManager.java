@@ -25,6 +25,7 @@ package com.invirgance.convirgance.jdbc.datasource;
 
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.json.JSONArray;
+import com.invirgance.convirgance.json.JSONObject;
 import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
@@ -46,6 +47,11 @@ public class DataSourceManager
         this.source = source;
         this.excluded = new JSONArray<>("class", "logWriter", "parentLogger", "connection", "loginTimeout");
     }
+
+    public DataSource getDataSource()
+    {
+        return source;
+    }
     
     private BeanInfo getBeanInfo()
     {
@@ -64,6 +70,7 @@ public class DataSourceManager
         for(PropertyDescriptor descriptor : info.getPropertyDescriptors())
         {
             if(excluded.contains(descriptor.getName())) continue;
+            if(descriptor.getWriteMethod() == null) continue;
             
             array.add(descriptor.getName());
         }
@@ -84,6 +91,8 @@ public class DataSourceManager
             
             try
             {
+                if(descriptor.getReadMethod() == null) return null;
+                
                 return descriptor.getReadMethod().invoke(source);
             }
             catch(IllegalAccessException | InvocationTargetException e) { throw new ConvirganceException(e); }
@@ -166,7 +175,10 @@ public class DataSourceManager
             
             try
             {
-                value = coerceValue(value.getClass(), descriptor.getPropertyType(), value);
+                if(value != null) 
+                {
+                    value = coerceValue(value.getClass(), descriptor.getPropertyType(), value);
+                }
                 
                 descriptor.getWriteMethod().invoke(source, value);
                 
@@ -176,5 +188,19 @@ public class DataSourceManager
         }
         
         throw new ConvirganceException("Property " + name + " not found");
+    }
+    
+    public JSONObject getConfig()
+    {
+        JSONObject config = new JSONObject();
+        
+        for(String key : getProperties()) config.put(key, getProperty(key));
+        
+        return config;
+    }
+    
+    public void setConfig(JSONObject config)
+    {
+        for(String key : config.keySet()) setProperty(key, config.get(key));
     }
 }

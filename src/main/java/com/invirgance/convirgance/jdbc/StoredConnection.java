@@ -22,6 +22,7 @@ SOFTWARE.
 package com.invirgance.convirgance.jdbc;
 
 import com.invirgance.convirgance.ConvirganceException;
+import com.invirgance.convirgance.jdbc.datasource.DataSourceManager;
 import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
 import com.invirgance.convirgance.json.JSONObject;
 import java.sql.Connection;
@@ -60,6 +61,16 @@ public class StoredConnection
         return new DriverConfig(record.getJSONObject("driverConfig"));
     }
     
+    public DataSourceConfig getDataSourceConfig()
+    {
+        DataSource source = getDriver().getDataSource();
+        
+        if(source == null) throw new ConvirganceException("DataSource is not configured on automatic driver " + record.getString("driver"));
+        if(record.isNull("datasourceConfig")) record.put("datasourceConfig", new DataSourceManager(source).getConfig());
+        
+        return new DataSourceConfig(record.getJSONObject("datasourceConfig"));
+    }
+    
     public Connection getConnection() throws SQLException
     {
         return getDataSource().getConnection();
@@ -68,7 +79,17 @@ public class StoredConnection
     public DataSource getDataSource() throws SQLException
     {
         DriverConfig config = getDriverConfig();
+        DataSourceManager manager;
         DataSource source;
+        
+        if(!record.isNull("datasourceConfig"))
+        {
+            manager = new DataSourceManager(getDriver().getDataSource());
+            
+            manager.setConfig(record.getJSONObject("datasourceConfig"));
+            
+            return manager.getDataSource();
+        }
         
         if(config != null) 
         {
@@ -133,6 +154,48 @@ public class StoredConnection
         public void setURL(String url)
         {
             config.put("url", url);
+        }
+
+        @Override
+        public String toString()
+        {
+            return config.toString(4);
+        }
+    }
+    
+    public class DataSourceConfig
+    {
+        private JSONObject config;
+
+        private DataSourceConfig(JSONObject config)
+        {
+            this.config = config;
+        }
+        
+        public String[] getProperties()
+        {
+            return config.keySet().toArray(String[]::new);
+        }
+        
+        public Object getProperty(String property)
+        {
+            return config.get(property);
+        }
+        
+        public void setProperty(String property, String value)
+        {
+            this.setProperty(property, (Object)value);
+        }
+        
+        public void setProperty(String property, Object value)
+        {
+            config.put(property, value);
+        }
+
+        @Override
+        public String toString()
+        {
+            return config.toString(4);
         }
     }
 }

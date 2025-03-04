@@ -23,6 +23,7 @@
  */
 package com.invirgance.convirgance.jdbc.datasource;
 
+import com.invirgance.convirgance.json.JSONObject;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -81,11 +82,21 @@ public class DataSourceManagerTest
     }
     
     @Test
+    public void testConfig()
+    {
+        JSONObject expected = new JSONObject("{\"url\":\"jdbc:test\", \"username\":\"testuser\", \"password\":\"testpass\"}");
+        DriverDataSource source = new DriverDataSource();
+        DataSourceManager manager = new DataSourceManager(source);
+        
+        manager.setConfig(expected);
+        
+        assertEquals(expected, manager.getConfig());
+    }
+    
+    @Test
     public void testCoersion()
     {
         DataSourceManager manager = new DataSourceManager(new AssertionDataSource());
-        
-        for(String property : manager.getProperties()) System.out.println(property);
         
         manager.setProperty("int", 42);
         manager.setProperty("long", 1337L);
