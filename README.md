@@ -14,3 +14,7 @@ String password = "password";
 DataSource source = DriverDataSource.getDataSource(url, username, password);
 DBMS dbms = new DBMS(source);
 ```
+
+## Documentation
+
+- [JavaDocs](https://docs.invirgance.com/javadocs/convirgance-jdbc/0.1.0-SNAPSHOT/) (Work in Progress)
