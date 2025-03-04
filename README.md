@@ -30,3 +30,8 @@ Add the following dependency to your Maven `pom.xml` file:
 ## Documentation
 
 - [JavaDocs](https://docs.invirgance.com/javadocs/convirgance-jdbc/0.1.0-SNAPSHOT/) (Work in Progress)
+
+
+## License
+
+Convirgance is available under the MIT License. See [License](LICENSE.md) for more details.
