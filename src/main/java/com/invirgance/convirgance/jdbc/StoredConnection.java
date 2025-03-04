@@ -101,7 +101,10 @@ public class StoredConnection
     
     public void save()
     {
-        if(getDriverConfig() == null) throw new ConvirganceException("Connection not configured!");
+        JSONObject driverConfig = record.getJSONObject("driverConfig");
+        JSONObject datasourceConfig = record.getJSONObject("datasourceConfig");
+        
+        if(driverConfig == null && datasourceConfig != null) throw new ConvirganceException("Connection not configured!");
         
         database.saveDescriptor(record);
     }
