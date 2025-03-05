@@ -15,7 +15,7 @@
         ]
     },
     {
-        "name": "Derby Network Client",
+        "name": "Derby Network",
         "artifact": [
             "org.apache.derby:derbytools:10.17.1.0",
             "org.apache.derby:derbyclient:10.17.1.0"
@@ -28,6 +28,25 @@
         "examples": [
             "jdbc:derby://<host>[/databaseName][;attribute=value]",
             "jdbc:derby:[subsubprotocol:][databaseName][;attribute=value]",
+            "jdbc:derby:directory:[databaseName][;attribute=value]",
+            "jdbc:derby:memory:[databaseName][;attribute=value]",
+            "jdbc:derby:classpath:[databaseName][;attribute=value]",
+            "jdbc:derby:jar:<pathToArchive>/<databaseName>[;attribute=value]"
+        ]
+    },
+    {
+        "name": "Derby Embedded",
+        "artifact": [
+            "org.apache.derby:derby:10.17.1.0",
+            "org.apache.derby:derbytools:10.17.1.0"
+        ],
+        "driver": "org.apache.derby.jdbc.EmbeddedDriver",
+        "datasource": "org.apache.derby.jdbc.EmbeddedDataSource",
+        "prefixes": [
+            "jdbc:derby:"
+        ],
+        "examples": [
+            "jdbc:derby:[<directory>/][databaseName][;attribute=value]",
             "jdbc:derby:directory:[databaseName][;attribute=value]",
             "jdbc:derby:memory:[databaseName][;attribute=value]",
             "jdbc:derby:classpath:[databaseName][;attribute=value]",
