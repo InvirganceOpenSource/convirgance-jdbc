@@ -27,49 +27,10 @@ import com.invirgance.convirgance.json.JSONObject;
  *
  * @author jbanes
  */
-public class View
+public class View extends TabularStructure
 {
-    private JSONObject record;
-    private DatabaseSchema schema;
-
     public View(JSONObject record, DatabaseSchema schema)
     {
-        this.record = record;
-        this.schema = schema;
-    }
-    
-    public String getName()
-    {
-        return record.getString("TABLE_NAME");
-    }
-    
-    public String getType()
-    {
-        return record.getString("TABLE_TYPE", "UNKNOWN");
-    }
-    
-    public Column[] getColumns()
-    {
-        return schema.getColumns(this.record);
-    }
-
-    @Override
-    public int hashCode()
-    {
-        return record.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if(!(obj instanceof View)) return false;
-        
-        return record.equals(((View)obj).record);
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.record.toString(4);
+        super(record, schema);
     }
 }

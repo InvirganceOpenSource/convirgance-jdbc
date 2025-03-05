@@ -31,6 +31,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Arrays;
 import javax.sql.DataSource;
 
 /**
@@ -118,31 +119,63 @@ public class DatabaseSchema
         }
     }
     
-    public Table[] getTables()
+    public TabularStructure[] getStructures(String type)
     {
-        JSONArray<Table> tables = new JSONArray<>();
+        JSONArray<TabularStructure> structures = new JSONArray<>();
+        TabularStructure structure;
         
         for(JSONObject record : getDatabaseObjects())
         {
-            if(!record.getString("TABLE_TYPE", "UNKNOWN").equals("TABLE")) continue;
+            if(type != null && !record.getString("TABLE_TYPE", "UNKNOWN").equals(type)) continue;
             
-            tables.add(new Table(record, this));
+            switch(record.getString("TABLE_TYPE"))
+            {
+                case "TABLE":
+                    structure = new Table(record, this); 
+                    break;
+                    
+                case "VIEW":
+                    structure = new View(record, this); 
+                    break;
+                    
+                default:
+                    structure = new TabularStructure(record, this);
+            }
+            
+            structures.add(structure);
         }
         
-        return tables.toArray(Table[]::new);
+        return structures.toArray(TabularStructure[]::new);
+    }
+    
+    public Table[] getTables()
+    {
+        return Arrays.asList(getStructures("TABLE")).toArray(Table[]::new);
     }
     
     public View[] getViews()
     {
-        JSONArray<View> views = new JSONArray<>();
+        return Arrays.asList(getStructures("VIEW")).toArray(View[]::new);
+    }
+    
+    public String[] getTypes()
+    {
+        JSONArray<String> types = new JSONArray<>();
         
-        for(JSONObject record : getDatabaseObjects())
+        try(ResultSet set = getMetaData().getTableTypes())
         {
-            if(!record.getString("TABLE_TYPE", "UNKNOWN").equals("VIEW")) continue;
+            for(JSONObject record : getObjects(set))
+            {
+                types.add(record.getString("TABLE_TYPE"));
+            }
             
-            views.add(new View(record, this));
+            types.sort(null);
+            
+            return types.toArray(String[]::new);
         }
-        
-        return views.toArray(View[]::new);
+        catch(SQLException e)
+        {
+            throw new ConvirganceException(e);
+        }
     }
 }

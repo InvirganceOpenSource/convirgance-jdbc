@@ -30,6 +30,7 @@ import com.invirgance.convirgance.jdbc.AutomaticDriver;
 import com.invirgance.convirgance.jdbc.AutomaticDrivers;
 import com.invirgance.convirgance.jdbc.StoredConnection;
 import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
+import com.invirgance.convirgance.json.JSONObject;
 import java.io.File;
 import java.sql.SQLException;
 import javax.sql.DataSource;
@@ -91,6 +92,20 @@ public class DatabaseSchemaTest
         
         dbms.update(new Query("create view ALL_CUSTOMERS as select * from CUSTOMER"));
     }
+    
+    private DatabaseSchema getSchema() throws SQLException
+    {
+        AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
+        StoredConnection connection = driver
+                                        .createConnection("test")
+                                        .datasource()
+                                            .property("url", url)
+                                            .property("user", "SA")
+                                            .property("password", "")
+                                        .build();
+        
+        return new DatabaseSchema(driver, connection.getDataSource());
+    }
 
     @Test
     public void testTables() throws SQLException
@@ -110,20 +125,12 @@ public class DatabaseSchemaTest
             "CREDIT_LIMIT"
         };
         
-        AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
-        StoredConnection connection = driver
-                                        .createConnection("test")
-                                        .datasource()
-                                            .property("url", url)
-                                            .property("user", "SA")
-                                            .property("password", "")
-                                        .build();
-        
-        DatabaseSchema schema = new DatabaseSchema(driver, connection.getDataSource());
+        DatabaseSchema schema = getSchema();
         Table[] tables = schema.getTables();
         View[] views = schema.getViews();
         
         int count;
+        
         
         assertEquals(1, tables.length);
         assertEquals("CUSTOMER", tables[0].getName());
@@ -152,5 +159,21 @@ public class DatabaseSchemaTest
         }
         
         assertEquals(names.length, count);
+    }
+
+    @Test
+    public void testTableTypes() throws SQLException
+    {
+        String[] expected = {"GLOBAL TEMPORARY", "SYSTEM TABLE", "TABLE", "VIEW"};
+        
+        DatabaseSchema schema = getSchema();
+        int count = 0;
+        
+        for(String type : schema.getTypes())
+        {
+            assertEquals(expected[count++], type);
+        }
+        
+        assertEquals(expected.length, count);
     }
 }
