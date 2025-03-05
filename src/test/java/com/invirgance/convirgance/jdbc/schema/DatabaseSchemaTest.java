@@ -95,6 +95,21 @@ public class DatabaseSchemaTest
     @Test
     public void testTables() throws SQLException
     {
+        String[] names = {
+            "CUSTOMER_ID", 
+            "DISCOUNT_CODE", 
+            "ZIP", 
+            "NAME", 
+            "ADDRESSLINE1", 
+            "ADDRESSLINE2", 
+            "CITY", 
+            "STATE", 
+            "PHONE", 
+            "FAX", 
+            "EMAIL", 
+            "CREDIT_LIMIT"
+        };
+        
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         StoredConnection connection = driver
                                         .createConnection("test")
@@ -108,62 +123,34 @@ public class DatabaseSchemaTest
         Table[] tables = schema.getTables();
         View[] views = schema.getViews();
         
+        int count;
+        
         assertEquals(1, tables.length);
         assertEquals("CUSTOMER", tables[0].getName());
         assertEquals("TABLE", tables[0].getType());
+        
+        count = 0;
+        
+        for(Column column : tables[0].getColumns())
+        {
+//            System.out.println("    " + column.getName() + ":" + column.isNullable() + ":" + column.getType() + ":" + column.getJDBCType() + ":" + column.getTypeClass());
+            assertEquals(names[count++], column.getName());
+        }
+        
+        assertEquals(names.length, count);
         
         assertEquals(1, views.length);
         assertEquals("ALL_CUSTOMERS", views[0].getName());
         assertEquals("VIEW", views[0].getType());
         
-        for(Table table : schema.getTables())
-        {
-            System.out.println(table.getName());
-            
-            for(Column column : table.getColumns())
-            {
-                System.out.println("    " + column.getName() + ":" + column.isNullable() + ":" + column.getType() + ":" + column.getJDBCType() + ":" + column.getTypeClass());
-            }
-        }
-        
-        for(View view : schema.getViews())
-        {
-            System.out.println(view.getName());
-            
-            for(Column column : view.getColumns())
-            {
-                System.out.println("    " + column.getName() + ":" + column.isNullable() + ":" + column.getType() + ":" + column.getJDBCType() + ":" + column.getTypeClass());
-            }
-        }
-    }
+        count = 0;
 
-    @Test
-public void testTablesTemp() throws SQLException
-    {
-        AutomaticDriver driver = AutomaticDrivers.getDriverByName("PostgreSQL");
-        StoredConnection connection = driver
-                                        .createConnection("test")
-                                        .driver()
-                                            .url("jdbc:postgresql://localhost:5432/warehouse_management")
-                                            .username("postgres")
-                                            .password("")
-                                        .build();
-        
-        for(Table table : new DatabaseSchema(driver, connection.getDataSource()).getTables())
+        for(Column column : views[0].getColumns())
         {
-            System.out.println(table.getName());
-            
-            for(Column column : table.getColumns())
-            {
-                System.out.println("    " + column.getName() + ":" + column.isNullable() + ":" + column.getType() + ":" + column.getJDBCType() + ":" + column.getTypeClass());
-//                System.out.println(column);
-            }
+//            System.out.println("    " + column.getName() + ":" + column.isNullable() + ":" + column.getType() + ":" + column.getJDBCType() + ":" + column.getTypeClass());
+            assertEquals(names[count++], column.getName());
         }
         
-        for(View view : new DatabaseSchema(driver, connection.getDataSource()).getViews())
-        {
-            System.out.println(view.getName());
-        }
+        assertEquals(names.length, count);
     }
-    
 }
