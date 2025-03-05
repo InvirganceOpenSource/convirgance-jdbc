@@ -73,19 +73,19 @@ public class StoredConnectionTest
         System.setProperty("convirgance.jdbc.connections", "target/unit-test-work/connections");
         
         dbms.update(new QueryOperation(new Query("create table CUSTOMER (\n" +
-                    "                                 CUSTOMER_ID INTEGER,\n" +
-                    "                                 DISCOUNT_CODE CHAR(1),\n" +
-                    "                                 ZIP VARCHAR(10),\n" +
-                    "                                 NAME VARCHAR(30),\n" +
-                    "                                 ADDRESSLINE1 VARCHAR(30),\n" +
-                    "                                 ADDRESSLINE2 VARCHAR(30),\n" +
-                    "                                 CITY VARCHAR(25),\n" +
-                    "                                 STATE CHAR(2),\n" +
-                    "                                 PHONE CHAR(12),\n" +
-                    "                                 FAX CHAR(12),\n" +
-                    "                                 EMAIL VARCHAR(40),\n" +
-                    "                                 CREDIT_LIMIT INTEGER\n" +
-                    "                             );")));
+                                                 "    CUSTOMER_ID INTEGER,\n" +
+                                                 "    DISCOUNT_CODE CHAR(1),\n" +
+                                                 "    ZIP VARCHAR(10),\n" +
+                                                 "    NAME VARCHAR(30),\n" +
+                                                 "    ADDRESSLINE1 VARCHAR(30),\n" +
+                                                 "    ADDRESSLINE2 VARCHAR(30),\n" +
+                                                 "    CITY VARCHAR(25),\n" +
+                                                 "    STATE CHAR(2),\n" +
+                                                 "    PHONE CHAR(12),\n" +
+                                                 "    FAX CHAR(12),\n" +
+                                                 "    EMAIL VARCHAR(40),\n" +
+                                                 "    CREDIT_LIMIT INTEGER\n" +
+                                                 ");")));
     }
     
     @Test
