@@ -61,6 +61,16 @@ public class DatabaseSchema
         }
     }
     
+    AutomaticDriver getDriver()
+    {
+        return driver;
+    }
+    
+    DataSource getDataSource()
+    {
+        return source;
+    }
+    
     private JSONArray<JSONObject> getObjects(ResultSet set) throws SQLException
     {
         ResultSetMetaData metadata = set.getMetaData();

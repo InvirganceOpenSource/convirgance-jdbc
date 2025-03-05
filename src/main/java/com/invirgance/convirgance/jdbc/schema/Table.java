@@ -21,16 +21,30 @@ SOFTWARE.
  */
 package com.invirgance.convirgance.jdbc.schema;
 
+import com.invirgance.convirgance.dbms.DBMS;
+import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.json.JSONObject;
+import java.util.Iterator;
 
 /**
  *
  * @author jbanes
  */
-public class Table extends TabularStructure
+public class Table extends TabularStructure implements Iterable<JSONObject>
 {
     Table(JSONObject record, DatabaseSchema schema)
     {
         super(record, schema);
+    }
+
+    @Override
+    public Iterator<JSONObject> iterator()
+    {
+        DBMS dbms = new DBMS(getSchema().getDataSource());
+        Query query = new Query("select * from " + getName());
+        
+        //FIX ME: This is a placeholder implmentation while the API is built out
+        
+        return dbms.query(query).iterator();
     }
 }

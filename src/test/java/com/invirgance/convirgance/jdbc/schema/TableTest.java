@@ -26,11 +26,13 @@ package com.invirgance.convirgance.jdbc.schema;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.dbms.QueryOperation;
+import com.invirgance.convirgance.input.JSONInput;
 import com.invirgance.convirgance.jdbc.AutomaticDriver;
 import com.invirgance.convirgance.jdbc.AutomaticDrivers;
 import com.invirgance.convirgance.jdbc.StoredConnection;
 import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
 import com.invirgance.convirgance.json.JSONObject;
+import com.invirgance.convirgance.source.FileSource;
 import java.io.File;
 import java.sql.SQLException;
 import javax.sql.DataSource;
@@ -42,9 +44,9 @@ import org.junit.jupiter.api.BeforeAll;
  *
  * @author jbanes
  */
-public class DatabaseSchemaTest
+public class TableTest
 {
-    private static String url = "jdbc:hsqldb:file:target/unit-test-work/dbms/schemadb/;hsqldb.lock_file=false";
+    private static String url = "jdbc:hsqldb:file:target/unit-test-work/dbms/tabledb/;hsqldb.lock_file=false";
     
     private static void delete(File file)
     {
@@ -65,7 +67,7 @@ public class DatabaseSchemaTest
     @BeforeAll
     public static void setup()
     {
-        File directory = new File("target/unit-test-work/dbms/schemadb");
+        File directory = new File("target/unit-test-work/dbms/tabledb");
         DataSource source = DriverDataSource.getDataSource(url, "SA", "");
         DBMS dbms = new DBMS(source);
         
@@ -88,9 +90,14 @@ public class DatabaseSchemaTest
                               ");"));
         
         dbms.update(new Query("create view ALL_CUSTOMERS as select * from CUSTOMER"));
+        
+        for(JSONObject record : new JSONInput().read(new FileSource(new File("src/test/resources/table/customer.json"))))
+        {
+            dbms.update(new Query("insert into CUSTOMER values (:CUSTOMER_ID, :DISCOUNT_CODE, :ZIP, :NAME, :ADDRESSLINE1, :ADDRESSLINE2, :CITY, :STATE, :PHONE, :FAX, :EMAIL, :CREDIT_LIMIT)", record));
+        }
     }
     
-    private DatabaseSchema getHSQLSchema() throws SQLException
+    private DatabaseSchema getSchema() throws SQLException
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         StoredConnection connection = driver
@@ -105,72 +112,20 @@ public class DatabaseSchemaTest
     }
 
     @Test
-    public void testTables() throws SQLException
+    public void testIterator() throws SQLException
     {
-        String[] names = {
-            "CUSTOMER_ID", 
-            "DISCOUNT_CODE", 
-            "ZIP", 
-            "NAME", 
-            "ADDRESSLINE1", 
-            "ADDRESSLINE2", 
-            "CITY", 
-            "STATE", 
-            "PHONE", 
-            "FAX", 
-            "EMAIL", 
-            "CREDIT_LIMIT"
-        };
-        
-        DatabaseSchema schema = getHSQLSchema();
-        Table[] tables = schema.getTables();
-        View[] views = schema.getViews();
-        
-        int count;
-        
-        
-        assertEquals(1, tables.length);
-        assertEquals("CUSTOMER", tables[0].getName());
-        assertEquals("TABLE", tables[0].getType());
-        
-        count = 0;
-        
-        for(Column column : tables[0].getColumns())
-        {
-//            System.out.println("    " + column.getName() + ":" + column.isNullable() + ":" + column.getType() + ":" + column.getJDBCType() + ":" + column.getTypeClass());
-            assertEquals(names[count++], column.getName());
-        }
-        
-        assertEquals(names.length, count);
-        
-        assertEquals(1, views.length);
-        assertEquals("ALL_CUSTOMERS", views[0].getName());
-        assertEquals("VIEW", views[0].getType());
-        
-        count = 0;
-
-        for(Column column : views[0].getColumns())
-        {
-//            System.out.println("    " + column.getName() + ":" + column.isNullable() + ":" + column.getType() + ":" + column.getJDBCType() + ":" + column.getTypeClass());
-            assertEquals(names[count++], column.getName());
-        }
-        
-        assertEquals(names.length, count);
-    }
-
-    @Test
-    public void testTableTypes() throws SQLException
-    {
-        String[] expected = {"GLOBAL TEMPORARY", "SYSTEM TABLE", "TABLE", "VIEW"};
-        
-        DatabaseSchema schema = getHSQLSchema();
+        DatabaseSchema schema = getSchema();
+        Table table = schema.getTables()[0];
         int count = 0;
         
-        for(String type : schema.getTypes())
+        for(JSONObject record : table)
         {
-            assertEquals(expected[count++], type);
+            System.out.println(record);
+            
+            assertEquals(++count, record.getInt("CUSTOMER_ID"));
         }
         
-        assertEquals(expected.length, count);
+        assertEquals(13, count);
     }
+    
 }

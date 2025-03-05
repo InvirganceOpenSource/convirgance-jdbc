@@ -45,6 +45,11 @@ public class TabularStructure
         return record;
     }
     
+    DatabaseSchema getSchema()
+    {
+        return schema;
+    }
+    
     public String getName()
     {
         return record.getString("TABLE_NAME");
