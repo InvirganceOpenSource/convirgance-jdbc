@@ -68,6 +68,7 @@ public class Column
                 case "int8": return JDBCType.BIGINT;
                 case "bool": return JDBCType.BOOLEAN;
                 case "float4": return JDBCType.FLOAT;
+                case "LONG VARCHAR": return JDBCType.LONGNVARCHAR;
                 default: return JDBCType.OTHER;
             }
         }

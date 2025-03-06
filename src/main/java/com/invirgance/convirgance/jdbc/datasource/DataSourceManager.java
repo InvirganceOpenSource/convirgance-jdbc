@@ -148,6 +148,18 @@ public class DataSourceManager
         throw new ConvirganceException("Unable to transform " + String.class + " to " + type + " for [" + value + "]");
     }
     
+    private Object coerceNumber(Class type, Number value)
+    {
+        if(type == Integer.class || type == int.class) return value.intValue();
+        else if(type == Double.class || type == double.class) return value.doubleValue();
+        else if(type == Long.class || type == long.class) return value.longValue();
+        else if(type == Float.class || type == float.class) return value.floatValue();
+        else if(type == Short.class || type == short.class) return value.shortValue();
+        else if(type == Byte.class || type == byte.class) return value.byteValue();
+        
+        throw new ConvirganceException("Unable to transform " + String.class + " to " + type + " for [" + value + "]");
+    }
+    
     private Object coerceValue(Class source, Class target, Object value)
     {
         if(source.equals(target)) return value;
@@ -161,6 +173,10 @@ public class DataSourceManager
         if(source.equals(String.class) && target.isPrimitive()) return coerceStringToPrimitive(target, (String)value);
         if(source.equals(String.class) && Number.class.isAssignableFrom(target)) return coerceStringToNumber(target, (String)value);
         if(source.equals(String.class) && Boolean.class.isAssignableFrom(target)) return coerceStringToNumber(target, (String)value);
+
+        // Handle number casts
+        if(Number.class.isAssignableFrom(source) && target.isPrimitive()) return coerceNumber(target, (Number)value);
+        if(Number.class.isAssignableFrom(source) && Number.class.isAssignableFrom(target)) return coerceNumber(target, (Number)value);
         
         throw new ConvirganceException("Unable to transform " + source + " to " + target + " for [" + value + "]");
     }
