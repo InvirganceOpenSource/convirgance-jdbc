@@ -25,11 +25,16 @@ Add the following dependency to your Maven `pom.xml` file:
     <artifactId>convirgance-jdbc</artifactId>
     <version>0.1.0</version>
 </dependency>
+<dependency>
+    <groupId>com.invirgance</groupId>
+    <artifactId>convirgance-storage</artifactId>
+    <version>0.1.0</version>
+</dependency>
 ```
 
 ## Documentation
 
-- [JavaDocs](https://docs.invirgance.com/javadocs/convirgance-jdbc/0.1.0-SNAPSHOT/) (Work in Progress)
+- [JavaDocs](https://docs.invirgance.com/javadocs/convirgance-jdbc/) (Work in Progress)
 
 
 ## License
