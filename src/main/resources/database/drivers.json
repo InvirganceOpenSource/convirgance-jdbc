@@ -87,6 +87,21 @@
         ]
     },
     {
+        "name": "H2",
+        "artifact": [
+            "com.h2database:h2:2.3.232"
+        ],
+        "driver": "org.h2.Driver",
+        "datasource": "org.h2.jdbcx.JdbcDataSource",
+        "prefixes": [
+            "jdbc:h2:"
+        ],
+        "examples": [
+            "jdbc:h2:<DIRECTORY>",
+            "jdbc:h2:tcp://<SERVER>[:PORT][/<DIRECTORY>]"
+        ]
+    },
+    {
         "name": "PostgreSQL",
         "artifact": [
             "org.postgresql:postgresql:42.7.5"

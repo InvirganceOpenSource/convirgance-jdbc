@@ -29,6 +29,7 @@ import com.invirgance.convirgance.dbms.QueryOperation;
 import com.invirgance.convirgance.jdbc.AutomaticDriver;
 import com.invirgance.convirgance.jdbc.AutomaticDrivers;
 import com.invirgance.convirgance.jdbc.StoredConnection;
+import com.invirgance.convirgance.jdbc.datasource.DataSourceManager;
 import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
 import com.invirgance.convirgance.json.JSONObject;
 import java.io.File;
@@ -45,6 +46,7 @@ import org.junit.jupiter.api.BeforeAll;
 public class DatabaseSchemaTest
 {
     private static String url = "jdbc:hsqldb:file:target/unit-test-work/dbms/schemadb/;hsqldb.lock_file=false";
+    private static DataSource source;
     
     private static void delete(File file)
     {
@@ -63,14 +65,15 @@ public class DatabaseSchemaTest
     }
     
     @BeforeAll
-    public static void setup()
+    public static void setup() throws SQLException
     {
         File directory = new File("target/unit-test-work/dbms/schemadb");
-        DataSource source = DriverDataSource.getDataSource(url, "SA", "");
-        DBMS dbms = new DBMS(source);
+        DBMS dbms;
         
         delete(directory);
         directory.mkdirs();
+        
+        dbms = new DBMS(getHSQLDataSource());
         
         dbms.update(new Query("create table CUSTOMER (\n" +
                               "    CUSTOMER_ID INTEGER PRIMARY KEY,\n" +
@@ -90,7 +93,7 @@ public class DatabaseSchemaTest
         dbms.update(new Query("create view ALL_CUSTOMERS as select * from CUSTOMER"));
     }
     
-    private DatabaseSchema getHSQLSchema() throws SQLException
+    private static DataSource getHSQLDataSource() throws SQLException
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         StoredConnection connection = driver
@@ -101,7 +104,16 @@ public class DatabaseSchemaTest
                                             .property("password", "")
                                         .build();
         
-        return new DatabaseSchema(driver, connection.getDataSource());
+        if(source == null) source = connection.getDataSource();
+        
+        return source;
+    }
+    
+    private DatabaseSchema getHSQLSchema() throws SQLException
+    {
+        AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
+        
+        return new DatabaseSchema(driver, getHSQLDataSource());
     }
 
     @Test
