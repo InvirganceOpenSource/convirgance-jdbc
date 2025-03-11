@@ -1,6 +1,6 @@
 # Convirgance (JDBC)
 
-![Version](https://img.shields.io/badge/Version-pre&dash;release-blue) ![License](https://img.shields.io/badge/License-MIT-green) ![Repository](https://img.shields.io/badge/Platform-Java-gold) ![Repository](https://img.shields.io/badge/Repository-Maven_Central-red)
+<a href="https://central.sonatype.com/artifact/com.invirgance/convirgance-jdbc/versions">![Version](https://img.shields.io/badge/Version-pre&dash;release-blue)</a> <a href="https://github.com/InvirganceOpenSource/convirgance-jdbc?tab=MIT-1-ov-file">![License](https://img.shields.io/badge/License-MIT-green)</a> <a href="#">![Repository](https://img.shields.io/badge/Platform-Java-gold)</a> <a href="https://central.sonatype.com/artifact/com.invirgance/convirgance-jdbc">![Repository](https://img.shields.io/badge/Repository-Maven_Central-red)</a>
 
 Library to automatically manage JDBC connections and drivers. Most common databases are supported with drivers pulled from Maven Central automatically.
 
