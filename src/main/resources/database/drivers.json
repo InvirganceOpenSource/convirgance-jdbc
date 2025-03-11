@@ -10,8 +10,8 @@
             "jdbc:oracle:thin:"
         ],
         "examples": [
-            "jdbc:oracle:thin:@[HOST][:PORT]:SID",
-            "jdbc:oracle:thin:@//[HOST][:PORT]/SERVICE"
+            "jdbc:oracle:thin:@[SERVER][:<PORT>]:SID",
+            "jdbc:oracle:thin:@//[SERVER][:<PORT>]/SERVICE"
         ]
     },
     {
@@ -26,12 +26,12 @@
             "jdbc:derby:"
         ],
         "examples": [
-            "jdbc:derby://<host>[/databaseName][;attribute=value]",
-            "jdbc:derby:[subsubprotocol:][databaseName][;attribute=value]",
-            "jdbc:derby:directory:[databaseName][;attribute=value]",
-            "jdbc:derby:memory:[databaseName][;attribute=value]",
-            "jdbc:derby:classpath:[databaseName][;attribute=value]",
-            "jdbc:derby:jar:<pathToArchive>/<databaseName>[;attribute=value]"
+            "jdbc:derby://<SERVER>[/<DATABASE_NAME>][;attribute=value]",
+            "jdbc:derby:[subsubprotocol:][DATABASE_NAME][;attribute=value]",
+            "jdbc:derby:directory:[DATABASE_NAME][;attribute=value]",
+            "jdbc:derby:memory:[DATABASE_NAME][;attribute=value]",
+            "jdbc:derby:classpath:[DATABASE_NAME][;attribute=value]",
+            "jdbc:derby:jar:<PATH_TO_ARCHIVE>/<DATABASE_NAME>[;attribute=value]"
         ]
     },
     {
@@ -46,11 +46,11 @@
             "jdbc:derby:"
         ],
         "examples": [
-            "jdbc:derby:[<directory>/][databaseName][;attribute=value]",
-            "jdbc:derby:directory:[databaseName][;attribute=value]",
-            "jdbc:derby:memory:[databaseName][;attribute=value]",
-            "jdbc:derby:classpath:[databaseName][;attribute=value]",
-            "jdbc:derby:jar:<pathToArchive>/<databaseName>[;attribute=value]"
+            "jdbc:derby:[<DIRECTORY>/][DATABASE_NAME][;attribute=value]",
+            "jdbc:derby:directory:[DATABASE_NAME][;attribute=value]",
+            "jdbc:derby:memory:[DATABASE_NAME][;attribute=value]",
+            "jdbc:derby:classpath:[DATABASE_NAME][;attribute=value]",
+            "jdbc:derby:jar:<PATH_TO_ARCHIVE>/<DATABASE_NAME>[;attribute=value]"
         ]
     },
     {
@@ -64,7 +64,7 @@
             "jdbc:jtds:"
         ],
         "examples": [
-            "jdbc:jtds:sqlserver://<server>[:<port>][/<database>][;<property>=<value>[;...]]"
+            "jdbc:jtds:sqlserver://<SERVER>[:<PORT>][/<DATABASE_NAME>][;<property>=<value>[;...]]"
         ]
     },
     {
@@ -78,12 +78,12 @@
             "jdbc:hsqldb:"
         ],
         "examples": [
-            "jdbc:hsqldb:hsql://<serverName>[:port][/databaseName]",
-            "jdbc:hsqldb:hsqls://<serverName>[:port][/databaseName]",
-            "jdbc:hsqldb:http://<serverName>[:port][/databaseName]",
-            "jdbc:hsqldb:https://<serverName>[:port][/databaseName]",
-            "jdbc:hsqldb:file:/<directory>[;shutdown=true]",
-            "jdbc:hsqldb:res:/<jarDirectory>"
+            "jdbc:hsqldb:hsql://<SERVER>[:<PORT>][/<DATABASE_NAME>]",
+            "jdbc:hsqldb:hsqls://<SERVER>[:<PORT>][/<DATABASE_NAME>]",
+            "jdbc:hsqldb:http://<SERVER>[:<PORT>][/<DATABASE_NAME>]",
+            "jdbc:hsqldb:https://<SERVER>[:<PORT>][/<DATABASE_NAME>]",
+            "jdbc:hsqldb:file:/<DIRECTORY>[;shutdown=true]",
+            "jdbc:hsqldb:res:/<JAR_DIRECTORY>"
         ]
     },
     {
@@ -97,8 +97,8 @@
             "jdbc:postgresql:"
         ],
         "examples": [
-            "jdbc:postgresql://<host>[:<port>][/<database>]",
-            "jdbc:postgresql:<database>",
+            "jdbc:postgresql://<SERVER>[:<PORT>][/<DATABASE_NAME>]",
+            "jdbc:postgresql:<DATABASE_NAME>",
             "jdbc:postgresql:/"
         ]
     },
@@ -114,8 +114,8 @@
             "jdbc:mysql:"
         ],
          "examples": [
-            "jdbc:mariadb://<host>[<:port>]/[/<database>]",
-            "jdbc:mysql://<host>[<:port>]/[/<database>]?permitMysqlScheme"
+            "jdbc:mariadb://<SERVER>[:<PORT>][/<DATABASE_NAME>]",
+            "jdbc:mysql://<SERVER>[:<PORT>][/<DATABASE_NAME>]?permitMysqlScheme"
         ]
     },
     {
@@ -129,7 +129,7 @@
             "jdbc:db2:"
         ],
          "examples": [
-            "jdbc:db2://<host>[:<port>]/<database>",
+            "jdbc:db2://<SERVER>[:<PORT>]/<DATABASE_NAME>",
             "jdbc:db2://localhost:50000/sample"
         ]
     }
