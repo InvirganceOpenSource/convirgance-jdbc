@@ -25,7 +25,6 @@ package com.invirgance.convirgance.jdbc.schema;
 
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
-import com.invirgance.convirgance.dbms.QueryOperation;
 import com.invirgance.convirgance.input.JSONInput;
 import com.invirgance.convirgance.jdbc.AutomaticDriver;
 import com.invirgance.convirgance.jdbc.AutomaticDrivers;
@@ -36,9 +35,9 @@ import com.invirgance.convirgance.source.FileSource;
 import java.io.File;
 import java.sql.SQLException;
 import javax.sql.DataSource;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  *
@@ -46,7 +45,7 @@ import org.junit.jupiter.api.BeforeAll;
  */
 public class TableTest
 {
-    private static String url = "jdbc:hsqldb:file:target/unit-test-work/dbms/tabledb/;hsqldb.lock_file=false";
+    private static String url = "jdbc:hsqldb:file:" + new File("target/unit-test-work/dbms/tabledb").getAbsolutePath() + ";hsqldb.lock_file=false;shutdown=true";    
     private static DataSource source;
     
     private static void delete(File file)
@@ -117,7 +116,7 @@ public class TableTest
     private DatabaseSchema getSchema() throws SQLException
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
-        
+
         return new DatabaseSchema(driver, getDataSource());
     }
 
@@ -125,6 +124,7 @@ public class TableTest
     public void testIterator() throws SQLException
     {
         DatabaseSchema schema = getSchema();
+
         Table table = schema.getTables()[0];
         int count = 0;
         
