@@ -99,6 +99,15 @@ public class AutomaticDriver
         record.put("examples", new JSONArray(Arrays.asList(examples)));
     }
     
+    /**
+     * This API may go away or be hidden in the future. Do not rely upon it.
+     * @return 
+     */
+    public JSONObject getConfiguration()
+    {
+        return this.record.getJSONObject("config", new JSONObject());
+    }
+    
     public StoredConnectionBuilder createConnection(String name)
     {
         return StoredConnections.createConnection(this, name);

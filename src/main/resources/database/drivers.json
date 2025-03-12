@@ -99,7 +99,10 @@
         "examples": [
             "jdbc:h2:<DIRECTORY>",
             "jdbc:h2:tcp://<SERVER>[:PORT][/<DIRECTORY>]"
-        ]
+        ],
+        "config": {
+            "tableType": "BASE TABLE"
+        }
     },
     {
         "name": "PostgreSQL",
