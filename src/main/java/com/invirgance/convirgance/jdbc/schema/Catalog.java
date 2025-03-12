@@ -54,19 +54,17 @@ public class Catalog
     {
         JSONArray<Schema> schemas = new JSONArray<>();
         
-        try(ResultSet set = schema.getMetaData().getSchemas(getName(), null))
-        {
-            for(JSONObject record : schema.getObjects(set))
+        schema.useMetaData(metadata -> {
+            try(ResultSet set = metadata.getSchemas(getName(), null))
             {
-                schemas.add(new Schema(record, schema, this));
+                for(JSONObject record : schema.getObjects(set))
+                {
+                    schemas.add(new Schema(record, schema, this));
+                }
             }
+        });
             
-            return schemas.toArray(Schema[]::new);
-        }
-        catch(SQLException e)
-        {
-            throw new ConvirganceException(e);
-        }
+        return schemas.toArray(Schema[]::new);
     }
     
     public Schema getSchema(String name)

@@ -25,6 +25,8 @@ package com.invirgance.convirgance.jdbc.schema;
 
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.jdbc.AutomaticDriver;
+import com.invirgance.convirgance.jdbc.callback.ConnectionCallback;
+import com.invirgance.convirgance.jdbc.callback.MetadataCallback;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import java.sql.*;
@@ -52,16 +54,9 @@ public class DatabaseSchema
         this.viewType = driver.getConfiguration().getString("viewType", "VIEW");
     }
     
-    DatabaseMetaData getMetaData()
+    void useMetaData(MetadataCallback callback)
     {
-        try
-        {
-            return this.source.getConnection().getMetaData();
-        }
-        catch(SQLException e)
-        {
-            throw new ConvirganceException(e);
-        }
+        ConnectionCallback.execute(source, callback);
     }
     
     AutomaticDriver getDriver()
@@ -98,15 +93,17 @@ public class DatabaseSchema
     }
     
     private JSONArray<JSONObject> getDatabaseObjects()
-    {   
-        try(ResultSet set = getMetaData().getTables(null, null, null, null))
-        {
-            return getObjects(set);
-        }
-        catch(SQLException e)
-        {
-            throw new ConvirganceException(e);
-        }
+    {
+        JSONArray<JSONObject> objects = new JSONArray<>();
+        
+        useMetaData(metadata -> {
+            try(ResultSet set = metadata.getTables(null, null, null, null))
+            {
+                objects.addAll(getObjects(set));
+            }
+        });
+        
+        return objects;
     }
     
     Column[] getColumns(JSONObject table)
@@ -117,19 +114,17 @@ public class DatabaseSchema
         
         JSONArray<Column> array = new JSONArray<>();
         
-        try(ResultSet set = getMetaData().getColumns(catalog, schema, name, null))
-        {
-            for(JSONObject record : getObjects(set))
+        useMetaData(metadata -> {
+            try(ResultSet set = metadata.getColumns(catalog, schema, name, null))
             {
-                array.add(new Column(record));
+                for(JSONObject record : getObjects(set))
+                {
+                    array.add(new Column(record));
+                }
             }
-            
-            return array.toArray(Column[]::new);
-        }
-        catch(SQLException e)
-        {
-            throw new ConvirganceException(e);
-        }
+        });
+        
+        return array.toArray(Column[]::new);
     }
     
     String quoteIdentifier(String name)
@@ -205,19 +200,17 @@ public class DatabaseSchema
     {
         JSONArray<Catalog> catalogs = new JSONArray<>();
         
-        try(ResultSet set = getMetaData().getCatalogs())
-        {
-            for(JSONObject record : getObjects(set))
+        useMetaData(metadata -> {
+            try(ResultSet set = metadata.getCatalogs())
             {
-                catalogs.add(new Catalog(record, this));
+                for(JSONObject record : getObjects(set))
+                {
+                    catalogs.add(new Catalog(record, this));
+                }
             }
-            
-            return catalogs.toArray(Catalog[]::new);
-        }
-        catch(SQLException e)
-        {
-            throw new ConvirganceException(e);
-        }
+        });
+        
+        return catalogs.toArray(Catalog[]::new);
     }
     
     public Catalog getCatalog(String name)
@@ -248,20 +241,18 @@ public class DatabaseSchema
     {
         JSONArray<String> types = new JSONArray<>();
         
-        try(ResultSet set = getMetaData().getTableTypes())
-        {
-            for(JSONObject record : getObjects(set))
+        useMetaData(metadata -> {
+            try(ResultSet set = metadata.getTableTypes())
             {
-                types.add(record.getString("TABLE_TYPE"));
+                for(JSONObject record : getObjects(set))
+                {
+                    types.add(record.getString("TABLE_TYPE"));
+                }
             }
-            
-            types.sort(null);
-            
-            return types.toArray(String[]::new);
-        }
-        catch(SQLException e)
-        {
-            throw new ConvirganceException(e);
-        }
+        });
+        
+        types.sort(null);
+
+        return types.toArray(String[]::new);
     }
 }
