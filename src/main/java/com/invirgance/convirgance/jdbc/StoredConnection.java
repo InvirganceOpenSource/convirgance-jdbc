@@ -66,7 +66,7 @@ public class StoredConnection
     {
         DataSource source = getDriver().getDataSource();
         
-        if(source == null) throw new ConvirganceException("DataSource is not configured on automatic driver " + record.getString("driver"));
+        if(source == null) throw new ConvirganceException("Automatic driver " + record.getString("driver") + " does not have a DataSource.");
         if(record.isNull("datasourceConfig")) record.put("datasourceConfig", new DataSourceManager(source).getConfig());
         
         return new DataSourceConfig(record.getJSONObject("datasourceConfig"));
