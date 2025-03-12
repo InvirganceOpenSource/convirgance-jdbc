@@ -26,12 +26,12 @@ package com.invirgance.convirgance.jdbc.schema;
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.jdbc.AutomaticDriver;
 import com.invirgance.convirgance.jdbc.callback.ConnectionCallback;
-import com.invirgance.convirgance.jdbc.callback.MetadataCallback;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import java.sql.*;
 import java.util.Arrays;
 import javax.sql.DataSource;
+import com.invirgance.convirgance.jdbc.callback.DatabaseMetaDataCallback;
 
 /**
  *
@@ -54,7 +54,7 @@ public class DatabaseSchema
         this.viewType = driver.getConfiguration().getString("viewType", "VIEW");
     }
     
-    void useMetaData(MetadataCallback callback)
+    void useMetaData(DatabaseMetaDataCallback callback)
     {
         ConnectionCallback.execute(source, callback);
     }

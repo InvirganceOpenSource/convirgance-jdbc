@@ -31,7 +31,7 @@ import java.sql.SQLException;
  *
  * @author jbanes
  */
-public interface MetadataCallback extends ConnectionCallback
+public interface DatabaseMetaDataCallback extends ConnectionCallback
 {
     @Override
     public default void execute(Connection connection) throws SQLException
