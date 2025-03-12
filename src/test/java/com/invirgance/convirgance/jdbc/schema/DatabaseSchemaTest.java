@@ -130,6 +130,21 @@ public class DatabaseSchemaTest
         
         return new DatabaseSchema(driver, connection.getDataSource());
     }
+    
+    @Test
+    public void testCatalogs() throws SQLException
+    {
+        DatabaseSchema schema = getHSQLSchema();
+        
+        for(Catalog catalog : schema.getCatalogs())
+        {
+            assertEquals("PUBLIC", catalog.getName());
+        }
+        
+        assertEquals(1, schema.getCatalogs().length);
+        assertEquals("PUBLIC", schema.getCurrentCatalog().getName());
+        assertEquals("PUBLIC", schema.getCatalog("PUBLIC").getName());
+    }
 
     @Test
     public void testTables() throws SQLException

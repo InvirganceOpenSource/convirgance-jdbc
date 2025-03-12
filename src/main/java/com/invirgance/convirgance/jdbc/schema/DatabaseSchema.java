@@ -27,10 +27,7 @@ import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.jdbc.AutomaticDriver;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.Arrays;
 import javax.sql.DataSource;
 
@@ -164,6 +161,51 @@ public class DatabaseSchema
         }
         
         return structures.toArray(TabularStructure[]::new);
+    }
+    
+    public Catalog getCurrentCatalog()
+    {
+        JSONObject record = new JSONObject();
+        
+        try(Connection connection = source.getConnection())
+        {
+            record.put("TABLE_CAT", connection.getCatalog());
+            
+            return new Catalog(record, this);
+        }
+        catch(SQLException e)
+        {
+            throw new ConvirganceException(e);
+        }
+    }
+    
+    public Catalog[] getCatalogs()
+    {
+        JSONArray<Catalog> catalogs = new JSONArray<>();
+        
+        try(ResultSet set = getMetaData().getCatalogs())
+        {
+            for(JSONObject record : getObjects(set))
+            {
+                catalogs.add(new Catalog(record, this));
+            }
+            
+            return catalogs.toArray(Catalog[]::new);
+        }
+        catch(SQLException e)
+        {
+            throw new ConvirganceException(e);
+        }
+    }
+    
+    public Catalog getCatalog(String name)
+    {
+        for(Catalog catalog : getCatalogs())
+        {
+            if(catalog.getName().equalsIgnoreCase(name)) return catalog;
+        }
+        
+        return null;
     }
     
     public Table[] getTables()
