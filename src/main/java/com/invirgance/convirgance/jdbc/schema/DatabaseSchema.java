@@ -179,6 +179,28 @@ public class DatabaseSchema
         }
     }
     
+    public Schema getCurrentSchema()
+    {
+        Catalog catalog = getCurrentCatalog();
+        String name;
+        
+        try(Connection connection = source.getConnection())
+        {
+            name = connection.getSchema();
+            
+            for(Schema schema : catalog.getSchemas())
+            {
+                if(schema.getName().equals(name)) return schema;
+            }
+            
+            return null;
+        }
+        catch(SQLException e)
+        {
+            throw new ConvirganceException(e);
+        }
+    }
+    
     public Catalog[] getCatalogs()
     {
         JSONArray<Catalog> catalogs = new JSONArray<>();

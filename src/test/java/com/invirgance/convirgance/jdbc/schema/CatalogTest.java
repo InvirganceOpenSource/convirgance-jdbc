@@ -50,6 +50,9 @@ public class CatalogTest
         }
         
         assertEquals(expected.length, count);
+        assertEquals("PUBLIC", dbschema.getCurrentSchema().getName());
+        assertEquals("PUBLIC", dbschema.getCurrentSchema().getCatalog().getName());
+        assertTrue(dbschema.getCurrentSchema().isDefault());
     }
     
 }
