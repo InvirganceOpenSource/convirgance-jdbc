@@ -65,7 +65,7 @@ public class DatabaseSchemaTest
     }
     
     @BeforeAll
-    public static void setup() throws SQLException
+    public static void setup()
     {
         File directory = new File("target/unit-test-work/dbms/schemadb");
         DBMS dbms;
@@ -94,7 +94,7 @@ public class DatabaseSchemaTest
         dbms.update(new Query("create view ALL_CUSTOMERS as select * from CUSTOMER"));
     }
     
-    public static DataSource getHSQLDataSource() throws SQLException
+    public static DataSource getHSQLDataSource()
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         StoredConnection connection = driver
@@ -110,14 +110,14 @@ public class DatabaseSchemaTest
         return source;
     }
     
-    public static DatabaseSchema getHSQLSchema() throws SQLException
+    public static DatabaseSchema getHSQLSchema()
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         
         return new DatabaseSchema(driver, getHSQLDataSource());
     }
     
-    private DatabaseSchema getH2Schema() throws SQLException
+    private DatabaseSchema getH2Schema()
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("H2");
         StoredConnection connection = driver
@@ -132,7 +132,7 @@ public class DatabaseSchemaTest
     }
     
     @Test
-    public void testCatalogs() throws SQLException
+    public void testCatalogs()
     {
         DatabaseSchema schema = getHSQLSchema();
         
@@ -147,7 +147,7 @@ public class DatabaseSchemaTest
     }
 
     @Test
-    public void testTables() throws SQLException
+    public void testTables()
     {
         String[] names = {
             "CUSTOMER_ID", 
@@ -201,7 +201,7 @@ public class DatabaseSchemaTest
     }
 
     @Test
-    public void testTableTypes() throws SQLException
+    public void testTableTypes()
     {
         String[] expected = {"GLOBAL TEMPORARY", "SYSTEM TABLE", "TABLE", "VIEW"};
         
@@ -217,7 +217,7 @@ public class DatabaseSchemaTest
     }
     
     @Test
-    public void testH2Tables() throws SQLException
+    public void testH2Tables()
     {
         DatabaseSchema schema = getH2Schema();
         Query create = new Query("create table test ( test_column VARCHAR(64) );");

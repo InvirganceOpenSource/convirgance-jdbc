@@ -42,8 +42,8 @@ public class DatabaseSchema
     private AutomaticDriver driver;
     private DataSource source;
     
-    private String tableType;
-    private String viewType;
+    String tableType;
+    String viewType;
 
     public DatabaseSchema(AutomaticDriver driver, DataSource source)
     {
@@ -92,12 +92,13 @@ public class DatabaseSchema
         return array;
     }
     
-    private JSONArray<JSONObject> getDatabaseObjects()
+    private JSONArray<JSONObject> getDatabaseObjects(String catalog, String schema, String type)
     {
         JSONArray<JSONObject> objects = new JSONArray<>();
+        String[] types = type == null ? null : new String[]{ type };
         
         useMetaData(metadata -> {
-            try(ResultSet set = metadata.getTables(null, null, null, null))
+            try(ResultSet set = metadata.getTables(catalog, schema, null, types))
             {
                 objects.addAll(getObjects(set));
             }
@@ -136,13 +137,13 @@ public class DatabaseSchema
         return quote + name + quote;
     }
     
-    public TabularStructure[] getStructures(String type)
+    TabularStructure[] getStructures(String catalog, String schema, String type)
     {
         JSONArray<TabularStructure> structures = new JSONArray<>();
         TabularStructure structure;
         String tableType;
         
-        for(JSONObject record : getDatabaseObjects())
+        for(JSONObject record : getDatabaseObjects(catalog, schema, type))
         {
             if(type != null && !record.getString("TABLE_TYPE", "UNKNOWN").equals(type)) continue;
             
@@ -156,6 +157,11 @@ public class DatabaseSchema
         }
         
         return structures.toArray(TabularStructure[]::new);
+    }
+    
+    public TabularStructure[] getStructures(String type)
+    {
+        return getStructures(null, null, type);
     }
     
     public Catalog getCurrentCatalog()
@@ -225,16 +231,12 @@ public class DatabaseSchema
     
     public Table[] getTables()
     {
-        String type = driver.getConfiguration().getString("tableType", "TABLE");
-        
-        return Arrays.asList(getStructures(type)).toArray(Table[]::new);
+        return Arrays.asList(getStructures(tableType)).toArray(Table[]::new);
     }
     
     public View[] getViews()
     {
-        String type = driver.getConfiguration().getString("viewType", "TABLE");
-        
-        return Arrays.asList(getStructures("VIEW")).toArray(View[]::new);
+        return Arrays.asList(getStructures(viewType)).toArray(View[]::new);
     }
     
     public String[] getTypes()

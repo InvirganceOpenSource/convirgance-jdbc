@@ -23,59 +23,45 @@
  */
 package com.invirgance.convirgance.jdbc.schema;
 
-import com.invirgance.convirgance.json.JSONObject;
-import java.util.Arrays;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
  * @author jbanes
  */
-public class Schema
+public class SchemaTest
 {
-    private JSONObject record;
-    private DatabaseSchema schema;
-    private Catalog catalog;
-
-    Schema(JSONObject record, DatabaseSchema schema, Catalog catalog)
+    @Test
+    public void testTables()
     {
-        this.record = record;
-        this.schema = schema;
-    }
-    
-    public Catalog getCatalog()
-    {
-        if(catalog != null) return catalog;
+        DatabaseSchema dbschema = DatabaseSchemaTest.getHSQLSchema();
+        int count = 0;
         
-        return schema.getCatalog(record.getString("TABLE_CATALOG"));
-    }
-    
-    public String getName()
-    {
-        return record.getString("TABLE_SCHEM");
-    }
-    
-    public boolean isDefault()
-    {
-        return record.getBoolean("IS_DEFAULT", false);
-    }
-    
-    public Table[] getTables()
-    {
-        TabularStructure[] structures = schema.getStructures(record.getString("TABLE_CATALOG"), getName(), schema.tableType);
+        for(Table table : dbschema.getCurrentSchema().getTables())
+        {
+            assertEquals("CUSTOMER", table.getName());
+            
+            count++;
+        }
         
-        return Arrays.asList(structures).toArray(Table[]::new);
+        assertEquals(1, count);
     }
     
-    public View[] getViews()
+    @Test
+    public void testViews()
     {
-        TabularStructure[] structures = schema.getStructures(record.getString("TABLE_CATALOG"), getName(), schema.viewType);
+        DatabaseSchema dbschema = DatabaseSchemaTest.getHSQLSchema();
+        int count = 0;
         
-        return Arrays.asList(structures).toArray(View[]::new);
+        for(View view : dbschema.getCurrentSchema().getViews())
+        {
+            assertEquals("ALL_CUSTOMERS", view.getName());
+            
+            count++;
+        }
+        
+        assertEquals(1, count);
     }
-
-    @Override
-    public String toString()
-    {
-        return this.record.toString();
-    }
+    
 }
