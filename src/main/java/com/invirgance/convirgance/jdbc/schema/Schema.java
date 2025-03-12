@@ -23,60 +23,39 @@
  */
 package com.invirgance.convirgance.jdbc.schema;
 
-import com.invirgance.convirgance.ConvirganceException;
-import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  *
  * @author jbanes
  */
-public class Catalog
+public class Schema
 {
     private JSONObject record;
     private DatabaseSchema schema;
+    private Catalog catalog;
 
-    Catalog(JSONObject record, DatabaseSchema schema)
+    Schema(JSONObject record, DatabaseSchema schema, Catalog catalog)
     {
         this.record = record;
         this.schema = schema;
     }
     
+    public Catalog getCatalog()
+    {
+        if(catalog != null) return catalog;
+        
+        return schema.getCatalog(record.getString("TABLE_CATALOG"));
+    }
+    
     public String getName()
     {
-        // Specs say "TABLE_CAT", but some databases appear to be returning CATALOG_NAME
-        return record.getString("CATALOG_NAME", record.getString("TABLE_CAT"));
+        return record.getString("TABLE_SCHEM");
     }
     
-    public Schema[] getSchemas()
+    public boolean isDefault()
     {
-        JSONArray<Schema> schemas = new JSONArray<>();
-        
-        try(ResultSet set = schema.getMetaData().getSchemas(getName(), null))
-        {
-            for(JSONObject record : schema.getObjects(set))
-            {
-                schemas.add(new Schema(record, schema, this));
-            }
-            
-            return schemas.toArray(Schema[]::new);
-        }
-        catch(SQLException e)
-        {
-            throw new ConvirganceException(e);
-        }
-    }
-    
-    public Schema getSchema(String name)
-    {
-        for(Schema schema : getSchemas())
-        {
-            if(schema.getName().equalsIgnoreCase(name)) return schema;
-        }
-        
-        return null;
+        return record.getBoolean("IS_DEFAULT", false);
     }
 
     @Override

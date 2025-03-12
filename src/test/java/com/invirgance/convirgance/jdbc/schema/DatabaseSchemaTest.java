@@ -94,7 +94,7 @@ public class DatabaseSchemaTest
         dbms.update(new Query("create view ALL_CUSTOMERS as select * from CUSTOMER"));
     }
     
-    private static DataSource getHSQLDataSource() throws SQLException
+    public static DataSource getHSQLDataSource() throws SQLException
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         StoredConnection connection = driver
@@ -110,7 +110,7 @@ public class DatabaseSchemaTest
         return source;
     }
     
-    private DatabaseSchema getHSQLSchema() throws SQLException
+    public static DatabaseSchema getHSQLSchema() throws SQLException
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         

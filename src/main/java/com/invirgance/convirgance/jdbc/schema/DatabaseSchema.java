@@ -52,7 +52,7 @@ public class DatabaseSchema
         this.viewType = driver.getConfiguration().getString("viewType", "VIEW");
     }
     
-    private DatabaseMetaData getMetaData()
+    DatabaseMetaData getMetaData()
     {
         try
         {
@@ -74,7 +74,7 @@ public class DatabaseSchema
         return source;
     }
     
-    private JSONArray<JSONObject> getObjects(ResultSet set) throws SQLException
+    JSONArray<JSONObject> getObjects(ResultSet set) throws SQLException
     {
         ResultSetMetaData metadata = set.getMetaData();
         int count = metadata.getColumnCount();
