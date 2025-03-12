@@ -71,6 +71,7 @@ public class DatabaseSchemaTest
         DBMS dbms;
         
         delete(directory);
+        delete(new File("target/unit-test-work/dbms/h2db"));
         directory.mkdirs();
         
         dbms = new DBMS(getHSQLDataSource());
@@ -114,6 +115,20 @@ public class DatabaseSchemaTest
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         
         return new DatabaseSchema(driver, getHSQLDataSource());
+    }
+    
+    private DatabaseSchema getH2Schema() throws SQLException
+    {
+        AutomaticDriver driver = AutomaticDrivers.getDriverByName("H2");
+        StoredConnection connection = driver
+                                        .createConnection("test")
+                                        .datasource()
+                                            .property("url", "jdbc:h2:./target/unit-test-work/dbms/h2db/h2")
+                                            .property("user", "SA")
+                                            .property("password", "")
+                                        .build();
+        
+        return new DatabaseSchema(driver, connection.getDataSource());
     }
 
     @Test
@@ -184,5 +199,24 @@ public class DatabaseSchemaTest
         }
         
         assertEquals(expected.length, count);
+    }
+    
+    @Test
+    public void testH2Tables() throws SQLException
+    {
+        DatabaseSchema schema = getH2Schema();
+        Query create = new Query("create table test ( test_column VARCHAR(64) );");
+        int count = 0;
+        
+        new DBMS(schema.getDataSource()).update(create);
+        
+        for(Table table : schema.getTables())
+        {
+            // H2 returns a bunch of built-in tables as normal tables, so we're
+            // looking for the one we created to confirm that it's there.
+            if(table.getName().equals("TEST")) count++;
+        }
+        
+        assertEquals(1, count);
     }
 }
