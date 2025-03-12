@@ -22,6 +22,7 @@ SOFTWARE.
 package com.invirgance.convirgance.jdbc;
 
 import com.invirgance.convirgance.ConvirganceException;
+import com.invirgance.convirgance.jdbc.callback.ConnectionCallback;
 import com.invirgance.convirgance.jdbc.datasource.DataSourceManager;
 import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
 import com.invirgance.convirgance.json.JSONObject;
@@ -71,12 +72,24 @@ public class StoredConnection
         return new DataSourceConfig(record.getJSONObject("datasourceConfig"));
     }
     
-    public Connection getConnection() throws SQLException
+    public Connection getConnection()
     {
-        return getDataSource().getConnection();
+        try
+        {
+            return getDataSource().getConnection();
+        }
+        catch(SQLException e)
+        {
+            throw new ConvirganceException(e);
+        }
     }
     
-    public DataSource getDataSource() throws SQLException
+    public void execute(ConnectionCallback callback)
+    {
+        ConnectionCallback.execute(getDataSource(), callback);
+    }
+    
+    public DataSource getDataSource()
     {
         DriverConfig config = getDriverConfig();
         DataSourceManager manager;
@@ -96,7 +109,7 @@ public class StoredConnection
             return DriverDataSource.getDataSource(config.getURL(), config.getUsername(), config.getPassword());
         }
         
-        throw new SQLException("Connection not configured!");
+        throw new ConvirganceException("Connection not configured!");
     }
     
     public void save()
