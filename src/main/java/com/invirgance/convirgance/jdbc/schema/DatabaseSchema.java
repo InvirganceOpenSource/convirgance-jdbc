@@ -135,6 +135,15 @@ public class DatabaseSchema
         }
     }
     
+    String quoteIdentifier(String name)
+    {
+        String quote = driver.getConfiguration().getString("identifierChar", "\"");
+        
+        name = name.replace(quote, quote + quote);
+        
+        return quote + name + quote;
+    }
+    
     public TabularStructure[] getStructures(String type)
     {
         JSONArray<TabularStructure> structures = new JSONArray<>();

@@ -65,7 +65,11 @@
         ],
         "examples": [
             "jdbc:jtds:sqlserver://<SERVER>[:<PORT>][/<DATABASE_NAME>][;<property>=<value>[;...]]"
-        ]
+        ],
+        "config": {
+            "identifierLeftChar": "[",
+            "identifierRightChar": "]"
+        }
     },
     {
         "name": "HSQLDB",
@@ -134,7 +138,10 @@
          "examples": [
             "jdbc:mariadb://<SERVER>[:<PORT>][/<DATABASE_NAME>]",
             "jdbc:mysql://<SERVER>[:<PORT>][/<DATABASE_NAME>]?permitMysqlScheme"
-        ]
+        ],
+        "config": {
+            "identifierChar": "`"
+        }
     },
     {
         "name": "DB2",

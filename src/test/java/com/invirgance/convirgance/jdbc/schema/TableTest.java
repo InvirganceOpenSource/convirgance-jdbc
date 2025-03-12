@@ -47,6 +47,7 @@ import org.junit.jupiter.api.BeforeAll;
 public class TableTest
 {
     private static String url = "jdbc:hsqldb:file:target/unit-test-work/dbms/tabledb/;hsqldb.lock_file=false";
+    private static DataSource source;
     
     private static void delete(File file)
     {
@@ -97,7 +98,7 @@ public class TableTest
         }
     }
     
-    private DatabaseSchema getSchema() throws SQLException
+    private static DataSource getDataSource() throws SQLException
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         StoredConnection connection = driver
@@ -108,7 +109,16 @@ public class TableTest
                                             .property("password", "")
                                         .build();
         
-        return new DatabaseSchema(driver, connection.getDataSource());
+        if(source == null) source = connection.getDataSource();
+        
+        return source;
+    }
+    
+    private DatabaseSchema getSchema() throws SQLException
+    {
+        AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
+        
+        return new DatabaseSchema(driver, getDataSource());
     }
 
     @Test
@@ -127,5 +137,6 @@ public class TableTest
         
         assertEquals(13, count);
     }
+    
     
 }

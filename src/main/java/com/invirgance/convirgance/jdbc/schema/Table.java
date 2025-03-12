@@ -36,15 +36,29 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
     {
         super(record, schema);
     }
+    
+    public Query generateSelect()
+    {
+        StringBuffer buffer = new StringBuffer("select \n");
+        
+        for(Column column : getColumns())
+        {
+            if(buffer.length() > 9) buffer.append(",\n");
+            
+            buffer.append("    ");
+            buffer.append(getSchema().quoteIdentifier(column.getName()));
+        }
+        
+        buffer.append("\n");
+        buffer.append("from ");
+        buffer.append(getSchema().quoteIdentifier(getName()));
+        
+        return new Query(buffer.toString());
+    }
 
     @Override
     public Iterator<JSONObject> iterator()
     {
-        DBMS dbms = new DBMS(getSchema().getDataSource());
-        Query query = new Query("select * from " + getName());
-        
-        //FIX ME: This is a placeholder implmentation while the API is built out
-        
-        return dbms.query(query).iterator();
+        return new DBMS(getSchema().getDataSource()).query(generateSelect()).iterator();
     }
 }
