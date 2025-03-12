@@ -25,15 +25,10 @@ package com.invirgance.convirgance.jdbc.schema;
 
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
-import com.invirgance.convirgance.dbms.QueryOperation;
 import com.invirgance.convirgance.jdbc.AutomaticDriver;
 import com.invirgance.convirgance.jdbc.AutomaticDrivers;
 import com.invirgance.convirgance.jdbc.StoredConnection;
-import com.invirgance.convirgance.jdbc.datasource.DataSourceManager;
-import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
-import com.invirgance.convirgance.json.JSONObject;
 import java.io.File;
-import java.sql.SQLException;
 import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -64,8 +59,7 @@ public class DatabaseSchemaTest
         file.delete();
     }
     
-    @BeforeAll
-    public static void setup()
+    private static synchronized void setup()
     {
         File directory = new File("target/unit-test-work/dbms/schemadb");
         DBMS dbms;
@@ -105,7 +99,12 @@ public class DatabaseSchemaTest
                                             .property("password", "")
                                         .build();
         
-        if(source == null) source = connection.getDataSource();
+        if(source == null) 
+        {
+            source = connection.getDataSource();
+            
+            setup();
+        }
         
         return source;
     }
