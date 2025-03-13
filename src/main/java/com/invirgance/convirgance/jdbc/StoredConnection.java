@@ -22,6 +22,7 @@ SOFTWARE.
 package com.invirgance.convirgance.jdbc;
 
 import com.invirgance.convirgance.ConvirganceException;
+import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.jdbc.callback.ConnectionCallback;
 import com.invirgance.convirgance.jdbc.datasource.DataSourceManager;
 import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
@@ -117,6 +118,11 @@ public class StoredConnection
         }
         
         throw new ConvirganceException("Connection not configured!");
+    }
+    
+    public DBMS getDBMS()
+    {
+        return new DBMS(getDataSource());
     }
     
     public DatabaseSchemaLayout getSchemaLayout()
