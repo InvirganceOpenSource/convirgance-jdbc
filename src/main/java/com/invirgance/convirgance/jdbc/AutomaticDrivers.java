@@ -28,7 +28,23 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- *
+ * Provides access to common database drivers with an ability to add more as
+ * needed. Built-in drivers include:
+ * 
+ * <ul>
+ *   <li>Oracle Thin Driver</li>
+ *   <li>Derby Network</li>
+ *   <li>Derby Embedded</li>
+ *   <li>SQL Server (jTDS)</li>
+ *   <li>HSQLDB</li>
+ *   <li>H2</li>
+ *   <li>PostgreSQL</li>
+ *   <li>MariaDB/MySQL</li>
+ *   <li>DB2</li>
+ * </ul>
+ * 
+ * All drivers are Type IV and pulled from Maven Central on-demand.
+ * 
  * @author jbanes
  */
 public class AutomaticDrivers implements Iterable<AutomaticDriver>

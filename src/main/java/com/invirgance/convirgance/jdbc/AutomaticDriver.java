@@ -23,6 +23,7 @@ package com.invirgance.convirgance.jdbc;
 
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.jdbc.StoredConnections.StoredConnectionBuilder;
+import com.invirgance.convirgance.jdbc.datasource.DataSourceManager;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import java.sql.Driver;
@@ -30,7 +31,9 @@ import java.util.Arrays;
 import javax.sql.DataSource;
 
 /**
- *
+ * Provides access to a vendor-specific database driver. Supports both 
+ * <code>java.sql.Driver</code> and <code>javax.sql.DataSource</code>. 
+ * 
  * @author jbanes
  */
 public class AutomaticDriver
@@ -59,6 +62,14 @@ public class AutomaticDriver
         record.put("driver", driverClass);
     }
     
+    /**
+     * Returns an unconfigured <code>DataSource</code> instance for this 
+     * database. Consult the documentation for the database to find what properties
+     * are available to setup the connection.
+     * 
+     * @return an unconfigured <code>DataSource</code>
+     * @see DataSourceManager
+     */
     public DataSource getDataSource()
     {
         return database.getDataSource(record);
@@ -100,14 +111,23 @@ public class AutomaticDriver
     }
     
     /**
-     * This API may go away or be hidden in the future. Do not rely upon it.
-     * @return 
+     * This API may go away or be hidden in the future. Do not rely upon it just yet.
+     * @return A JSONObject of database-specific details
      */
     public JSONObject getConfiguration()
     {
         return this.record.getJSONObject("config", new JSONObject());
     }
     
+    /**
+     * Create a new StoredConnection for permanently record a connection to an 
+     * external database. Returns a builder object to allow for rapid configuration
+     * of the connection. Connection will not be saved until {@link StoredConnection#save()}
+     * is called.
+     * 
+     * @param name a unique name that can be used to later retrieve the connection
+     * @return a builder for configuring the new connection
+     */
     public StoredConnectionBuilder createConnection(String name)
     {
         return StoredConnections.createConnection(this, name);

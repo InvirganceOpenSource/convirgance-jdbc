@@ -85,6 +85,12 @@ public class StoredConnection
         }
     }
     
+    /**
+     * Obtains a connection to the database, executes the callback, and then
+     * closes the connection.
+     * @param callback a callback containing the logic to execute against the database
+     * @throws ConvirganceException if an SQL error occurs
+     */
     public void execute(ConnectionCallback callback)
     {
         ConnectionCallback.execute(getDataSource(), callback);
@@ -118,6 +124,10 @@ public class StoredConnection
         return new DatabaseSchemaLayout(getDriver(), getDataSource());
     }
     
+    /**
+     * Persist any changes to the connection configuration. If this is a new
+     * connection, the connection will not be saved until this is called.
+     */
     public void save()
     {
         JSONObject driverConfig = record.getJSONObject("driverConfig");
@@ -128,6 +138,9 @@ public class StoredConnection
         database.saveDescriptor(record);
     }
     
+    /**
+     * Permanently deletes this connection from the repository of stored connections
+     */
     public void delete()
     {
         database.deleteDescriptor(record);

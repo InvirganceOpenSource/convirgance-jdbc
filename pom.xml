@@ -108,7 +108,9 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    
+                    <links>
+                        <link>https://docs.invirgance.com/javadocs/convirgance/latest/</link>
+                    </links>
                 </configuration>
                 <reportSets>
                     <reportSet>
