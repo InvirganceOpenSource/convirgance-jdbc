@@ -34,15 +34,22 @@ import java.sql.*;
 public class Column
 {
     private JSONObject record;
+    private TabularStructure parent;
 
-    Column(JSONObject record)
+    Column(JSONObject record, TabularStructure parent)
     {
         this.record = record;
+        this.parent = parent;
     }
     
     public String getName()
     {
         return this.record.getString("COLUMN_NAME");
+    }
+
+    public TabularStructure getParent()
+    {
+        return parent;
     }
     
     public boolean isNullable()

@@ -107,11 +107,11 @@ public class DatabaseSchemaLayout
         return objects;
     }
     
-    Column[] getColumns(JSONObject table)
+    Column[] getColumns(TabularStructure table)
     {
-        String catalog = table.getString("TABLE_CAT");
-        String schema = table.getString("TABLE_SCHEM");
-        String name = table.getString("TABLE_NAME");
+        String catalog = table.getRecord().getString("TABLE_CAT");
+        String schema = table.getRecord().getString("TABLE_SCHEM");
+        String name = table.getRecord().getString("TABLE_NAME");
         
         JSONArray<Column> array = new JSONArray<>();
         
@@ -120,7 +120,7 @@ public class DatabaseSchemaLayout
             {
                 for(JSONObject record : getObjects(set))
                 {
-                    array.add(new Column(record));
+                    array.add(new Column(record, table));
                 }
             }
         });

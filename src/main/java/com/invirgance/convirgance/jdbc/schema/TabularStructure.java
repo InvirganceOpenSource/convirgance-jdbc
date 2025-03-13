@@ -76,7 +76,7 @@ public class TabularStructure
     
     public Column[] getColumns()
     {
-        return layout.getColumns(this.record);
+        return layout.getColumns(this);
     }
 
     @Override
