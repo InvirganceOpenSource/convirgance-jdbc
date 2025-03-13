@@ -87,32 +87,32 @@ public class Column
     {
         switch(getJDBCType())
         {
-            case JDBCType.ARRAY: return Array.class;
-            case JDBCType.BIGINT: return Long.class;
-            case JDBCType.BINARY: return byte[].class;
-            case JDBCType.BLOB: return Blob.class;
-            case JDBCType.BOOLEAN: return Boolean.class;
-            case JDBCType.CHAR: return String.class;
-            case JDBCType.CLOB: return Clob.class;
-            case JDBCType.DECIMAL: return BigDecimal.class;
-            case JDBCType.INTEGER: return Integer.class;
-            case JDBCType.DATE: return java.sql.Date.class;
-            case JDBCType.DOUBLE: return Double.class;
-            case JDBCType.FLOAT: return Float.class;
-            case JDBCType.LONGVARBINARY: return byte[].class;
-            case JDBCType.LONGNVARCHAR: return String.class;
-            case JDBCType.LONGVARCHAR: return String.class;
-            case JDBCType.NCHAR: return String.class;
-            case JDBCType.NVARCHAR: return String.class;
-            case JDBCType.NUMERIC: return BigDecimal.class;
-            case JDBCType.REAL: return Float.class;
-            case JDBCType.SMALLINT: return Short.class;
-            case JDBCType.STRUCT: return Struct.class;
-            case JDBCType.TIME: return Time.class;
-            case JDBCType.TIMESTAMP: return Timestamp.class;
-            case JDBCType.TIMESTAMP_WITH_TIMEZONE: return Timestamp.class;
-            case JDBCType.VARBINARY: return byte[].class;
-            case JDBCType.VARCHAR: return String.class;
+            case ARRAY: return Array.class;
+            case BIGINT: return Long.class;
+            case BINARY: return byte[].class;
+            case BLOB: return Blob.class;
+            case BOOLEAN: return Boolean.class;
+            case CHAR: return String.class;
+            case CLOB: return Clob.class;
+            case DECIMAL: return BigDecimal.class;
+            case INTEGER: return Integer.class;
+            case DATE: return java.sql.Date.class;
+            case DOUBLE: return Double.class;
+            case FLOAT: return Float.class;
+            case LONGVARBINARY: return byte[].class;
+            case LONGNVARCHAR: return String.class;
+            case LONGVARCHAR: return String.class;
+            case NCHAR: return String.class;
+            case NVARCHAR: return String.class;
+            case NUMERIC: return BigDecimal.class;
+            case REAL: return Float.class;
+            case SMALLINT: return Short.class;
+            case STRUCT: return Struct.class;
+            case TIME: return Time.class;
+            case TIMESTAMP: return Timestamp.class;
+            case TIMESTAMP_WITH_TIMEZONE: return Timestamp.class;
+            case VARBINARY: return byte[].class;
+            case VARCHAR: return String.class;
             
             default: return Object.class;
         }

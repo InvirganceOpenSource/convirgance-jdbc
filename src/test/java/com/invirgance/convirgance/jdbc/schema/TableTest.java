@@ -130,7 +130,7 @@ public class TableTest
         assertEquals("CUSTOMER", table.getName());
         assertEquals("PUBLIC", table.getSchema().getName());
         
-        table = layout.getTables()[0];
+        table = layout.getAllTables()[0];
         
         assertEquals("CUSTOMER", table.getName());
         assertEquals("PUBLIC", table.getSchema().getName());
@@ -141,7 +141,7 @@ public class TableTest
     {
         DatabaseSchemaLayout layout = getLayout();
 
-        Table table = layout.getTables()[0];
+        Table table = layout.getAllTables()[0];
         int count = 0;
         
         for(JSONObject record : table)

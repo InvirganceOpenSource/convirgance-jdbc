@@ -159,7 +159,12 @@ public class DatabaseSchemaLayout
         return structures.toArray(TabularStructure[]::new);
     }
     
-    public TabularStructure[] getStructures(String type)
+    public TabularStructure[] getAllStructures()
+    {
+        return getAllStructures(null);
+    }
+    
+    public TabularStructure[] getAllStructures(String type)
     {
         return getStructures(null, null, type);
     }
@@ -229,14 +234,14 @@ public class DatabaseSchemaLayout
         return null;
     }
     
-    public Table[] getTables()
+    public Table[] getAllTables()
     {
-        return Arrays.asList(getStructures(tableType)).toArray(Table[]::new);
+        return Arrays.asList(getAllStructures(tableType)).toArray(Table[]::new);
     }
     
-    public View[] getViews()
+    public View[] getAllViews()
     {
-        return Arrays.asList(getStructures(viewType)).toArray(View[]::new);
+        return Arrays.asList(getAllStructures(viewType)).toArray(View[]::new);
     }
     
     public String[] getTypes()

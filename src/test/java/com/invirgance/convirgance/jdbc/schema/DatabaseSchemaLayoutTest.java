@@ -165,8 +165,8 @@ public class DatabaseSchemaLayoutTest
         };
         
         DatabaseSchemaLayout schema = getHSQLLayout();
-        Table[] tables = schema.getTables();
-        View[] views = schema.getViews();
+        Table[] tables = schema.getAllTables();
+        View[] views = schema.getAllViews();
         
         int count;
         
@@ -226,7 +226,7 @@ public class DatabaseSchemaLayoutTest
         
         new DBMS(layout.getDataSource()).update(new TransactionOperation(createTable, createView));
         
-        for(Table table : layout.getTables())
+        for(Table table : layout.getAllTables())
         {
             // H2 returns a bunch of built-in tables as normal tables, so we're
             // looking for the one we created to confirm that it's there.
