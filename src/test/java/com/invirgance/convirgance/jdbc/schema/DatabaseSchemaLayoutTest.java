@@ -109,14 +109,14 @@ public class DatabaseSchemaLayoutTest
         return source;
     }
     
-    public static DatabaseSchemaLayout getHSQLSchema()
+    public static DatabaseSchemaLayout getHSQLLayout()
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         
         return new DatabaseSchemaLayout(driver, getHSQLDataSource());
     }
     
-    private DatabaseSchemaLayout getH2Schema()
+    private DatabaseSchemaLayout getH2Layout()
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("H2");
         StoredConnection connection = driver
@@ -133,7 +133,7 @@ public class DatabaseSchemaLayoutTest
     @Test
     public void testCatalogs()
     {
-        DatabaseSchemaLayout schema = getHSQLSchema();
+        DatabaseSchemaLayout schema = getHSQLLayout();
         
         for(Catalog catalog : schema.getCatalogs())
         {
@@ -163,7 +163,7 @@ public class DatabaseSchemaLayoutTest
             "CREDIT_LIMIT"
         };
         
-        DatabaseSchemaLayout schema = getHSQLSchema();
+        DatabaseSchemaLayout schema = getHSQLLayout();
         Table[] tables = schema.getTables();
         View[] views = schema.getViews();
         
@@ -204,7 +204,7 @@ public class DatabaseSchemaLayoutTest
     {
         String[] expected = {"GLOBAL TEMPORARY", "SYSTEM TABLE", "TABLE", "VIEW"};
         
-        DatabaseSchemaLayout schema = getHSQLSchema();
+        DatabaseSchemaLayout schema = getHSQLLayout();
         int count = 0;
         
         for(String type : schema.getTypes())
@@ -218,13 +218,13 @@ public class DatabaseSchemaLayoutTest
     @Test
     public void testH2Tables()
     {
-        DatabaseSchemaLayout schema = getH2Schema();
+        DatabaseSchemaLayout layout = getH2Layout();
         Query create = new Query("create table test ( test_column VARCHAR(64) );");
         int count = 0;
         
-        new DBMS(schema.getDataSource()).update(create);
+        new DBMS(layout.getDataSource()).update(create);
         
-        for(Table table : schema.getTables())
+        for(Table table : layout.getTables())
         {
             // H2 returns a bunch of built-in tables as normal tables, so we're
             // looking for the one we created to confirm that it's there.
@@ -232,5 +232,9 @@ public class DatabaseSchemaLayoutTest
         }
         
         assertEquals(1, count);
+        assertEquals("H2", layout.getCurrentCatalog().getName());
+        assertEquals("PUBLIC", layout.getCurrentSchema().getName());
+        assertEquals(1, layout.getCurrentSchema().getTables().length);
+        assertEquals("TEST", layout.getCurrentSchema().getTables()[0].getName());
     }
 }
