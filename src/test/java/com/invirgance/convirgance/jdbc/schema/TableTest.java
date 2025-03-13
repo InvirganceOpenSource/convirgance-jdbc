@@ -45,7 +45,7 @@ import org.junit.jupiter.api.Test;
  */
 public class TableTest
 {
-    private static String url = "jdbc:hsqldb:file:" + new File("target/unit-test-work/dbms/tabledb").getAbsolutePath() + ";hsqldb.lock_file=false;shutdown=true";    
+    private static String url = "jdbc:hsqldb:file:target/unit-test-work/dbms/tabledb/;hsqldb.lock_file=false;shutdown=true";    
     private static DataSource source;
     
     private static void delete(File file)
@@ -68,11 +68,12 @@ public class TableTest
     public static void setup()
     {
         File directory = new File("target/unit-test-work/dbms/tabledb");
-        DataSource source = DriverDataSource.getDataSource(url, "SA", "");
-        DBMS dbms = new DBMS(source);
+        DBMS dbms;
         
         delete(directory);
         directory.mkdirs();
+        
+        dbms = new DBMS(getDataSource());
         
         dbms.update(new Query("create table CUSTOMER (\n" +
                               "    CUSTOMER_ID INTEGER PRIMARY KEY,\n" +
@@ -97,7 +98,7 @@ public class TableTest
         }
     }
     
-    private static DataSource getDataSource() throws SQLException
+    private static DataSource getDataSource()
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         StoredConnection connection = driver
@@ -113,25 +114,38 @@ public class TableTest
         return source;
     }
     
-    private DatabaseSchemaLayout getSchema() throws SQLException
+    private DatabaseSchemaLayout getLayout()
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
 
         return new DatabaseSchemaLayout(driver, getDataSource());
     }
+    
+    @Test
+    public void testSchema()
+    {
+        DatabaseSchemaLayout layout = getLayout();
+        Table table = layout.getCurrentSchema().getTables()[0];
+        
+        assertEquals("CUSTOMER", table.getName());
+        assertEquals("PUBLIC", table.getSchema().getName());
+        
+        table = layout.getTables()[0];
+        
+        assertEquals("CUSTOMER", table.getName());
+        assertEquals("PUBLIC", table.getSchema().getName());
+    }
 
     @Test
-    public void testIterator() throws SQLException
+    public void testIterator()
     {
-        DatabaseSchemaLayout schema = getSchema();
+        DatabaseSchemaLayout layout = getLayout();
 
-        Table table = schema.getTables()[0];
+        Table table = layout.getTables()[0];
         int count = 0;
         
         for(JSONObject record : table)
         {
-            System.out.println(record);
-            
             assertEquals(++count, record.getInt("CUSTOMER_ID"));
         }
         

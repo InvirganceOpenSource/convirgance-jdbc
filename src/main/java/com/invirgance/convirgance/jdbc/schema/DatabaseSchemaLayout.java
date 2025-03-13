@@ -149,9 +149,9 @@ public class DatabaseSchemaLayout
             
             tableType = record.getString("TABLE_TYPE");
             
-            if(tableType.equals(this.tableType)) structure = new Table(record, this); 
-            else if(tableType.equals(this.viewType)) structure = new View(record, this); 
-            else structure = new TabularStructure(record, this);
+            if(tableType.equals(this.tableType)) structure = new Table(record, this, null); 
+            else if(tableType.equals(this.viewType)) structure = new View(record, this, null); 
+            else structure = new TabularStructure(record, this, null);
             
             structures.add(structure);
         }

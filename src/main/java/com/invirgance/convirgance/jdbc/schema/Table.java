@@ -32,9 +32,9 @@ import java.util.Iterator;
  */
 public class Table extends TabularStructure implements Iterable<JSONObject>
 {
-    Table(JSONObject record, DatabaseSchemaLayout schema)
+    Table(JSONObject record, DatabaseSchemaLayout layout, Schema schema)
     {
-        super(record, schema);
+        super(record, layout, schema);
     }
     
     public Query generateSelect()

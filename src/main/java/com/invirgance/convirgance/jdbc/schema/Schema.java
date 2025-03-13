@@ -63,6 +63,9 @@ public class Schema
     {
         TabularStructure[] structures = schema.getStructures(record.getString("TABLE_CATALOG"), getName(), schema.tableType);
         
+        // Optimization that prevents excessive database lookups for schema
+        for(TabularStructure structure : structures) structure.setSchema(this);
+        
         return Arrays.asList(structures).toArray(Table[]::new);
     }
     

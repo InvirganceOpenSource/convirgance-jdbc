@@ -23,11 +23,9 @@
  */
 package com.invirgance.convirgance.jdbc.schema;
 
-import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  *

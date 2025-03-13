@@ -32,11 +32,13 @@ import com.invirgance.convirgance.json.JSONObject;
 public class TabularStructure
 {    
     private JSONObject record;
-    private DatabaseSchemaLayout schema;
+    private DatabaseSchemaLayout layout;
+    private Schema schema;
 
-    TabularStructure(JSONObject record, DatabaseSchemaLayout schema)
+    TabularStructure(JSONObject record, DatabaseSchemaLayout layout, Schema schema)
     {
         this.record = record;
+        this.layout = layout;
         this.schema = schema;
     }
     
@@ -47,12 +49,24 @@ public class TabularStructure
     
     DatabaseSchemaLayout getLayout()
     {
-        return schema;
+        return layout;
+    }
+    
+    void setSchema(Schema schema)
+    {
+        this.schema = schema;
     }
     
     public String getName()
     {
         return record.getString("TABLE_NAME");
+    }
+    
+    public Schema getSchema()
+    {
+        if(this.schema != null) return schema;
+        
+        return layout.getCatalog(record.getString("TABLE_CAT")).getSchema(record.getString("TABLE_SCHEM"));
     }
     
     public String getType()
@@ -62,7 +76,7 @@ public class TabularStructure
     
     public Column[] getColumns()
     {
-        return schema.getColumns(this.record);
+        return layout.getColumns(this.record);
     }
 
     @Override

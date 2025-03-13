@@ -29,8 +29,8 @@ import com.invirgance.convirgance.json.JSONObject;
  */
 public class View extends TabularStructure
 {
-    public View(JSONObject record, DatabaseSchemaLayout schema)
+    public View(JSONObject record, DatabaseSchemaLayout layout, Schema schema)
     {
-        super(record, schema);
+        super(record, layout, schema);
     }
 }
