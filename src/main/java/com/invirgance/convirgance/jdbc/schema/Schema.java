@@ -33,10 +33,10 @@ import java.util.Arrays;
 public class Schema
 {
     private JSONObject record;
-    private DatabaseSchema schema;
+    private DatabaseSchemaLayout schema;
     private Catalog catalog;
 
-    Schema(JSONObject record, DatabaseSchema schema, Catalog catalog)
+    Schema(JSONObject record, DatabaseSchemaLayout schema, Catalog catalog)
     {
         this.record = record;
         this.schema = schema;

@@ -32,9 +32,9 @@ import com.invirgance.convirgance.json.JSONObject;
 public class TabularStructure
 {    
     private JSONObject record;
-    private DatabaseSchema schema;
+    private DatabaseSchemaLayout schema;
 
-    TabularStructure(JSONObject record, DatabaseSchema schema)
+    TabularStructure(JSONObject record, DatabaseSchemaLayout schema)
     {
         this.record = record;
         this.schema = schema;
@@ -45,7 +45,7 @@ public class TabularStructure
         return record;
     }
     
-    DatabaseSchema getSchema()
+    DatabaseSchemaLayout getLayout()
     {
         return schema;
     }

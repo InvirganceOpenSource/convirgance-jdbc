@@ -36,9 +36,9 @@ import java.sql.SQLException;
 public class Catalog
 {
     private JSONObject record;
-    private DatabaseSchema schema;
+    private DatabaseSchemaLayout schema;
 
-    Catalog(JSONObject record, DatabaseSchema schema)
+    Catalog(JSONObject record, DatabaseSchemaLayout schema)
     {
         this.record = record;
         this.schema = schema;

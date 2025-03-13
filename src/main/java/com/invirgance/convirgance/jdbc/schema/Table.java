@@ -32,7 +32,7 @@ import java.util.Iterator;
  */
 public class Table extends TabularStructure implements Iterable<JSONObject>
 {
-    Table(JSONObject record, DatabaseSchema schema)
+    Table(JSONObject record, DatabaseSchemaLayout schema)
     {
         super(record, schema);
     }
@@ -46,12 +46,12 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
             if(buffer.length() > 9) buffer.append(",\n");
             
             buffer.append("    ");
-            buffer.append(getSchema().quoteIdentifier(column.getName()));
+            buffer.append(getLayout().quoteIdentifier(column.getName()));
         }
         
         buffer.append("\n");
         buffer.append("from ");
-        buffer.append(getSchema().quoteIdentifier(getName()));
+        buffer.append(getLayout().quoteIdentifier(getName()));
         
         return new Query(buffer.toString());
     }
@@ -59,6 +59,6 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
     @Override
     public Iterator<JSONObject> iterator()
     {
-        return new DBMS(getSchema().getDataSource()).query(generateSelect()).iterator();
+        return new DBMS(getLayout().getDataSource()).query(generateSelect()).iterator();
     }
 }

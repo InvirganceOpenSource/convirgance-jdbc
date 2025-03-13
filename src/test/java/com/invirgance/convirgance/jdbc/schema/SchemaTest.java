@@ -35,7 +35,7 @@ public class SchemaTest
     @Test
     public void testTables()
     {
-        DatabaseSchema dbschema = DatabaseSchemaTest.getHSQLSchema();
+        DatabaseSchemaLayout dbschema = DatabaseSchemaLayoutTest.getHSQLSchema();
         int count = 0;
         
         for(Table table : dbschema.getCurrentSchema().getTables())
@@ -51,7 +51,7 @@ public class SchemaTest
     @Test
     public void testViews()
     {
-        DatabaseSchema dbschema = DatabaseSchemaTest.getHSQLSchema();
+        DatabaseSchemaLayout dbschema = DatabaseSchemaLayoutTest.getHSQLSchema();
         int count = 0;
         
         for(View view : dbschema.getCurrentSchema().getViews())

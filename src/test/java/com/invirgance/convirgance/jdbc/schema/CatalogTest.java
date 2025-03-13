@@ -37,7 +37,7 @@ public class CatalogTest
     public void testSchemas() throws SQLException
     {
         String[] expected = {"INFORMATION_SCHEMA", "PUBLIC", "SYSTEM_LOBS"};
-        DatabaseSchema dbschema = DatabaseSchemaTest.getHSQLSchema();
+        DatabaseSchemaLayout dbschema = DatabaseSchemaLayoutTest.getHSQLSchema();
         int count = 0;
         
         for(Schema schema : dbschema.getCurrentCatalog().getSchemas())

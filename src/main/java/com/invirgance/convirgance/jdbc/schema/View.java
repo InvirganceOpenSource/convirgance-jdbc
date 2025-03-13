@@ -29,7 +29,7 @@ import com.invirgance.convirgance.json.JSONObject;
  */
 public class View extends TabularStructure
 {
-    public View(JSONObject record, DatabaseSchema schema)
+    public View(JSONObject record, DatabaseSchemaLayout schema)
     {
         super(record, schema);
     }

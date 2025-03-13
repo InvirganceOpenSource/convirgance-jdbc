@@ -38,7 +38,7 @@ import org.junit.jupiter.api.BeforeAll;
  *
  * @author jbanes
  */
-public class DatabaseSchemaTest
+public class DatabaseSchemaLayoutTest
 {
     private static String url = "jdbc:hsqldb:file:target/unit-test-work/dbms/schemadb/;hsqldb.lock_file=false";
     private static DataSource source;
@@ -109,14 +109,14 @@ public class DatabaseSchemaTest
         return source;
     }
     
-    public static DatabaseSchema getHSQLSchema()
+    public static DatabaseSchemaLayout getHSQLSchema()
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         
-        return new DatabaseSchema(driver, getHSQLDataSource());
+        return new DatabaseSchemaLayout(driver, getHSQLDataSource());
     }
     
-    private DatabaseSchema getH2Schema()
+    private DatabaseSchemaLayout getH2Schema()
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("H2");
         StoredConnection connection = driver
@@ -127,13 +127,13 @@ public class DatabaseSchemaTest
                                             .property("password", "")
                                         .build();
         
-        return new DatabaseSchema(driver, connection.getDataSource());
+        return new DatabaseSchemaLayout(driver, connection.getDataSource());
     }
     
     @Test
     public void testCatalogs()
     {
-        DatabaseSchema schema = getHSQLSchema();
+        DatabaseSchemaLayout schema = getHSQLSchema();
         
         for(Catalog catalog : schema.getCatalogs())
         {
@@ -163,7 +163,7 @@ public class DatabaseSchemaTest
             "CREDIT_LIMIT"
         };
         
-        DatabaseSchema schema = getHSQLSchema();
+        DatabaseSchemaLayout schema = getHSQLSchema();
         Table[] tables = schema.getTables();
         View[] views = schema.getViews();
         
@@ -204,7 +204,7 @@ public class DatabaseSchemaTest
     {
         String[] expected = {"GLOBAL TEMPORARY", "SYSTEM TABLE", "TABLE", "VIEW"};
         
-        DatabaseSchema schema = getHSQLSchema();
+        DatabaseSchemaLayout schema = getHSQLSchema();
         int count = 0;
         
         for(String type : schema.getTypes())
@@ -218,7 +218,7 @@ public class DatabaseSchemaTest
     @Test
     public void testH2Tables()
     {
-        DatabaseSchema schema = getH2Schema();
+        DatabaseSchemaLayout schema = getH2Schema();
         Query create = new Query("create table test ( test_column VARCHAR(64) );");
         int count = 0;
         

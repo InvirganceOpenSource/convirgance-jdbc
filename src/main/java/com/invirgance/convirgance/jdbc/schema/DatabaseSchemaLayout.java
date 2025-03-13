@@ -37,7 +37,7 @@ import com.invirgance.convirgance.jdbc.callback.DatabaseMetaDataCallback;
  *
  * @author jbanes
  */
-public class DatabaseSchema
+public class DatabaseSchemaLayout
 {
     private AutomaticDriver driver;
     private DataSource source;
@@ -45,7 +45,7 @@ public class DatabaseSchema
     String tableType;
     String viewType;
 
-    public DatabaseSchema(AutomaticDriver driver, DataSource source)
+    public DatabaseSchemaLayout(AutomaticDriver driver, DataSource source)
     {
         this.driver = driver;
         this.source = source;

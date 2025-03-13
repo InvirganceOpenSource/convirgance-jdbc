@@ -113,17 +113,17 @@ public class TableTest
         return source;
     }
     
-    private DatabaseSchema getSchema() throws SQLException
+    private DatabaseSchemaLayout getSchema() throws SQLException
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
 
-        return new DatabaseSchema(driver, getDataSource());
+        return new DatabaseSchemaLayout(driver, getDataSource());
     }
 
     @Test
     public void testIterator() throws SQLException
     {
-        DatabaseSchema schema = getSchema();
+        DatabaseSchemaLayout schema = getSchema();
 
         Table table = schema.getTables()[0];
         int count = 0;
