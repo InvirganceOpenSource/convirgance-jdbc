@@ -25,6 +25,7 @@ import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.jdbc.callback.ConnectionCallback;
 import com.invirgance.convirgance.jdbc.datasource.DataSourceManager;
 import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
+import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 import com.invirgance.convirgance.json.JSONObject;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -110,6 +111,11 @@ public class StoredConnection
         }
         
         throw new ConvirganceException("Connection not configured!");
+    }
+    
+    public DatabaseSchemaLayout getSchemaLayout()
+    {
+        return new DatabaseSchemaLayout(getDriver(), getDataSource());
     }
     
     public void save()
