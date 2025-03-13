@@ -113,7 +113,7 @@ public class StoredConnections implements Iterable<StoredConnection>
             DataSource source = driver.getDataSource();
 
             if(source == null) throw new ConvirganceException("DataSource is not configured on automatic driver " + record.getString("driver"));
-            if(record.isNull("datasourceConfig")) record.put("datasourceConfig", new DataSourceManager(source).getConfig());
+            if(record.isNull("datasourceConfig")) record.put("datasourceConfig", new JSONObject());
             
             return new DataSourceConfigBuilder(this, record.getJSONObject("datasourceConfig"));
         }
