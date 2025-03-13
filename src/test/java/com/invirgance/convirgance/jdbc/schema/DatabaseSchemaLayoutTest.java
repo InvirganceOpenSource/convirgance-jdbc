@@ -25,6 +25,7 @@ package com.invirgance.convirgance.jdbc.schema;
 
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
+import com.invirgance.convirgance.dbms.TransactionOperation;
 import com.invirgance.convirgance.jdbc.AutomaticDriver;
 import com.invirgance.convirgance.jdbc.AutomaticDrivers;
 import com.invirgance.convirgance.jdbc.StoredConnection;
@@ -219,10 +220,11 @@ public class DatabaseSchemaLayoutTest
     public void testH2Tables()
     {
         DatabaseSchemaLayout layout = getH2Layout();
-        Query create = new Query("create table test ( test_column VARCHAR(64) );");
+        Query createTable = new Query("create table test ( test_column VARCHAR(64) );");
+        Query createView = new Query("create view test_view as select * from test;");
         int count = 0;
         
-        new DBMS(layout.getDataSource()).update(create);
+        new DBMS(layout.getDataSource()).update(new TransactionOperation(createTable, createView));
         
         for(Table table : layout.getTables())
         {
@@ -236,5 +238,7 @@ public class DatabaseSchemaLayoutTest
         assertEquals("PUBLIC", layout.getCurrentSchema().getName());
         assertEquals(1, layout.getCurrentSchema().getTables().length);
         assertEquals("TEST", layout.getCurrentSchema().getTables()[0].getName());
+        assertEquals(1, layout.getCurrentSchema().getViews().length);
+        assertEquals("TEST_VIEW", layout.getCurrentSchema().getViews()[0].getName());
     }
 }
