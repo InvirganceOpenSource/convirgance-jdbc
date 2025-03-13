@@ -69,9 +69,9 @@ public class StoredConnection
         DataSource source = getDriver().getDataSource();
         
         if(source == null) throw new ConvirganceException("Automatic driver " + record.getString("driver") + " does not have a DataSource.");
-        if(record.isNull("datasourceConfig")) record.put("datasourceConfig", new DataSourceManager(source).getConfig());
+        if(record.isNull("datasourceConfig")) record.put("datasourceConfig", new JSONObject());
         
-        return new DataSourceConfig(record.getJSONObject("datasourceConfig"));
+        return new DataSourceConfig(record.getJSONObject("datasourceConfig"), new DataSourceManager(source).getConfig());
     }
     
     public Connection getConnection()
@@ -139,7 +139,7 @@ public class StoredConnection
         JSONObject driverConfig = record.getJSONObject("driverConfig");
         JSONObject datasourceConfig = record.getJSONObject("datasourceConfig");
         
-        if(driverConfig == null && datasourceConfig != null) throw new ConvirganceException("Connection not configured!");
+        if(driverConfig == null && datasourceConfig == null) throw new ConvirganceException("Connection not configured!");
         
         database.saveDescriptor(record);
     }
@@ -207,19 +207,25 @@ public class StoredConnection
     public class DataSourceConfig
     {
         private JSONObject config;
-
-        private DataSourceConfig(JSONObject config)
+        private JSONObject defaults;
+        
+        private DataSourceConfig(JSONObject config, JSONObject defaults)
         {
             this.config = config;
+            this.defaults = defaults;
         }
         
         public String[] getProperties()
         {
+            if(!defaults.isEmpty()) defaults.keySet().toArray(String[]::new);
+            
             return config.keySet().toArray(String[]::new);
         }
         
         public Object getProperty(String property)
         {
+            if(!config.containsKey(property)) return defaults.get(property);
+            
             return config.get(property);
         }
         
