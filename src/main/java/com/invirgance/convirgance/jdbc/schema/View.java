@@ -21,16 +21,44 @@ SOFTWARE.
  */
 package com.invirgance.convirgance.jdbc.schema;
 
+import com.invirgance.convirgance.dbms.DBMS;
+import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.json.JSONObject;
+import java.util.Iterator;
 
 /**
  *
  * @author jbanes
  */
-public class View extends TabularStructure
+public class View extends TabularStructure implements Iterable<JSONObject>
 {
     public View(JSONObject record, DatabaseSchemaLayout layout, Schema schema)
     {
         super(record, layout, schema);
+    }
+    
+    public Query generateSelect()
+    {
+        StringBuffer buffer = new StringBuffer("select \n");
+        
+        for(Column column : getColumns())
+        {
+            if(buffer.length() > 9) buffer.append(",\n");
+            
+            buffer.append("    ");
+            buffer.append(getLayout().quoteIdentifier(column.getName()));
+        }
+        
+        buffer.append("\n");
+        buffer.append("from ");
+        buffer.append(getLayout().quoteIdentifier(getName()));
+        
+        return new Query(buffer.toString());
+    }
+
+    @Override
+    public Iterator<JSONObject> iterator()
+    {
+        return new DBMS(getLayout().getDataSource()).query(generateSelect()).iterator();
     }
 }

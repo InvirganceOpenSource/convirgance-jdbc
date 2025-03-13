@@ -152,5 +152,20 @@ public class TableTest
         assertEquals(13, count);
     }
     
+    @Test
+    public void testViewIterator()
+    {
+        DatabaseSchemaLayout layout = getLayout();
+
+        View table = layout.getAllViews()[0];
+        int count = 0;
+
+        for(JSONObject record : table)
+        {
+            assertEquals(++count, record.getInt("CUSTOMER_ID"));
+        }
+
+        assertEquals(13, count);
+    }
     
 }
