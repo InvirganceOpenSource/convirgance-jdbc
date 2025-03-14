@@ -75,26 +75,43 @@ public class AutomaticDriver
         return database.getDataSource(record);
     }
     
+    /**
+     * Sets the data source the driver will use when creating connections.
+     * @param dataSourceClass The full class name of the data source
+     */
     public void setDataSource(String dataSourceClass)
     {
         record.put("datasource", dataSourceClass);
     }
-    
+
     public String[] getArtifacts()
     {
         return ((JSONArray<String>)record.getJSONArray("artifact")).toArray(String[]::new);
     }
     
+    /**
+     * Set the maven artifacts for the driver, these will be used to load the driver.
+     * Include the full artifact coordinates.
+     * @param artifacts Artifacts
+     */
     public void setArtifacts(String... artifacts)
     {
         record.put("artifact", new JSONArray(Arrays.asList(artifacts)));
     }
     
+    /**
+     * Returns the prefixes that can be used in connection URLs.
+     * @return URL prefix strings
+     */
     public String[] getPrefixes()
     {
         return ((JSONArray<String>)record.getJSONArray("prefixes")).toArray(String[]::new);
     }
     
+    /**
+     * The prefixes used by the driver to connect to the Database.
+     * @param prefixes Strings that represent connection URL prefixes.
+     */
     public void setPrefixes(String... prefixes)
     {
         record.put("prefixes", new JSONArray(Arrays.asList(prefixes)));
@@ -105,6 +122,11 @@ public class AutomaticDriver
         return ((JSONArray<String>)record.getJSONArray("examples")).toArray(String[]::new);
     }
     
+    /**
+     * Set the connection URL examples for the driver.
+     * 
+     * @param examples URL Strings showcasing the connection URL for the driver.
+     */
     public void setExamples(String... examples)
     {
         record.put("examples", new JSONArray(Arrays.asList(examples)));
