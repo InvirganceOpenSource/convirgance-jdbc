@@ -62,6 +62,13 @@ public class DataSourceManager
         catch(IntrospectionException e) { throw new ConvirganceException(e); }
     }
     
+    /**
+     * Returns the properties available on the DataSource.
+     * These can be used to configure how the Driver that uses this 
+     * DataSource connects to the database.
+     * 
+     * @return Property names.
+     */
     public String[] getProperties()
     {
         BeanInfo info = getBeanInfo();
@@ -80,6 +87,12 @@ public class DataSourceManager
         return array.toArray(String[]::new);
     }
     
+    /**
+     * Returns the value assigned to the data source's property.
+     * 
+     * @param name Property name.
+     * @return The value.
+     */
     public Object getProperty(String name)
     {
         BeanInfo info = getBeanInfo();
@@ -101,6 +114,14 @@ public class DataSourceManager
         throw new ConvirganceException("Property " + name + " not found");
     }
     
+    /**
+     * Assign a value to the data source. 
+     * This will modify how drivers that utilize this data source create connections.
+     * Such as configuring SSL, setting cache properties etc...
+     * 
+     * @param name Name.
+     * @param value Value.
+     */
     public void setProperty(String name, String value)
     {
         setProperty(name, (Object)value);
@@ -206,6 +227,11 @@ public class DataSourceManager
         throw new ConvirganceException("Property " + name + " not found");
     }
     
+    /**
+     * Creates a clone of the data sources configuration.
+     * 
+     * @return The configuration.
+     */
     public JSONObject getConfig()
     {
         JSONObject config = new JSONObject();
@@ -215,6 +241,12 @@ public class DataSourceManager
         return config;
     }
     
+    /**
+     * Merges the provided configuration with the current one, 
+     * overwriting existing values.
+     * 
+     * @param config The configuration
+     */
     public void setConfig(JSONObject config)
     {
         for(String key : config.keySet()) setProperty(key, config.get(key));
