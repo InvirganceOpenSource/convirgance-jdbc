@@ -40,13 +40,19 @@ import org.jboss.shrinkwrap.resolver.api.maven.ConfigurableMavenResolverSystem;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 
 /**
- *
+ * Manages the Driver descriptors used throughout the program.
+ * Providing ways to load the classes with Maven, and make descriptor configuration changes.
+ * 
  * @author jbanes
  */
 class DriverDatabase implements Iterable<JSONObject>
 {
     private Config config;
-
+    
+    /**
+     * Setup for the DriverDatabase.
+     * When instantiated, writes to the users home directory, under '.convirgance/database/drivers'
+     */
     public DriverDatabase()
     {
         PrintStream err = System.err;
@@ -89,7 +95,16 @@ class DriverDatabase implements Iterable<JSONObject>
         this.config = new Config(new ClasspathSource("/database/drivers.json"), location, "name");
     }
     
-    
+    /**
+     * Returns information about the database with the provided name.
+     * Ex "PostgreSQL" would return, the driver it uses, its data source 
+     * and other information such as connection examples, prefixes
+     * 
+     * Used in AutomaticDriver to determine the correct driver.
+     * 
+     * @param name Database name
+     * @return The descriptor
+     */
     public JSONObject findDescriptorByName(String name)
     {
         for(JSONObject descriptor : this)
@@ -100,6 +115,14 @@ class DriverDatabase implements Iterable<JSONObject>
         return null;
     }
     
+    /**
+     * Returns the database descriptor based on the URL prefix.
+     * Example: "jdbc:derby:classpath:SomeDatabaseName"
+     * Used in AutomaticDriver to determine the correct driver.
+     * 
+     * @param url The URL or just the prefix itself.
+     * @return The descriptor.
+     */
     public JSONObject findDescriptorByURL(String url)
     {
         for(JSONObject descriptor : this)
@@ -113,11 +136,21 @@ class DriverDatabase implements Iterable<JSONObject>
         return null;
     }
     
+    /**
+     * Adds a new database descriptor.
+     * This also save the updates to the disk
+     * @param descriptor A JSONObject.
+     */
     public void saveDescriptor(JSONObject descriptor)
     {
         config.insert(descriptor);
     }
     
+    /**
+     * Removes a database descriptor.
+     * 
+     * @param descriptor A JSONObject.
+     */   
     public void deleteDescriptor(JSONObject descriptor)
     {
         config.delete(descriptor);
@@ -148,6 +181,13 @@ class DriverDatabase implements Iterable<JSONObject>
         }
     }
     
+    /**
+     * Returns and loads the driver in the descriptor.
+     * The driver itself is loaded in from maven based on the artifact id.
+     * 
+     * @param descriptor Driver descriptor.
+     * @return The driver.
+     */
     public Driver getDriver(JSONObject descriptor)
     {
         if(descriptor == null || descriptor.isNull("driver")) return null;
@@ -155,6 +195,13 @@ class DriverDatabase implements Iterable<JSONObject>
         return (Driver)loadClass(descriptor.getJSONArray("artifact"), descriptor.getString("driver"));
     }
     
+    /**
+     * Returns and loads the data source in the descriptor.
+     * The class object is returned.
+     * 
+     * @param descriptor The descriptor.
+     * @return The DataSource.
+     */
     public DataSource getDataSource(JSONObject descriptor)
     {
         if(descriptor == null || descriptor.isNull("datasource")) return null;
@@ -162,6 +209,7 @@ class DriverDatabase implements Iterable<JSONObject>
         return (DataSource)loadClass(descriptor.getJSONArray("artifact"), descriptor.getString("datasource"));
     }
     
+    // TODO Null pointer if user config missing at this point
     @Override
     public Iterator<JSONObject> iterator()
     {

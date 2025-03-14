@@ -34,7 +34,8 @@ import javax.sql.DataSource;
 
 /**
  * Represents a customized stored connection for interacting with databases.
- * Use the StoredConnections Builder class to create this.
+ * To obtain a StoredConnection use the StoredConnectionsBuilder 
+ * returned by AutomaticDriver.createConnection([NAME])
  * 
  * @author jbanes
  */

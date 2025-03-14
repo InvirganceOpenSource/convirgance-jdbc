@@ -22,15 +22,13 @@ SOFTWARE.
 package com.invirgance.convirgance.jdbc;
 
 import com.invirgance.convirgance.ConvirganceException;
-import com.invirgance.convirgance.jdbc.datasource.DataSourceManager;
 import com.invirgance.convirgance.json.JSONObject;
 import java.util.Iterator;
 import javax.sql.DataSource;
 
 /**
- * Used for creating customized reusable database connections.
- * Allows configuring the driver, the drivers data source, and the StoredConnection itself.
- * This class utilizes the builder pattern.
+ * Contains builders for creating the driver, the drivers data source, and the StoredConnection itself.
+ * To obtain a builder use AutomaticDriver.createConnection([NAME])
  * 
  * @author jbanes
  */
