@@ -76,7 +76,8 @@ public class AutomaticDriver
     }
     
     /**
-     * Sets the data source the driver will use when creating connections.
+     * Sets the DataSource the Driver will use when creating connections.
+     * 
      * @param dataSourceClass The full class name of the data source
      */
     public void setDataSource(String dataSourceClass)
@@ -84,6 +85,12 @@ public class AutomaticDriver
         record.put("datasource", dataSourceClass);
     }
 
+    /**
+     * Returns the artifacts that will be loaded from maven.
+     * Note: Some Drivers do not include the DataSource.
+     * 
+     * @return The artifacts coordinates.
+     */
     public String[] getArtifacts()
     {
         return ((JSONArray<String>)record.getJSONArray("artifact")).toArray(String[]::new);
@@ -101,6 +108,7 @@ public class AutomaticDriver
     
     /**
      * Returns the prefixes that can be used in connection URLs.
+     * 
      * @return URL prefix strings
      */
     public String[] getPrefixes()
@@ -109,7 +117,8 @@ public class AutomaticDriver
     }
     
     /**
-     * The prefixes used by the driver to connect to the Database.
+     * Update the prefixes used by the Driver to connect to the Database.
+     * 
      * @param prefixes Strings that represent connection URL prefixes.
      */
     public void setPrefixes(String... prefixes)
@@ -142,7 +151,7 @@ public class AutomaticDriver
     }
     
     /**
-     * Create a new StoredConnection for permanently record a connection to an 
+     * Create a new StoredConnection for permanently recording a connection to an 
      * external database. Returns a builder object to allow for rapid configuration
      * of the connection. Connection will not be saved until {@link StoredConnection#save()}
      * is called.
