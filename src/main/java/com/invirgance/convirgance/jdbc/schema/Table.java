@@ -40,6 +40,13 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
         super(record, layout, schema);
     }
     
+    /**
+     * Obtain the primary key {@link Column}. Throws an exception if the primary key is 
+     * multi-column.
+     * 
+     * @return the primary key {@link Column}
+     * @throws ConvirganceException if primary key is multi-column
+     */
     public Column getPrimaryKey()
     {
         Column[] primary = getPrimaryKeys();
@@ -49,6 +56,12 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
         return primary[0];
     }
     
+    /**
+     * Obtain the primary key columns. Columns are guaranteed to be returned in
+     * primary key order.
+     * 
+     * @return an array of {@link Column} objects representing the primary key
+     */
     public Column[] getPrimaryKeys()
     {
         Column[] columns = getColumns();
