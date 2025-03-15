@@ -27,8 +27,9 @@ import java.util.Iterator;
 import javax.sql.DataSource;
 
 /**
- * Contains builders for creating the driver, the drivers data source, and the StoredConnection itself.
- * To obtain a builder use AutomaticDriver.createConnection([NAME])
+ * Contains builders for creating the driver, the drivers data source, and a list of
+ * StoredConnections that have been saved. To obtain a builder to construct a 
+ * new StoredConnection, use {@link AutomaticDriver#createConnection(String)}.
  * 
  * @author jbanes
  */
@@ -95,7 +96,9 @@ public class StoredConnections implements Iterable<StoredConnection>
     }
     
     /**
-     * A Builder for creating and StoredConnections.
+     * A Builder for creating and StoredConnections. Typically a connection would
+     * be configured for the driver or for the datasource, but not both. If both
+     * are configured, datasource will take precedence when attempting to connect.
      * Example: Creating a new StoredConnection for a Driver that was retrieved 
      * with AutomaticDrivers.getDriverByName().
      */
