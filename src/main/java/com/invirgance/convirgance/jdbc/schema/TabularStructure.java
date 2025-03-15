@@ -66,7 +66,9 @@ public class TabularStructure
     {
         if(this.schema != null) return schema;
         
-        return layout.getCatalog(record.getString("TABLE_CAT")).getSchema(record.getString("TABLE_SCHEM"));
+        this.schema = layout.getCatalog(record.getString("TABLE_CAT")).getSchema(record.getString("TABLE_SCHEM"));
+        
+        return this.schema;
     }
     
     public String getType()

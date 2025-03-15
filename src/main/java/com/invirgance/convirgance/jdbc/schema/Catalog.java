@@ -34,12 +34,12 @@ import java.sql.ResultSet;
 public class Catalog
 {
     private JSONObject record;
-    private DatabaseSchemaLayout schema;
+    private DatabaseSchemaLayout layout;
 
-    Catalog(JSONObject record, DatabaseSchemaLayout schema)
+    Catalog(JSONObject record, DatabaseSchemaLayout layout)
     {
         this.record = record;
-        this.schema = schema;
+        this.layout = layout;
     }
     
     public String getName()
@@ -52,12 +52,12 @@ public class Catalog
     {
         JSONArray<Schema> schemas = new JSONArray<>();
         
-        schema.useMetaData(metadata -> {
+        layout.useMetaData(metadata -> {
             try(ResultSet set = metadata.getSchemas(getName(), null))
             {
-                for(JSONObject record : schema.getObjects(set))
+                for(JSONObject record : layout.getObjects(set))
                 {
-                    schemas.add(new Schema(record, schema, this));
+                    schemas.add(new Schema(record, layout, this));
                 }
             }
         });

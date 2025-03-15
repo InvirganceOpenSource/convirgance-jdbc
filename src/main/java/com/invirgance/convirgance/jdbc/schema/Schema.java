@@ -46,7 +46,9 @@ public class Schema
     {
         if(catalog != null) return catalog;
         
-        return schema.getCatalog(record.getString("TABLE_CATALOG"));
+        this.catalog = schema.getCatalog(record.getString("TABLE_CATALOG"));
+        
+        return this.catalog;
     }
     
     public String getName()

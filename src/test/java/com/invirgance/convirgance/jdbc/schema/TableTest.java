@@ -150,6 +150,8 @@ public class TableTest
         }
         
         assertEquals(13, count);
+        assertEquals("CUSTOMER_ID", table.getColumns()[0].getName());
+        assertEquals(table.getColumns()[0], table.getPrimaryKey());
     }
     
     @Test
@@ -167,5 +169,4 @@ public class TableTest
 
         assertEquals(13, count);
     }
-    
 }

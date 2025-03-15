@@ -21,9 +21,12 @@ SOFTWARE.
  */
 package com.invirgance.convirgance.jdbc.schema;
 
+import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
+import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
+import java.sql.ResultSet;
 import java.util.Iterator;
 
 /**
@@ -35,6 +38,46 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
     Table(JSONObject record, DatabaseSchemaLayout layout, Schema schema)
     {
         super(record, layout, schema);
+    }
+    
+    public Column getPrimaryKey()
+    {
+        Column[] primary = getPrimaryKeys();
+        
+        if(primary.length > 1) throw new ConvirganceException("Requested single primary key when table \"" + getName() + "\" primary key consists of " + primary.length + " columns");
+        
+        return primary[0];
+    }
+    
+    public Column[] getPrimaryKeys()
+    {
+        Column[] columns = getColumns();
+        Column[] primary;
+        
+        DatabaseSchemaLayout layout = getLayout();
+        JSONArray<JSONObject> keys = new JSONArray<>();
+        
+        layout.useMetaData(metadata -> {
+            try(ResultSet set = metadata.getPrimaryKeys(getSchema().getCatalog().getName(), getSchema().getName(), getName()))
+            {
+                keys.addAll(layout.getObjects(set));
+            }
+        });
+        
+        primary = new Column[keys.size()];
+        
+        for(JSONObject key : keys)
+        {
+            for(Column column : columns)
+            {
+                if(!column.getName().equals(key.getString("COLUMN_NAME"))) continue;
+                
+                primary[key.getInt("KEY_SEQ")-1] = column;
+                break;
+            }
+        }
+        
+        return primary;
     }
     
     public Query generateSelect()
