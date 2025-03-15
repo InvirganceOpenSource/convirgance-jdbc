@@ -61,6 +61,16 @@ public class Schema
         return record.getBoolean("IS_DEFAULT", false);
     }
     
+    public Table getTable(String name)
+    {
+        for(Table table : getTables())
+        {
+            if(table.getName().equalsIgnoreCase(name)) return table;
+        }
+        
+        return null;
+    }
+    
     public Table[] getTables()
     {
         TabularStructure[] structures = schema.getStructures(record.getString("TABLE_CATALOG"), getName(), schema.tableType);
@@ -69,6 +79,16 @@ public class Schema
         for(TabularStructure structure : structures) structure.setSchema(this);
         
         return Arrays.asList(structures).toArray(Table[]::new);
+    }
+    
+    public View getView(String name)
+    {
+        for(View view : getViews())
+        {
+            if(view.getName().equalsIgnoreCase(name)) return view;
+        }
+        
+        return null;
     }
     
     public View[] getViews()

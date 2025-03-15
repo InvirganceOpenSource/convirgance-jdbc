@@ -33,6 +33,7 @@ import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.source.FileSource;
 import java.io.File;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.sql.DataSource;
 import static org.junit.jupiter.api.Assertions.*;
@@ -91,6 +92,9 @@ public class TableTest
                               ");"));
         
         dbms.update(new Query("create view ALL_CUSTOMERS as select * from CUSTOMER"));
+        
+        dbms.update(new Query("create schema TESTING AUTHORIZATION DBA"));
+        dbms.update(new Query("create table TESTING.TEST_TABLE ( ID INTEGER PRIMARY KEY, TEST_CUSTOMER_ID INTEGER REFERENCES PUBLIC.CUSTOMER )"));
         
         for(JSONObject record : new JSONInput().read(new FileSource(new File("src/test/resources/table/customer.json"))))
         {
@@ -152,6 +156,26 @@ public class TableTest
         assertEquals(13, count);
         assertEquals("CUSTOMER_ID", table.getColumns()[0].getName());
         assertEquals(table.getColumns()[0], table.getPrimaryKey());
+    }
+    
+    @Test
+    public void testForeignKeys()
+    {
+        DatabaseSchemaLayout layout = getLayout();
+        Table table = layout.getCurrentCatalog().getSchema("TESTING").getTable("TEST_TABLE");
+        
+        for(Table.ForeignKey key : table.getForeignKeys())
+        {
+            assertEquals("PUBLIC", key.getTable().getSchema().getCatalog().getName());
+            assertEquals("TESTING", key.getTable().getSchema().getName());
+            assertEquals("TEST_CUSTOMER_ID", key.getColumn().getName());
+            assertEquals("PUBLIC", key.getTarget().getSchema().getName());
+            assertEquals("CUSTOMER", key.getTarget().getName());
+            assertEquals("CUSTOMER_ID", key.getTargetKey().getName());
+            assertTrue(key.getName().startsWith("SYS_FK_"));
+        }
+        
+        assertEquals(1, table.getForeignKeys().length);
     }
     
     @Test
