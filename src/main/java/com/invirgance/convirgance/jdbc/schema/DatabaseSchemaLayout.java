@@ -50,8 +50,8 @@ public class DatabaseSchemaLayout
         this.driver = driver;
         this.source = source;
         
-        this.tableType = driver.getConfiguration().getString("tableType", "TABLE");
-        this.viewType = driver.getConfiguration().getString("viewType", "VIEW");
+        this.tableType = driver.getConfiguration("tableType", "TABLE");
+        this.viewType = driver.getConfiguration("viewType", "VIEW");
     }
     
     void useMetaData(DatabaseMetaDataCallback callback)
@@ -59,12 +59,12 @@ public class DatabaseSchemaLayout
         ConnectionCallback.execute(source, callback);
     }
     
-    AutomaticDriver getDriver()
+    public AutomaticDriver getDriver()
     {
         return driver;
     }
     
-    DataSource getDataSource()
+    public DataSource getDataSource()
     {
         return source;
     }
@@ -130,11 +130,7 @@ public class DatabaseSchemaLayout
     
     String quoteIdentifier(String name)
     {
-        String quote = driver.getConfiguration().getString("identifierChar", "\"");
-        
-        name = name.replace(quote, quote + quote);
-        
-        return quote + name + quote;
+        return driver.quoteIdentifier(name);
     }
     
     TabularStructure[] getStructures(String catalog, String schema, String type)

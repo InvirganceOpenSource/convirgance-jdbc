@@ -141,13 +141,42 @@ public class AutomaticDriver
         record.put("examples", new JSONArray(Arrays.asList(examples)));
     }
     
-    /**
-     * This API may go away or be hidden in the future. Do not rely upon it just yet.
-     * @return A JSONObject of database-specific details
-     */
-    public JSONObject getConfiguration()
+    private JSONObject getConfiguration()
     {
-        return this.record.getJSONObject("config", new JSONObject());
+        if(!this.record.containsKey("config")) return new JSONObject();
+        
+        return this.record.getJSONObject("config");
+    }
+    
+    /**
+     * Return the requested driver configuration value, or the provided default 
+     * value if the configuration is not found.
+     *  
+     * @param key the configuration value to retrieve
+     * @param defaultValue the value to return if the key is not configured
+     * @return the configuration value if available, or the default value otherwise
+     */
+    public String getConfiguration(String key, String defaultValue)
+    {
+        return getConfiguration().getString(key, defaultValue);
+    }
+    
+    /**
+     * Natively quotes an identifier for use in a SQL statement. If the identifier
+     * contains the quote character, the quote character will be escaped by 
+     * doubling the instance of the character. e.g. <code>This "Thing"</code>
+     * is quoted as <code>"This ""Thing"""</code>.
+     * 
+     * @param name value to quote
+     * @return the quoted value
+     */
+    public String quoteIdentifier(String name)
+    {
+        String quote = getConfiguration("identifierChar", "\"");
+        
+        name = name.replace(quote, quote + quote);
+        
+        return quote + name + quote;
     }
     
     /**
