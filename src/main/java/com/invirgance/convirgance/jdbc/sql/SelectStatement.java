@@ -61,12 +61,28 @@ public class SelectStatement implements SQLStatement
     /**
      * Adds a column to the select clause
      * 
-     * @param column
-     * @return 
+     * @param column Column to select
+     * @return this object for chaining
      */
     public SelectStatement column(Column column)
     {
         columns.add(new ColumnExpressionStatement(layout, column, null, this));
+        
+        if(!tables.contains((Table)column.getParent())) tables.add((Table)column.getParent());
+        
+        return this;
+    }
+    
+    /**
+     * Adds a column to the select clause with the specified result set name
+     * 
+     * @param column Column to select
+     * @param name to generate "as" clause
+     * @return this object for chaining
+     */
+    public SelectStatement column(Column column, String name)
+    {
+        columns.add(new ColumnExpressionStatement(layout, column, name, this));
         
         if(!tables.contains((Table)column.getParent())) tables.add((Table)column.getParent());
         

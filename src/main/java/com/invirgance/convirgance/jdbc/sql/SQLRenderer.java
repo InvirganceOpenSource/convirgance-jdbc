@@ -67,6 +67,16 @@ public class SQLRenderer
         this.prettyPrint = pretty;
     }
     
+    public int getLine()
+    {
+        return line;
+    }
+    
+    public int getCharacter()
+    {
+        return (buffer.length() - lineOffset) + 1;
+    }
+    
     private void newline()
     {
         buffer.append("\n");

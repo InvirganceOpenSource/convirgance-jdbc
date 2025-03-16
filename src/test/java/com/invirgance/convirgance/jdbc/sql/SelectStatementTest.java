@@ -174,4 +174,27 @@ public class SelectStatementTest
         assertEquals(13, count);
     }
     
+    @Test
+    public void testNamedColumns()
+    {
+        List<String> zips = Arrays.asList(new String[]{"10095", "10096", "12347", "48124", "48128", "85638", "94401", "95035", "95117"});
+        
+        DatabaseSchemaLayout layout = getHSQLLayout();
+        Table table = layout.getCurrentSchema().getTable("customer");
+        DBMS dbms = new DBMS(getHSQLDataSource());
+        
+        SelectStatement select = new SelectStatement(layout).column(table.getColumn("zip"), "zipcode");
+        int count = 0;
+        
+        assertEquals("select \"ZIP\" as \"zipcode\" from \"PUBLIC\".\"CUSTOMER\";", select.query().getSQL());
+        
+        for(JSONObject record : dbms.query(select.query()))
+        {
+            assertTrue(zips.contains(record.getString("zipcode")));
+            count++;
+        }
+
+        assertEquals(13, count);
+    }
+    
 }
