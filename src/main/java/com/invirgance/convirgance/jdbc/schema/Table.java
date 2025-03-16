@@ -41,57 +41,19 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
         super(record, layout, schema);
     }
     
-    /**
-     * Obtain the primary key {@link Column}. Throws an exception if the primary key is 
-     * multi-column.
-     * 
-     * @return the primary key {@link Column}
-     * @throws ConvirganceException if primary key is multi-column
-     */
-    public Column getPrimaryKey()
+    public PrimaryKey getPrimaryKey()
     {
-        Column[] primary = getPrimaryKeys();
-        
-        if(primary.length > 1) throw new ConvirganceException("Requested single primary key when table \"" + getName() + "\" primary key consists of " + primary.length + " columns");
-        
-        return primary[0];
-    }
-    
-    /**
-     * Obtain the primary key columns. Columns are guaranteed to be returned in
-     * primary key order.
-     * 
-     * @return an array of {@link Column} objects representing the primary key
-     */
-    public Column[] getPrimaryKeys()
-    {
-        Column[] columns = getColumns();
-        Column[] primary;
-        
         DatabaseSchemaLayout layout = getLayout();
-        JSONArray<JSONObject> keys = new JSONArray<>();
+        JSONArray<JSONObject> records = new JSONArray<>();
         
         layout.useMetaData(metadata -> {
             try(ResultSet set = metadata.getPrimaryKeys(getSchema().getCatalog().getName(), getSchema().getName(), getName()))
             {
-                keys.addAll(layout.getObjects(set));
+                records.addAll(layout.getObjects(set));
             }
         });
-        
-        primary = new Column[keys.size()];
-        
-        for(JSONObject key : keys)
-        {
-            for(Column column : columns)
-            {
-                if(!column.getName().equals(key.getString("COLUMN_NAME"))) continue;
-                
-                primary[key.getInt("KEY_SEQ")-1] = column;
-                break;
-            }
-        }
-        
-        return primary;
+
+        return new PrimaryKey(getColumns(), records.toArray(JSONObject[]::new));
     }
     
     private boolean matchTable(JSONObject record1, JSONObject record2)
@@ -166,6 +128,105 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
     public Iterator<JSONObject> iterator()
     {
         return new DBMS(getLayout().getDataSource()).query(generateSelect()).iterator();
+    }
+    
+    public class PrimaryKey
+    {
+        private Column[] columns;
+        private JSONObject[] records;
+
+        public PrimaryKey(Column[] columns, JSONObject[] records)
+        {
+            this.columns = columns;
+            this.records = records;
+        }
+        
+        public String getName()
+        {
+            return records[0].getString("PK_NAME");
+        }
+        
+        /**
+         * The table the primary key belongs to
+         * 
+         * @return the Table containing the primary key column(s)
+         */
+        public Table getTable()
+        {
+            return Table.this;
+        }
+        
+        /**
+         * Obtain the primary key {@link Column}. Throws an exception if the primary key is 
+         * multi-column.
+         * 
+         * @return the primary key {@link Column}
+         * @throws ConvirganceException if primary key is multi-column
+         */
+        public Column getColumn()
+        {
+            Column[] columns = getColumns();
+            
+            if(columns.length > 1) throw new ConvirganceException("Single column requested for primary key on table \"" + getTable().getName() + "\" when key consists of " + columns.length + " columns");
+            
+            return columns[0];
+        }
+        
+        /**
+         * Obtain the primary key columns. Columns are guaranteed to be returned in
+         * primary key order.
+         * 
+         * @return an array of {@link Column} objects representing the primary key
+         */
+        public Column[] getColumns()
+        {
+            Column[] columns = new Column[this.records.length];
+            
+            for(JSONObject record : records)
+            {
+                for(Column column : this.columns)
+                {
+                    if(record.getString("COLUMN_NAME").equals(column.getName()))
+                    {
+                        columns[record.getInt("KEY_SEQ")-1] = column;
+                    }
+                }
+            }
+            
+            return columns;
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            PrimaryKey key;
+            
+            if(!(obj instanceof PrimaryKey)) return false;
+            
+            key = (PrimaryKey)obj;
+            
+            if(key.records.length != records.length) return false;
+            if(!key.getTable().equals(getTable())) return false;
+            
+            for(int i=0; i<records.length; i++)
+            {
+                if(!records[i].equals(key.records[i])) return false;
+            }
+            
+            return true;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return 79 * 13 + Arrays.deepHashCode(this.records);
+        }
+
+        @Override
+        public String toString()
+        {
+            return new JSONArray(Arrays.asList(records)).toString(4);
+        }
     }
     
     public class ForeignKey

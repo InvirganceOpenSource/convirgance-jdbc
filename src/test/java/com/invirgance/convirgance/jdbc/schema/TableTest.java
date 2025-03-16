@@ -155,7 +155,8 @@ public class TableTest
         
         assertEquals(13, count);
         assertEquals("CUSTOMER_ID", table.getColumns()[0].getName());
-        assertEquals(table.getColumns()[0], table.getPrimaryKey());
+        assertEquals(table.getColumns()[0], table.getPrimaryKey().getColumn());
+        assertTrue(table.getPrimaryKey().getName().startsWith("SYS_PK_"));
     }
     
     @Test
