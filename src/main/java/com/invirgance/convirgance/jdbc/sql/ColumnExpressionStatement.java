@@ -34,7 +34,6 @@ public class ColumnExpressionStatement implements ExpressionStatement
 {
     private DatabaseSchemaLayout layout;
     private SQLStatement parent;
-    private SQLRenderer renderer;
     
     private Column column;
     private String name;
@@ -67,19 +66,6 @@ public class ColumnExpressionStatement implements ExpressionStatement
     public void setParent(SQLStatement parent)
     {
         this.parent = parent;
-    }
-    
-    @Override
-    public SQLRenderer getRenderer()
-    {
-        if(parent == null)
-        {
-            if(renderer == null) this.renderer = new SQLRenderer();
-            
-            return renderer;
-        }
-        
-        return parent.getRenderer();
     }
     
     public Column getColumn()
@@ -122,8 +108,6 @@ public class ColumnExpressionStatement implements ExpressionStatement
     @Override
     public String toString()
     {
-        SQLRenderer renderer = getRenderer().reset();
-        
-        return render(renderer).toString();
+        return render(new SQLRenderer()).toString();
     }
 }

@@ -40,17 +40,9 @@ public class SelectStatement implements SQLStatement
     private DatabaseSchemaLayout layout;
     private Table from;
     
-    private SQLRenderer renderer = new SQLRenderer();
-    
     public SelectStatement(DatabaseSchemaLayout layout)
     {
         this.layout = layout;
-    }
-    
-    @Override
-    public SQLRenderer getRenderer()
-    {
-        return renderer;
     }
 
     public ExpressionStatement[] getColumns()
@@ -122,6 +114,6 @@ public class SelectStatement implements SQLStatement
     @Override
     public String toString()
     {
-        return render(renderer.reset()).toString();
+        return render(new SQLRenderer()).toString();
     }
 }

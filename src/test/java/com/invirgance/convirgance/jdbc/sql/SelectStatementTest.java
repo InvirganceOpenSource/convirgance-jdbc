@@ -160,10 +160,8 @@ public class SelectStatementTest
         
         SelectStatement select = new SelectStatement(layout).column(table.getColumn("name")).column(table.getColumn("zip"));
         int count = 0;
-        
-        select.getRenderer().setPrettyPrint(true);
 
-        assertEquals("select\n    \"NAME\",\n    \"ZIP\"\nfrom \"PUBLIC\".\"CUSTOMER\";", select.query().getSQL());
+        assertEquals("SELECT\n    \"NAME\",\n    \"ZIP\"\nFROM \"PUBLIC\".\"CUSTOMER\";", select.query(new SQLRenderer().capitialize(true).pretty(true)).getSQL());
 
         for(JSONObject record : dbms.query(select.query()))
         {

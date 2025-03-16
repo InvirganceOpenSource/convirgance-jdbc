@@ -23,7 +23,6 @@
  */
 package com.invirgance.convirgance.jdbc.sql;
 
-import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.jdbc.schema.NamedSchema;
 
 /**

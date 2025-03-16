@@ -34,7 +34,6 @@ public class LiteralExpressionStatement implements ExpressionStatement
 {
     private DatabaseSchemaLayout layout;
     private SQLStatement parent;
-    private SQLRenderer renderer;
     
     private Object literal;
     private String name;
@@ -68,19 +67,6 @@ public class LiteralExpressionStatement implements ExpressionStatement
     {
         this.parent = parent;
     }
-    
-    @Override
-    public SQLRenderer getRenderer()
-    {
-        if(parent == null)
-        {
-            if(renderer == null) this.renderer = new SQLRenderer();
-            
-            return renderer;
-        }
-        
-        return parent.getRenderer();
-    }
 
     @Override
     public String getName()
@@ -112,8 +98,6 @@ public class LiteralExpressionStatement implements ExpressionStatement
     @Override
     public String toString()
     {
-        SQLRenderer renderer = getRenderer().reset();
-        
-        return render(renderer).toString();
+        return render(new SQLRenderer()).toString();
     }
 }

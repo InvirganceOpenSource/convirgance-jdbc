@@ -43,23 +43,23 @@ public interface SQLStatement
     }
     
     /**
-     * Return the renderer used to render the SQL.
-     * 
-     * @return a SQLRenderer for re-configuration
-     */
-    public SQLRenderer getRenderer();
-    
-    /**
      * Obtain a {@link Query} object for execution
      * 
      * @return a Query object
      */
     public default Query query()
     {
-        SQLRenderer renderer = getRenderer();
-        
-        renderer.reset();
-        
+        return query(new SQLRenderer());
+    }
+    
+    /**
+     * Obtain a {@link Query} object for execution
+     * 
+     * @param renderer the SQL renderer to use when creating the query
+     * @return a Query object
+     */
+    public default Query query(SQLRenderer renderer)
+    {
         return new Query(render(renderer).toString());
     }
     

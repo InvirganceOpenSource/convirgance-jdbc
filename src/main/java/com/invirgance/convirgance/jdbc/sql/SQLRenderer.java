@@ -125,6 +125,20 @@ public class SQLRenderer
         last = value;
     }
     
+    public SQLRenderer capitialize(boolean capitalize)
+    {
+        this.capitalizeKeywords = capitalize;
+        
+        return this;
+    }
+    
+    public SQLRenderer pretty(boolean pretty)
+    {
+        this.prettyPrint = pretty;
+        
+        return this;
+    }
+    
     public SQLRenderer reset()
     {
         buffer.setLength(0);
