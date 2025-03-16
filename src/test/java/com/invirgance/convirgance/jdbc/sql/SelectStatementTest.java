@@ -138,7 +138,7 @@ public class SelectStatementTest
         SelectStatement select = new SelectStatement(layout).column(table.getColumn("zip"));
         int count = 0;
         
-        assertEquals("select \"ZIP\" from \"PUBLIC\".\"CUSTOMER\";", select.query().getSQL());
+        assertEquals("select \"ZIP\" from \"PUBLIC\".\"CUSTOMER\";", select.toString());
         
         for(JSONObject record : dbms.query(select.query()))
         {
@@ -161,7 +161,7 @@ public class SelectStatementTest
         SelectStatement select = new SelectStatement(layout).column(table.getColumn("name")).column(table.getColumn("zip"));
         int count = 0;
 
-        assertEquals("SELECT\n    \"NAME\",\n    \"ZIP\"\nFROM \"PUBLIC\".\"CUSTOMER\";", select.query(new SQLRenderer().capitialize(true).pretty(true)).getSQL());
+        assertEquals("SELECT\n    \"NAME\",\n    \"ZIP\"\nFROM \"PUBLIC\".\"CUSTOMER\";", new SQLRenderer().capitialize(true).pretty(true).statement(select).toString());
 
         for(JSONObject record : dbms.query(select.query()))
         {
@@ -184,7 +184,7 @@ public class SelectStatementTest
         SelectStatement select = new SelectStatement(layout).column(table.getColumn("zip"), "zipcode");
         int count = 0;
         
-        assertEquals("select \"ZIP\" as \"zipcode\" from \"PUBLIC\".\"CUSTOMER\";", select.query().getSQL());
+        assertEquals("select \"ZIP\" as \"zipcode\" from \"PUBLIC\".\"CUSTOMER\";", select.toString());
         
         for(JSONObject record : dbms.query(select.query()))
         {
