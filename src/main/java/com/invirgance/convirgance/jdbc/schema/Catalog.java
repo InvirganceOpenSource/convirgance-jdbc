@@ -31,7 +31,7 @@ import java.sql.ResultSet;
  *
  * @author jbanes
  */
-public class Catalog
+public class Catalog implements NamedSchema
 {
     private JSONObject record;
     private DatabaseSchemaLayout layout;
@@ -42,12 +42,14 @@ public class Catalog
         this.layout = layout;
     }
     
+    @Override
     public String getName()
     {
         // Specs say "TABLE_CAT", but some databases appear to be returning CATALOG_NAME
         return record.getString("CATALOG_NAME", record.getString("TABLE_CAT"));
     }
     
+    @Override
     public String getQuotedName()
     {
         return layout.quoteIdentifier(getName());

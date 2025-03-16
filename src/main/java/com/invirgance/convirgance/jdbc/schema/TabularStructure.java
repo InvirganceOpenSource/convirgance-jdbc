@@ -29,7 +29,7 @@ import com.invirgance.convirgance.json.JSONObject;
  *
  * @author jbanes
  */
-public class TabularStructure
+public class TabularStructure implements NamedSchema
 {    
     private JSONObject record;
     private DatabaseSchemaLayout layout;
@@ -57,11 +57,13 @@ public class TabularStructure
         this.schema = schema;
     }
     
+    @Override
     public String getName()
     {
         return record.getString("TABLE_NAME");
     }
     
+    @Override
     public String getQuotedName()
     {
         return layout.quoteIdentifier(getName());

@@ -30,7 +30,7 @@ import java.util.Arrays;
  *
  * @author jbanes
  */
-public class Schema
+public class Schema implements NamedSchema
 {
     private JSONObject record;
     private DatabaseSchemaLayout layout;
@@ -51,11 +51,13 @@ public class Schema
         return this.catalog;
     }
     
+    @Override
     public String getName()
     {
         return record.getString("TABLE_SCHEM");
     }
     
+    @Override
     public String getQuotedName()
     {
         return layout.quoteIdentifier(getName());

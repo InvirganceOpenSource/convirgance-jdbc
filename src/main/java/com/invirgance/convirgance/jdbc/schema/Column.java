@@ -31,7 +31,7 @@ import java.sql.*;
  *
  * @author jbanes
  */
-public class Column
+public class Column implements NamedSchema
 {
     private JSONObject record;
     private TabularStructure parent;
@@ -42,11 +42,13 @@ public class Column
         this.parent = parent;
     }
     
+    @Override
     public String getName()
     {
         return this.record.getString("COLUMN_NAME");
     }
     
+    @Override
     public String getQuotedName()
     {
         return getParent().getLayout().quoteIdentifier(getName());
