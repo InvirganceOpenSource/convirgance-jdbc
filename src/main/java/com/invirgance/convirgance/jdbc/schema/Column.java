@@ -46,6 +46,11 @@ public class Column
     {
         return this.record.getString("COLUMN_NAME");
     }
+    
+    public String getQuotedName()
+    {
+        return getParent().getLayout().quoteIdentifier(getName());
+    }
 
     public TabularStructure getParent()
     {

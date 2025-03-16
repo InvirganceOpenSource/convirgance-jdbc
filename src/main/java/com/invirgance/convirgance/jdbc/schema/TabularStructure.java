@@ -62,6 +62,11 @@ public class TabularStructure
         return record.getString("TABLE_NAME");
     }
     
+    public String getQuotedName()
+    {
+        return layout.quoteIdentifier(getName());
+    }
+    
     public Schema getSchema()
     {
         if(this.schema != null) return schema;
@@ -74,6 +79,16 @@ public class TabularStructure
     public String getType()
     {
         return record.getString("TABLE_TYPE", "UNKNOWN");
+    }
+    
+    public Column getColumn(String name)
+    {
+        for(Column column : getColumns())
+        {
+            if(column.getName().equalsIgnoreCase(name)) return column;
+        }
+        
+        return null;
     }
     
     public Column[] getColumns()

@@ -33,20 +33,20 @@ import java.util.Arrays;
 public class Schema
 {
     private JSONObject record;
-    private DatabaseSchemaLayout schema;
+    private DatabaseSchemaLayout layout;
     private Catalog catalog;
 
     Schema(JSONObject record, DatabaseSchemaLayout schema, Catalog catalog)
     {
         this.record = record;
-        this.schema = schema;
+        this.layout = schema;
     }
     
     public Catalog getCatalog()
     {
         if(catalog != null) return catalog;
         
-        this.catalog = schema.getCatalog(record.getString("TABLE_CATALOG"));
+        this.catalog = layout.getCatalog(record.getString("TABLE_CATALOG"));
         
         return this.catalog;
     }
@@ -54,6 +54,11 @@ public class Schema
     public String getName()
     {
         return record.getString("TABLE_SCHEM");
+    }
+    
+    public String getQuotedName()
+    {
+        return layout.quoteIdentifier(getName());
     }
     
     public boolean isDefault()
@@ -73,7 +78,7 @@ public class Schema
     
     public Table[] getTables()
     {
-        TabularStructure[] structures = schema.getStructures(record.getString("TABLE_CATALOG"), getName(), schema.tableType);
+        TabularStructure[] structures = layout.getStructures(record.getString("TABLE_CATALOG"), getName(), layout.tableType);
         
         // Optimization that prevents excessive database lookups for schema
         for(TabularStructure structure : structures) structure.setSchema(this);
@@ -93,7 +98,7 @@ public class Schema
     
     public View[] getViews()
     {
-        TabularStructure[] structures = schema.getStructures(record.getString("TABLE_CATALOG"), getName(), schema.viewType);
+        TabularStructure[] structures = layout.getStructures(record.getString("TABLE_CATALOG"), getName(), layout.viewType);
         
         return Arrays.asList(structures).toArray(View[]::new);
     }

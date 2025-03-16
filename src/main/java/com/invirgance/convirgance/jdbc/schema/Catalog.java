@@ -48,6 +48,11 @@ public class Catalog
         return record.getString("CATALOG_NAME", record.getString("TABLE_CAT"));
     }
     
+    public String getQuotedName()
+    {
+        return layout.quoteIdentifier(getName());
+    }
+    
     public Schema[] getSchemas()
     {
         JSONArray<Schema> schemas = new JSONArray<>();
