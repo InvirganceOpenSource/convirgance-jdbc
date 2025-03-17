@@ -25,6 +25,7 @@ package com.invirgance.convirgance.jdbc.sql;
 
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 import com.invirgance.convirgance.jdbc.schema.Table;
+import com.invirgance.convirgance.jdbc.schema.View;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,9 +40,11 @@ public class FromStatementTest
     {
         DatabaseSchemaLayout layout = SelectStatementTest.getHSQLLayout();
         Table table = layout.getCurrentSchema().getTable("customer");
+        View view = layout.getCurrentSchema().getView("all_customers");
         
         assertEquals("from \"PUBLIC\".\"CUSTOMER\"", new FromStatement(layout, table).toString());
         assertEquals("from \"PUBLIC\".\"CUSTOMER\" \"c\"", new FromStatement(layout, table, "c").toString());
+        assertEquals("from \"PUBLIC\".\"ALL_CUSTOMERS\" \"ac\"", new FromStatement(layout, view, "ac").toString());
     }
     
 }
