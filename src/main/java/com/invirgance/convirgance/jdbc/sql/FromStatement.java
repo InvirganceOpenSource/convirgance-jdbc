@@ -23,36 +23,36 @@
  */
 package com.invirgance.convirgance.jdbc.sql;
 
-import com.invirgance.convirgance.jdbc.schema.Column;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
+import com.invirgance.convirgance.jdbc.schema.NamedSchema;
+import com.invirgance.convirgance.jdbc.schema.TabularStructure;
 
 /**
  *
  * @author jbanes
  */
-public class ColumnExpressionStatement implements ExpressionStatement
+public class FromStatement implements SQLStatement, NamedSchema
 {
     private DatabaseSchemaLayout layout;
+    private TabularStructure table;
     private SQLStatement parent;
-    
-    private Column column;
     private String name;
+
     
-    
-    public ColumnExpressionStatement(DatabaseSchemaLayout layout, Column column)
+    public FromStatement(DatabaseSchemaLayout layout, TabularStructure table)
     {
-        this(layout, column, null);
+        this(layout, table, null);
     }
     
-    public ColumnExpressionStatement(DatabaseSchemaLayout layout, Column column, String name)
+    public FromStatement(DatabaseSchemaLayout layout, TabularStructure table, String name)
     {
-        this(layout, column, name, null);
+        this(layout, table, name, null);
     }
     
-    ColumnExpressionStatement(DatabaseSchemaLayout layout, Column column, String name, SQLStatement parent)
+    FromStatement(DatabaseSchemaLayout layout, TabularStructure table, String name, SQLStatement parent)
     {
         this.layout = layout;
-        this.column = column;
+        this.table = table;
         this.name = name;
         this.parent = parent;
     }
@@ -67,16 +67,11 @@ public class ColumnExpressionStatement implements ExpressionStatement
     {
         this.parent = parent;
     }
-    
-    public Column getColumn()
-    {
-        return this.column;
-    }
 
     @Override
     public String getName()
     {
-        return (name == null) ? column.getName() : name;
+        return (name == null) ? table.getName() : name;
     }
     
     public void setName(String name)
@@ -93,18 +88,14 @@ public class ColumnExpressionStatement implements ExpressionStatement
     @Override
     public SQLRenderer render(SQLRenderer renderer)
     {
-        renderer.column(column);
+        renderer.keyword("from");
+        renderer.schema(table);
         
-        if(this.name != null)
-        {
-            renderer
-                .keyword("as")
-                .schema(this);
-        }
+        if(this.name != null) renderer.schema(this);
         
         return renderer;
     }
-    
+
     @Override
     public String toString()
     {

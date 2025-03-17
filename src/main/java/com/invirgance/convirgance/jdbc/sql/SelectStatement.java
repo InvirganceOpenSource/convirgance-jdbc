@@ -26,6 +26,7 @@ package com.invirgance.convirgance.jdbc.sql;
 import com.invirgance.convirgance.jdbc.schema.Column;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 import com.invirgance.convirgance.jdbc.schema.Table;
+import com.invirgance.convirgance.jdbc.schema.TabularStructure;
 import com.invirgance.convirgance.json.JSONArray;
 
 /**
@@ -35,10 +36,10 @@ import com.invirgance.convirgance.json.JSONArray;
 public class SelectStatement implements SQLStatement
 {
     private JSONArray<ExpressionStatement> columns = new JSONArray<>();
-    private JSONArray<Table> tables = new JSONArray<>();
+    private JSONArray<TabularStructure> tables = new JSONArray<>();
 
     private DatabaseSchemaLayout layout;
-    private Table from;
+    private FromStatement from;
     
     public SelectStatement(DatabaseSchemaLayout layout)
     {
@@ -81,9 +82,14 @@ public class SelectStatement implements SQLStatement
         return this;
     }
     
-    public SelectStatement from(Table table)
+    public SelectStatement from(TabularStructure table)
     {
-        this.from = table;
+        return from(table, null);
+    }
+    
+    public SelectStatement from(TabularStructure table, String name)
+    {
+        this.from = new FromStatement(layout, table, name, this);
         
         if(!tables.contains(table)) tables.add(table);
         
@@ -93,8 +99,13 @@ public class SelectStatement implements SQLStatement
     @Override
     public SQLRenderer render(SQLRenderer renderer)
     {
-        Table from = this.from != null ? this.from : !this.tables.isEmpty() ? this.tables.get(0) : null;
+        FromStatement from = this.from;
  
+        if(this.from == null && !this.tables.isEmpty())
+        {
+            from = new FromStatement(layout, this.tables.get(0), null, this);
+        }
+        
         renderer
             .keyword("select");
         
@@ -104,8 +115,7 @@ public class SelectStatement implements SQLStatement
         }
         
         renderer
-            .keyword("from")
-            .schema(from)
+            .statement(from)
             .endStatement();
         
         return renderer;
