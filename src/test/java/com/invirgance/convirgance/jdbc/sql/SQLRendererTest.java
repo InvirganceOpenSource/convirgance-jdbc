@@ -44,7 +44,7 @@ public class SQLRendererTest
         assertEquals(1, renderer.getLine());
         assertEquals(1, renderer.getCharacter());
         
-        renderer.keyword("select");
+        renderer.keyword(Keyword.SELECT);
         
         assertEquals(1, renderer.getLine());
         assertEquals(7, renderer.getCharacter());
@@ -59,7 +59,7 @@ public class SQLRendererTest
         assertEquals(3, renderer.getLine());
         assertEquals(21, renderer.getCharacter());
         
-        renderer.keyword("from");
+        renderer.keyword(Keyword.FROM);
         
         assertEquals(4, renderer.getLine());
         assertEquals(5, renderer.getCharacter());

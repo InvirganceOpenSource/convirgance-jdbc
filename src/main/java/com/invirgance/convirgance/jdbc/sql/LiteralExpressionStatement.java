@@ -88,7 +88,7 @@ public class LiteralExpressionStatement implements ExpressionStatement
         if(this.name != null)
         {
             renderer
-                .keyword("as")
+                .keyword(Keyword.AS)
                 .schema(this);
         }
         

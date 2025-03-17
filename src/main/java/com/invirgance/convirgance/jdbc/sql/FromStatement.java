@@ -88,7 +88,7 @@ public class FromStatement implements SQLStatement, NamedSchema
     @Override
     public SQLRenderer render(SQLRenderer renderer)
     {
-        renderer.keyword("from");
+        renderer.keyword(Keyword.FROM);
         renderer.schema(table);
         
         if(this.name != null) renderer.schema(this);

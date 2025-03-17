@@ -98,7 +98,7 @@ public class ColumnExpressionStatement implements ExpressionStatement
         if(this.name != null)
         {
             renderer
-                .keyword("as")
+                .keyword(Keyword.AS)
                 .schema(this);
         }
         

@@ -165,13 +165,13 @@ public class SQLRenderer
         last = stack.pop();
     }
     
-    public SQLRenderer keyword(String keyword)
+    public SQLRenderer keyword(Keyword keyword)
     {
         prefix(keyword);
         
-        buffer.append(capitalizeKeywords ? keyword.toUpperCase() : keyword.toLowerCase());
+        buffer.append(capitalizeKeywords ? keyword.getUpperCase() : keyword.getLowerCase());
         
-        if(keyword.equalsIgnoreCase("select") && prettyPrint) 
+        if(keyword == Keyword.SELECT && prettyPrint) 
         {
             requireNewline = true;
             depth++;
@@ -230,15 +230,6 @@ public class SQLRenderer
         push();
         statement.render(this);
         pop();
-        
-        return this;
-    }
-    
-    public SQLRenderer comma()
-    {
-        prefix(",");
-        
-        buffer.append(",");
         
         return this;
     }

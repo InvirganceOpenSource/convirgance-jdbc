@@ -106,8 +106,7 @@ public class SelectStatement implements SQLStatement
             from = new FromStatement(layout, this.tables.get(0), null, this);
         }
         
-        renderer
-            .keyword("select");
+        renderer.keyword(Keyword.SELECT);
         
         for(ExpressionStatement column : this.columns)
         {
