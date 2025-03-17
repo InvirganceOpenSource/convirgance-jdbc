@@ -24,6 +24,7 @@ package com.invirgance.convirgance.jdbc.schema;
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.dbms.DBMS;
 import com.invirgance.convirgance.dbms.Query;
+import com.invirgance.convirgance.jdbc.sql.SelectStatement;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import java.sql.ResultSet;
@@ -105,29 +106,22 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
         return keys.toArray(ForeignKey[]::new);
     }
     
-    public Query generateSelect()
+    public SelectStatement select()
     {
-        StringBuffer buffer = new StringBuffer("select \n");
+        SelectStatement select = new SelectStatement(getLayout());
         
         for(Column column : getColumns())
         {
-            if(buffer.length() > 9) buffer.append(",\n");
-            
-            buffer.append("    ");
-            buffer.append(getLayout().quoteIdentifier(column.getName()));
+            select.column(column);
         }
         
-        buffer.append("\n");
-        buffer.append("from ");
-        buffer.append(getLayout().quoteIdentifier(getName()));
-        
-        return new Query(buffer.toString());
+        return select.from(this);
     }
 
     @Override
     public Iterator<JSONObject> iterator()
     {
-        return new DBMS(getLayout().getDataSource()).query(generateSelect()).iterator();
+        return new DBMS(getLayout().getDataSource()).query(select().query()).iterator();
     }
     
     public class PrimaryKey

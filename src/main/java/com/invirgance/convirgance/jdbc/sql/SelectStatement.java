@@ -61,7 +61,7 @@ public class SelectStatement implements SQLStatement
     {
         columns.add(new ColumnExpressionStatement(layout, column, null, this));
         
-        if(!tables.contains((Table)column.getParent())) tables.add((Table)column.getParent());
+        if(!tables.contains(column.getParent())) tables.add(column.getParent());
         
         return this;
     }

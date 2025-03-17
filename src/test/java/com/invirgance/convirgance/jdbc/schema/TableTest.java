@@ -65,7 +65,7 @@ public class TableTest
         file.delete();
     }
     
-    @BeforeAll
+//    @BeforeAll
     public static void setup()
     {
         File directory = new File("target/unit-test-work/dbms/tabledb");
@@ -74,7 +74,7 @@ public class TableTest
         delete(directory);
         directory.mkdirs();
         
-        dbms = new DBMS(getDataSource());
+        dbms = new DBMS(source);
         
         dbms.update(new Query("create table CUSTOMER (\n" +
                               "    CUSTOMER_ID INTEGER PRIMARY KEY,\n" +
@@ -102,7 +102,7 @@ public class TableTest
         }
     }
     
-    private static DataSource getDataSource()
+    public static DataSource getDataSource()
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
         StoredConnection connection = driver
@@ -113,12 +113,17 @@ public class TableTest
                                             .property("password", "")
                                         .build();
         
-        if(source == null) source = connection.getDataSource();
+        if(source == null) 
+        {
+            source = connection.getDataSource();
+            
+            setup();
+        }
         
         return source;
     }
     
-    private DatabaseSchemaLayout getLayout()
+    public static DatabaseSchemaLayout getLayout()
     {
         AutomaticDriver driver = AutomaticDrivers.getDriverByName("HSQLDB");
 
@@ -177,21 +182,5 @@ public class TableTest
         }
         
         assertEquals(1, table.getForeignKeys().length);
-    }
-    
-    @Test
-    public void testViewIterator()
-    {
-        DatabaseSchemaLayout layout = getLayout();
-
-        View table = layout.getAllViews()[0];
-        int count = 0;
-
-        for(JSONObject record : table)
-        {
-            assertEquals(++count, record.getInt("CUSTOMER_ID"));
-        }
-
-        assertEquals(13, count);
     }
 }
