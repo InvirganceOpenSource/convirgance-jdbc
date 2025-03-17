@@ -42,6 +42,11 @@ public interface SQLStatement
         return null;
     }
     
+    public default void setParent(SQLStatement parent)
+    {
+        throw new UnsupportedOperationException("Not implemented yet");
+    }
+    
     /**
      * Obtain a {@link Query} object for execution
      * 

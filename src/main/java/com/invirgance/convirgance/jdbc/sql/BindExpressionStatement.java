@@ -23,65 +23,58 @@
  */
 package com.invirgance.convirgance.jdbc.sql;
 
-import com.invirgance.convirgance.jdbc.schema.Column;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 
 /**
  *
  * @author jbanes
  */
-public class ColumnExpressionStatement implements ExpressionStatement
+public class BindExpressionStatement implements ExpressionStatement
 {
     private DatabaseSchemaLayout layout;
     private SQLStatement parent;
-    
-    private Column column;
+    private BindVariable bind;
     private String name;
-    
-    
-    public ColumnExpressionStatement(DatabaseSchemaLayout layout, Column column)
+
+    public BindExpressionStatement(DatabaseSchemaLayout layout, BindVariable bind)
     {
-        this(layout, column, null);
+        this(layout, bind, null);
     }
     
-    public ColumnExpressionStatement(DatabaseSchemaLayout layout, Column column, String name)
+    public BindExpressionStatement(DatabaseSchemaLayout layout, BindVariable bind, String name)
     {
-        this(layout, column, name, null);
+        this(layout, bind, name, null);
     }
     
-    ColumnExpressionStatement(DatabaseSchemaLayout layout, Column column, String name, SQLStatement parent)
+    BindExpressionStatement(DatabaseSchemaLayout layout, BindVariable bind, String name, SQLStatement parent)
     {
         this.layout = layout;
-        this.column = column;
-        this.name = name;
         this.parent = parent;
+        this.bind = bind;
+        this.name = name;
     }
-    
+
+    public BindVariable getBind()
+    {
+        return bind;
+    }
+
     @Override
     public SQLStatement getParent()
     {
         return this.parent;
     }
     
+    @Override
     public void setParent(SQLStatement parent)
     {
         this.parent = parent;
-    }
-    
-    public Column getColumn()
-    {
-        return this.column;
     }
 
     @Override
     public String getName()
     {
-        return (name == null) ? column.getName() : name;
-    }
-    
-    public void setName(String name)
-    {
-        this.name = name;
+        return name;
     }
 
     @Override
@@ -89,26 +82,12 @@ public class ColumnExpressionStatement implements ExpressionStatement
     {
         return layout.getDriver().quoteIdentifier(getName());
     }
-
+    
     @Override
     public SQLRenderer render(SQLRenderer renderer)
     {
-        //TODO: Need to generate prefix with table reference for multiple tables
-        renderer.column(column);
-        
-        if(this.name != null)
-        {
-            renderer
-                .keyword(Keyword.AS)
-                .schema(this);
-        }
+        renderer.schema(bind);
         
         return renderer;
-    }
-    
-    @Override
-    public String toString()
-    {
-        return render(new SQLRenderer()).toString();
     }
 }

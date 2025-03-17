@@ -27,47 +27,7 @@ package com.invirgance.convirgance.jdbc.sql;
  *
  * @author jbanes
  */
-public enum Keyword
+public interface ComparisonStatement extends SQLStatement 
 {
-    SELECT("select"),
-    FROM("from"),
-    AS("as"),
-    WHERE("where"),
-    INSERT("insert"),
-    INTO("into"),
-    VALUES("values"),
-    ORDER("order"),
-    BY("by"),
-    ASC("asc"),
-    DESC("desc"),
-    GROUP("group"),
-    HAVING("having"),
-    AND("and"),
-    OR("or"),
-    NOT("not");
-
-    private final String keyword;
-    private final String upper;
-        
-    private Keyword(String keyword)
-    {
-        this.keyword = keyword;
-        this.upper = keyword.toUpperCase();
-    }
     
-    public String getLowerCase()
-    {
-        return this.keyword;
-    }
-    
-    public String getUpperCase()
-    {
-        return this.upper;
-    }
-
-    @Override
-    public String toString()
-    {
-        return getLowerCase();
-    }
 }

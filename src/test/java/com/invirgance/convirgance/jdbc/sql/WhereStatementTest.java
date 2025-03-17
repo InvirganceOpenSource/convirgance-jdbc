@@ -23,51 +23,31 @@
  */
 package com.invirgance.convirgance.jdbc.sql;
 
+import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
+import com.invirgance.convirgance.jdbc.schema.Table;
+import com.invirgance.convirgance.jdbc.schema.TableTest;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 /**
  *
  * @author jbanes
  */
-public enum Keyword
+public class WhereStatementTest
 {
-    SELECT("select"),
-    FROM("from"),
-    AS("as"),
-    WHERE("where"),
-    INSERT("insert"),
-    INTO("into"),
-    VALUES("values"),
-    ORDER("order"),
-    BY("by"),
-    ASC("asc"),
-    DESC("desc"),
-    GROUP("group"),
-    HAVING("having"),
-    AND("and"),
-    OR("or"),
-    NOT("not");
-
-    private final String keyword;
-    private final String upper;
+    @Test
+    public void testEquals()
+    {
+        DatabaseSchemaLayout layout = TableTest.getLayout();
+        WhereStatement statement = new WhereStatement(layout);
+        Table table = layout.getCurrentSchema().getTable("customer");
         
-    private Keyword(String keyword)
-    {
-        this.keyword = keyword;
-        this.upper = keyword.toUpperCase();
+        assertEquals("", statement.toString());
+        assertEquals("where \"ZIP\" = '90210'", statement.equals(table.getColumn("zip"), "90210").toString());
+        assertEquals("where \"ZIP\" = '90210' and '12' = 12", statement.equals("12", 12).toString());
+        assertEquals("where \"ZIP\" = '90210' and '12' = 12 and \"ZIP\" = \"ZIP\"", statement.equals(table.getColumn("zip"), table.getColumn("zip")).toString());
+        assertEquals("where \"ZIP\" = '90210' and '12' = 12 and \"ZIP\" = \"ZIP\" and \"NAME\" = :name", statement.equals(table.getColumn("name"), new BindVariable("name")).toString());
+        
     }
     
-    public String getLowerCase()
-    {
-        return this.keyword;
-    }
-    
-    public String getUpperCase()
-    {
-        return this.upper;
-    }
-
-    @Override
-    public String toString()
-    {
-        return getLowerCase();
-    }
 }

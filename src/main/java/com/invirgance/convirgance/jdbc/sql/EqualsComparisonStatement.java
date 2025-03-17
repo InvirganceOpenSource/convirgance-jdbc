@@ -23,92 +23,77 @@
  */
 package com.invirgance.convirgance.jdbc.sql;
 
-import com.invirgance.convirgance.jdbc.schema.Column;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 
 /**
  *
  * @author jbanes
  */
-public class ColumnExpressionStatement implements ExpressionStatement
+public class EqualsComparisonStatement implements ComparisonStatement
 {
     private DatabaseSchemaLayout layout;
     private SQLStatement parent;
     
-    private Column column;
-    private String name;
-    
-    
-    public ColumnExpressionStatement(DatabaseSchemaLayout layout, Column column)
+    private ExpressionStatement left;
+    private ExpressionStatement right;
+
+    public EqualsComparisonStatement(DatabaseSchemaLayout layout)
     {
-        this(layout, column, null);
+        this(layout, null, null, null);
     }
     
-    public ColumnExpressionStatement(DatabaseSchemaLayout layout, Column column, String name)
+    public EqualsComparisonStatement(DatabaseSchemaLayout layout, ExpressionStatement left, ExpressionStatement right)
     {
-        this(layout, column, name, null);
+        this(layout, left, right, null);
     }
     
-    ColumnExpressionStatement(DatabaseSchemaLayout layout, Column column, String name, SQLStatement parent)
+    EqualsComparisonStatement(DatabaseSchemaLayout layout, ExpressionStatement left, ExpressionStatement right, SQLStatement parent)
     {
         this.layout = layout;
-        this.column = column;
-        this.name = name;
         this.parent = parent;
+        this.left = left;
+        this.right = right;
     }
-    
+
     @Override
     public SQLStatement getParent()
     {
         return this.parent;
     }
-    
+
     public void setParent(SQLStatement parent)
     {
         this.parent = parent;
     }
-    
-    public Column getColumn()
+
+    public ExpressionStatement getLeft()
     {
-        return this.column;
+        return left;
     }
 
-    @Override
-    public String getName()
+    public void setLeft(ExpressionStatement left)
     {
-        return (name == null) ? column.getName() : name;
-    }
-    
-    public void setName(String name)
-    {
-        this.name = name;
+        this.left = left;
     }
 
-    @Override
-    public String getQuotedName()
+    public ExpressionStatement getRight()
     {
-        return layout.getDriver().quoteIdentifier(getName());
+        return right;
+    }
+
+    public void setRight(ExpressionStatement right)
+    {
+        this.right = right;
     }
 
     @Override
     public SQLRenderer render(SQLRenderer renderer)
     {
-        //TODO: Need to generate prefix with table reference for multiple tables
-        renderer.column(column);
-        
-        if(this.name != null)
-        {
-            renderer
-                .keyword(Keyword.AS)
-                .schema(this);
-        }
+        renderer.statement(left);
+        renderer.operator("=");
+        renderer.statement(right);
         
         return renderer;
     }
     
-    @Override
-    public String toString()
-    {
-        return render(new SQLRenderer()).toString();
-    }
 }

@@ -180,6 +180,17 @@ public class SQLRenderer
         return this;
     }
     
+    public SQLRenderer operator(String operator)
+    {
+        prefix(operator);
+        
+        buffer.append(operator);
+        
+        last = operator;
+        
+        return this;
+    }
+    
     public SQLRenderer column(Column column)
     {
         prefix(column);
