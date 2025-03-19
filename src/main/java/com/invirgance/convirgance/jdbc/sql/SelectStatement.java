@@ -40,6 +40,7 @@ public class SelectStatement implements SQLStatement
 
     private DatabaseSchemaLayout layout;
     private FromStatement from;
+    private WhereStatement where;
     
     public SelectStatement(DatabaseSchemaLayout layout)
     {
@@ -95,6 +96,13 @@ public class SelectStatement implements SQLStatement
         
         return this;
     }
+    
+    public WhereStatement<SelectStatement> where()
+    {
+        this.where = new WhereStatement<>(layout, this);
+        
+        return where;
+    }
 
     @Override
     public SQLRenderer render(SQLRenderer renderer)
@@ -115,6 +123,7 @@ public class SelectStatement implements SQLStatement
         
         renderer
             .statement(from)
+            .statement(where)
             .endStatement();
         
         return renderer;

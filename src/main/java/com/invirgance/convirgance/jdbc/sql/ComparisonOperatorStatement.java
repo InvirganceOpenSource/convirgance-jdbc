@@ -29,30 +29,32 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  *
  * @author jbanes
  */
-public class EqualsComparisonStatement implements ComparisonStatement
+public class ComparisonOperatorStatement implements ComparisonStatement
 {
     private DatabaseSchemaLayout layout;
     private SQLStatement parent;
     
     private ExpressionStatement left;
     private ExpressionStatement right;
+    private ComparisonOperator operator;
 
-    public EqualsComparisonStatement(DatabaseSchemaLayout layout)
+    public ComparisonOperatorStatement(DatabaseSchemaLayout layout)
     {
         this(layout, null, null, null);
     }
     
-    public EqualsComparisonStatement(DatabaseSchemaLayout layout, ExpressionStatement left, ExpressionStatement right)
+    public ComparisonOperatorStatement(DatabaseSchemaLayout layout, ExpressionStatement left, ComparisonOperator operator, ExpressionStatement right)
     {
-        this(layout, left, right, null);
+        this(layout, left, operator, right, null);
     }
     
-    EqualsComparisonStatement(DatabaseSchemaLayout layout, ExpressionStatement left, ExpressionStatement right, SQLStatement parent)
+    ComparisonOperatorStatement(DatabaseSchemaLayout layout, ExpressionStatement left, ComparisonOperator operator, ExpressionStatement right, SQLStatement parent)
     {
         this.layout = layout;
         this.parent = parent;
         this.left = left;
         this.right = right;
+        this.operator = operator;
     }
 
     @Override
@@ -86,11 +88,21 @@ public class EqualsComparisonStatement implements ComparisonStatement
         this.right = right;
     }
 
+    public ComparisonOperator getOperator()
+    {
+        return operator;
+    }
+
+    public void setOperator(ComparisonOperator operator)
+    {
+        this.operator = operator;
+    }
+
     @Override
     public SQLRenderer render(SQLRenderer renderer)
     {
         renderer.statement(left);
-        renderer.operator("=");
+        renderer.operator(operator);
         renderer.statement(right);
         
         return renderer;

@@ -170,6 +170,14 @@ public class SelectStatementTest
         }
 
         assertEquals(13, count);
+        
+        select
+            .where()
+                .equals(table.getColumn("zip"), "90210")
+                .notEquals(table.getColumn("city"), "LA")
+                .done();
+        
+        assertEquals("select\n    \"NAME\",\n    \"ZIP\"\nfrom \"PUBLIC\".\"CUSTOMER\" \nwhere \"ZIP\" = '90210'\nand \"CITY\" <> 'LA';", new SQLRenderer().pretty(true).statement(select).toString());
     }
     
     @Test

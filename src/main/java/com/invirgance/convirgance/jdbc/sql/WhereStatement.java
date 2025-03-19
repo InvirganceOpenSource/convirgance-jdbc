@@ -30,11 +30,12 @@ import com.invirgance.convirgance.json.JSONArray;
 /**
  *
  * @author jbanes
+ * @param <P> the parent type
  */
-public class WhereStatement implements SQLStatement
+public class WhereStatement<P extends SQLStatement> implements SQLStatement
 {
     private DatabaseSchemaLayout layout;
-    private SQLStatement parent;
+    private P parent;
     
     private JSONArray<ComparisonStatement> clauses = new JSONArray<>();
 
@@ -44,7 +45,7 @@ public class WhereStatement implements SQLStatement
         this(layout, null);
     }
     
-    public WhereStatement(DatabaseSchemaLayout layout, SQLStatement parent)
+    public WhereStatement(DatabaseSchemaLayout layout, P parent)
     {
         this.layout = layout;
         this.parent = parent;
@@ -56,14 +57,15 @@ public class WhereStatement implements SQLStatement
         return this.parent;
     }
 
+    @Override
     public void setParent(SQLStatement parent)
     {
-        this.parent = parent;
+        this.parent = (P)parent;
     }
     
-    public WhereStatement equals(ExpressionStatement column, ExpressionStatement value)
+    public WhereStatement<P> filter(ExpressionStatement column, ComparisonOperator operator, ExpressionStatement value)
     {
-        EqualsComparisonStatement comparison = new EqualsComparisonStatement(layout, column, value, this);
+        ComparisonOperatorStatement comparison = new ComparisonOperatorStatement(layout, column, operator, value, this);
         
         column.setParent(comparison);
         value.setParent(comparison);
@@ -73,36 +75,191 @@ public class WhereStatement implements SQLStatement
         return this;
     }
     
-    public WhereStatement equals(Object column, Object value)
+    public WhereStatement<P> filter(Object column, ComparisonOperator operator, Object value)
     {
         ExpressionStatement left = new LiteralExpressionStatement(layout, column, null);
         ExpressionStatement right = new LiteralExpressionStatement(layout, value, null);
         
-        return equals(left, right);
+        return filter(left, operator, right);
     }
     
-    public WhereStatement equals(Column column, Object value)
+    public WhereStatement<P> filter(Column column, ComparisonOperator operator, Object value)
     {
         ExpressionStatement left = new ColumnExpressionStatement(layout, column, null);
         ExpressionStatement right = new LiteralExpressionStatement(layout, value, null);
         
-        return equals(left, right);
+        return filter(left, operator, right);
     }
     
-    public WhereStatement equals(Column column, Column value)
+    public WhereStatement<P> filter(Column column, ComparisonOperator operator, Column value)
     {
         ExpressionStatement left = new ColumnExpressionStatement(layout, column, null);
         ExpressionStatement right = new ColumnExpressionStatement(layout, value, null);
         
-        return equals(left, right);
+        return filter(left, operator, right);
     }
     
-    public WhereStatement equals(Column column, BindVariable value)
+    public WhereStatement<P> filter(Column column, ComparisonOperator operator, BindVariable value)
     {
         ExpressionStatement left = new ColumnExpressionStatement(layout, column, null);
         ExpressionStatement right = new BindExpressionStatement(layout, value, null);
         
-        return equals(left, right);
+        return filter(left, operator, right);
+    }
+    
+    public WhereStatement<P> equals(ExpressionStatement column, ExpressionStatement value)
+    {
+        return filter(column, ComparisonOperator.EQUAL, value);
+    }
+    
+    public WhereStatement<P> equals(Object column, Object value)
+    {
+        return filter(column, ComparisonOperator.EQUAL, value);
+    }
+    
+    public WhereStatement<P> equals(Column column, Object value)
+    {
+        return filter(column, ComparisonOperator.EQUAL, value);
+    }
+    
+    public WhereStatement<P> equals(Column column, Column value)
+    {
+        return filter(column, ComparisonOperator.EQUAL, value);
+    }
+    
+    public WhereStatement<P> equals(Column column, BindVariable value)
+    {
+        return filter(column, ComparisonOperator.EQUAL, value);
+    }
+    
+    public WhereStatement<P> notEquals(ExpressionStatement column, ExpressionStatement value)
+    {
+        return filter(column, ComparisonOperator.NOT_EQUAL, value);
+    }
+    
+    public WhereStatement<P> notEquals(Object column, Object value)
+    {
+        return filter(column, ComparisonOperator.NOT_EQUAL, value);
+    }
+    
+    public WhereStatement<P> notEquals(Column column, Object value)
+    {
+        return filter(column, ComparisonOperator.NOT_EQUAL, value);
+    }
+    
+    public WhereStatement<P> notEquals(Column column, Column value)
+    {
+        return filter(column, ComparisonOperator.NOT_EQUAL, value);
+    }
+    
+    public WhereStatement<P> notEquals(Column column, BindVariable value)
+    {
+        return filter(column, ComparisonOperator.NOT_EQUAL, value);
+    }
+    
+    public WhereStatement<P> greaterThan(ExpressionStatement column, ExpressionStatement value)
+    {
+        return filter(column, ComparisonOperator.GREATER_THAN, value);
+    }
+    
+    public WhereStatement<P> greaterThan(Object column, Object value)
+    {
+        return filter(column, ComparisonOperator.GREATER_THAN, value);
+    }
+    
+    public WhereStatement<P> greaterThan(Column column, Object value)
+    {
+        return filter(column, ComparisonOperator.GREATER_THAN, value);
+    }
+    
+    public WhereStatement<P> greaterThan(Column column, Column value)
+    {
+        return filter(column, ComparisonOperator.GREATER_THAN, value);
+    }
+    
+    public WhereStatement<P> greaterThan(Column column, BindVariable value)
+    {
+        return filter(column, ComparisonOperator.GREATER_THAN, value);
+    }
+    
+    public WhereStatement<P> greaterThanOrEquals(ExpressionStatement column, ExpressionStatement value)
+    {
+        return filter(column, ComparisonOperator.GREATER_THAN_OR_EQUAL, value);
+    }
+    
+    public WhereStatement<P> greaterThanOrEquals(Object column, Object value)
+    {
+        return filter(column, ComparisonOperator.GREATER_THAN_OR_EQUAL, value);
+    }
+    
+    public WhereStatement<P> greaterThanOrEquals(Column column, Object value)
+    {
+        return filter(column, ComparisonOperator.GREATER_THAN_OR_EQUAL, value);
+    }
+    
+    public WhereStatement<P> greaterThanOrEquals(Column column, Column value)
+    {
+        return filter(column, ComparisonOperator.GREATER_THAN_OR_EQUAL, value);
+    }
+    
+    public WhereStatement<P> greaterThanOrEquals(Column column, BindVariable value)
+    {
+        return filter(column, ComparisonOperator.GREATER_THAN_OR_EQUAL, value);
+    }
+    
+    public WhereStatement<P> lessThan(ExpressionStatement column, ExpressionStatement value)
+    {
+        return filter(column, ComparisonOperator.LESS_THAN, value);
+    }
+    
+    public WhereStatement<P> lessThan(Object column, Object value)
+    {
+        return filter(column, ComparisonOperator.LESS_THAN, value);
+    }
+    
+    public WhereStatement<P> lessThan(Column column, Object value)
+    {
+        return filter(column, ComparisonOperator.LESS_THAN, value);
+    }
+    
+    public WhereStatement<P> lessThan(Column column, Column value)
+    {
+        return filter(column, ComparisonOperator.LESS_THAN, value);
+    }
+    
+    public WhereStatement<P> lessThan(Column column, BindVariable value)
+    {
+        return filter(column, ComparisonOperator.LESS_THAN, value);
+    }
+    
+    public WhereStatement<P> lessThanOrEquals(ExpressionStatement column, ExpressionStatement value)
+    {
+        return filter(column, ComparisonOperator.LESS_THAN_OR_EQUAL, value);
+    }
+    
+    public WhereStatement<P> lessThanOrEquals(Object column, Object value)
+    {
+        return filter(column, ComparisonOperator.LESS_THAN_OR_EQUAL, value);
+    }
+    
+    public WhereStatement<P> lessThanOrEquals(Column column, Object value)
+    {
+        return filter(column, ComparisonOperator.LESS_THAN_OR_EQUAL, value);
+    }
+    
+    public WhereStatement<P> lessThanOrEquals(Column column, Column value)
+    {
+        return filter(column, ComparisonOperator.LESS_THAN_OR_EQUAL, value);
+    }
+    
+    public WhereStatement<P> lessThanOrEquals(Column column, BindVariable value)
+    {
+        return filter(column, ComparisonOperator.LESS_THAN_OR_EQUAL, value);
+    }
+    
+    public P done()
+    {
+        return parent;
     }
     
     @Override

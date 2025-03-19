@@ -26,6 +26,9 @@ package com.invirgance.convirgance.jdbc.sql;
 import com.invirgance.convirgance.jdbc.schema.Column;
 import com.invirgance.convirgance.jdbc.schema.NamedSchema;
 import com.invirgance.convirgance.jdbc.schema.TabularStructure;
+import static com.invirgance.convirgance.jdbc.sql.Keyword.AND;
+import static com.invirgance.convirgance.jdbc.sql.Keyword.OR;
+import static com.invirgance.convirgance.jdbc.sql.Keyword.WHERE;
 import java.util.Stack;
 
 /**
@@ -97,14 +100,13 @@ public class SQLRenderer
     
     private void prefix(Object value)
     {
-        boolean column = (value instanceof Column || value instanceof ExpressionStatement);
-        boolean whitespace;
+        boolean column = (value instanceof ExpressionStatement);
         
         if(requireNewline) 
         {
             newline();
         }
-        else if(last instanceof Column || last instanceof ExpressionStatement) 
+        else if(last instanceof ExpressionStatement && !(value instanceof ComparisonOperator)) 
         {
             if(column) buffer.append(",");
             
@@ -115,8 +117,7 @@ public class SQLRenderer
                 newline();
             }
         }
-        
-        if(buffer.length() > lineOffset && !whitespace()) 
+        else if(buffer.length() > lineOffset && !whitespace()) 
         {
             buffer.append(" ");
         }
@@ -167,11 +168,22 @@ public class SQLRenderer
     
     public SQLRenderer keyword(Keyword keyword)
     {
+        if(prettyPrint)
+        {
+            switch(keyword)
+            {
+                case WHERE:
+                case AND:
+                case OR:
+                    newline();
+            }
+        }
+        
         prefix(keyword);
         
         buffer.append(capitalizeKeywords ? keyword.getUpperCase() : keyword.getLowerCase());
         
-        if(keyword == Keyword.SELECT && prettyPrint) 
+        if(prettyPrint && keyword == Keyword.SELECT ) 
         {
             requireNewline = true;
             depth++;
@@ -180,11 +192,11 @@ public class SQLRenderer
         return this;
     }
     
-    public SQLRenderer operator(String operator)
+    public SQLRenderer operator(ComparisonOperator operator)
     {
         prefix(operator);
         
-        buffer.append(operator);
+        buffer.append(this.capitalizeKeywords ? operator.getUpperCase() : operator.getLowerCase());
         
         last = operator;
         
@@ -196,7 +208,7 @@ public class SQLRenderer
         prefix(column);
         
         buffer.append(column.getQuotedName());
-        
+
         return this;
     }
     
@@ -236,6 +248,8 @@ public class SQLRenderer
     
     public SQLRenderer statement(SQLStatement statement)
     {
+        if(statement == null) return this;
+        
         prefix(statement);
         
         push();
