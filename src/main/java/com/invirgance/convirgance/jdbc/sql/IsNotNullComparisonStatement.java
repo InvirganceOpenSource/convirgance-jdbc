@@ -23,44 +23,37 @@
  */
 package com.invirgance.convirgance.jdbc.sql;
 
+import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
+
 /**
  *
  * @author jbanes
  */
-public enum ComparisonOperator
+public class IsNotNullComparisonStatement extends IsNullComparisonStatement
 {
-    EQUAL("="),
-    GREATER_THAN(">"),
-    GREATER_THAN_OR_EQUAL(">="),
-    LESS_THAN("<"),
-    LESS_THAN_OR_EQUAL("<="),
-    NOT_EQUAL("<>"),
-    LIKE("like"),
-    IS_NULL("is null"),
-    IS_NOT_NULL("is not null");
-    
-    private final String operator;
-    private final String upper;
-
-    private ComparisonOperator(String operator)
+    public IsNotNullComparisonStatement(DatabaseSchemaLayout layout)
     {
-        this.operator = operator;
-        this.upper = operator.toUpperCase();
+        super(layout);
     }
     
-    public String getLowerCase()
+    public IsNotNullComparisonStatement(DatabaseSchemaLayout layout, ExpressionStatement expression)
     {
-        return this.operator;
+        super(layout, expression);
     }
     
-    public String getUpperCase()
+    IsNotNullComparisonStatement(DatabaseSchemaLayout layout, ExpressionStatement expression, SQLStatement parent)
     {
-        return this.upper;
+        super(layout, expression, parent);
     }
 
     @Override
-    public String toString()
+    public SQLRenderer render(SQLRenderer renderer)
     {
-        return operator;
+        renderer.statement(getExpression());
+        renderer.operator(ComparisonOperator.IS_NOT_NULL);
+        
+        return renderer;
     }
+    
+    
 }

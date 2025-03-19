@@ -257,6 +257,56 @@ public class WhereStatement<P extends SQLStatement> implements SQLStatement
         return filter(column, ComparisonOperator.LESS_THAN_OR_EQUAL, value);
     }
     
+    public WhereStatement<P> isNull(ExpressionStatement column)
+    {
+        IsNullComparisonStatement comparison = new IsNullComparisonStatement(layout, column, this);
+        
+        column.setParent(comparison);
+        clauses.add(comparison);
+        
+        return this;
+    }
+    
+    public WhereStatement<P> isNull(Object column)
+    {
+        return isNull(new LiteralExpressionStatement(layout, column));
+    }
+    
+    public WhereStatement<P> isNull(Column column)
+    {
+        return isNull(new ColumnExpressionStatement(layout, column));
+    }
+    
+    public WhereStatement<P> isNull(BindVariable column)
+    {
+        return isNull(new BindExpressionStatement(layout, column));
+    }
+    
+    public WhereStatement<P> isNotNull(ExpressionStatement column)
+    {
+        IsNotNullComparisonStatement comparison = new IsNotNullComparisonStatement(layout, column, this);
+        
+        column.setParent(comparison);
+        clauses.add(comparison);
+        
+        return this;
+    }
+    
+    public WhereStatement<P> isNotNull(Object column)
+    {
+        return isNotNull(new LiteralExpressionStatement(layout, column));
+    }
+    
+    public WhereStatement<P> isNotNull(Column column)
+    {
+        return isNotNull(new ColumnExpressionStatement(layout, column));
+    }
+    
+    public WhereStatement<P> isNotNull(BindVariable column)
+    {
+        return isNotNull(new BindExpressionStatement(layout, column));
+    }
+    
     public P done()
     {
         return parent;

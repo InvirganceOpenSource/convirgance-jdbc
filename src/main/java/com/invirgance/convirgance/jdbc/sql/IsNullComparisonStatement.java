@@ -23,44 +23,64 @@
  */
 package com.invirgance.convirgance.jdbc.sql;
 
+import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
+
 /**
  *
  * @author jbanes
  */
-public enum ComparisonOperator
+public class IsNullComparisonStatement implements ComparisonStatement
 {
-    EQUAL("="),
-    GREATER_THAN(">"),
-    GREATER_THAN_OR_EQUAL(">="),
-    LESS_THAN("<"),
-    LESS_THAN_OR_EQUAL("<="),
-    NOT_EQUAL("<>"),
-    LIKE("like"),
-    IS_NULL("is null"),
-    IS_NOT_NULL("is not null");
+    private DatabaseSchemaLayout layout;
+    private SQLStatement parent;
     
-    private final String operator;
-    private final String upper;
+    private ExpressionStatement expression;
+    
+    
+    public IsNullComparisonStatement(DatabaseSchemaLayout layout)
+    {
+        this(layout, null);
+    }
+    
+    public IsNullComparisonStatement(DatabaseSchemaLayout layout, ExpressionStatement expression)
+    {
+        this(layout, expression, null);
+    }
+    
+    IsNullComparisonStatement(DatabaseSchemaLayout layout, ExpressionStatement expression, SQLStatement parent)
+    {
+        this.layout = layout;
+        this.parent = parent;
+        this.expression = expression;
+    }
+    
+    @Override
+    public SQLStatement getParent()
+    {
+        return this.parent;
+    }
 
-    private ComparisonOperator(String operator)
+    public void setParent(SQLStatement parent)
     {
-        this.operator = operator;
-        this.upper = operator.toUpperCase();
+        this.parent = parent;
     }
-    
-    public String getLowerCase()
+
+    public ExpressionStatement getExpression()
     {
-        return this.operator;
+        return expression;
     }
-    
-    public String getUpperCase()
+
+    public void setExpression(ExpressionStatement expression)
     {
-        return this.upper;
+        this.expression = expression;
     }
 
     @Override
-    public String toString()
+    public SQLRenderer render(SQLRenderer renderer)
     {
-        return operator;
+        renderer.statement(expression);
+        renderer.operator(ComparisonOperator.IS_NULL);
+        
+        return renderer;
     }
 }

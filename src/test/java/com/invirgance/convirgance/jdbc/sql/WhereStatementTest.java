@@ -47,7 +47,19 @@ public class WhereStatementTest
         assertEquals("where \"ZIP\" = '90210' and '12' = 12", statement.equals("12", 12).toString());
         assertEquals("where \"ZIP\" = '90210' and '12' = 12 and \"ZIP\" = \"ZIP\"", statement.equals(table.getColumn("zip"), table.getColumn("zip")).toString());
         assertEquals("where \"ZIP\" = '90210' and '12' = 12 and \"ZIP\" = \"ZIP\" and \"NAME\" = :name", statement.equals(table.getColumn("name"), new BindVariable("name")).toString());
-        
     }
     
+    @Test
+    public void testNull()
+    {
+        DatabaseSchemaLayout layout = TableTest.getLayout();
+        Table table = layout.getCurrentSchema().getTable("customer");
+        
+        assertEquals("where \"ZIP\" is null", new WhereStatement(layout).isNull(table.getColumn("zip")).toString());
+        assertEquals("where null is null", new WhereStatement(layout).isNull((Object)null).toString());
+        assertEquals("where :test is null", new WhereStatement(layout).isNull(new BindVariable("test")).toString());
+        assertEquals("where \"ZIP\" is not null", new WhereStatement(layout).isNotNull(table.getColumn("zip")).toString());
+        assertEquals("where '90210' is not null", new WhereStatement(layout).isNotNull("90210").toString());
+        assertEquals("where :test is not null", new WhereStatement(layout).isNotNull(new BindVariable("test")).toString());
+    }
 }
