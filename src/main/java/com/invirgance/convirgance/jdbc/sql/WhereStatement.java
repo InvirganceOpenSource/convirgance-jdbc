@@ -45,10 +45,15 @@ public class WhereStatement<P extends SQLStatement> implements SQLStatement
         this(layout, null);
     }
     
-    public WhereStatement(DatabaseSchemaLayout layout, P parent)
+    WhereStatement(DatabaseSchemaLayout layout, P parent)
     {
         this.layout = layout;
         this.parent = parent;
+    }
+    
+    public ComparisonStatement[] getClauses()
+    {
+        return clauses.toArray(ComparisonStatement[]::new);
     }
 
     @Override
@@ -305,6 +310,20 @@ public class WhereStatement<P extends SQLStatement> implements SQLStatement
     public WhereStatement<P> isNotNull(BindVariable column)
     {
         return isNotNull(new BindExpressionStatement(layout, column));
+    }
+    
+    public BooleanOrStatement<WhereStatement> or()
+    {
+        BooleanOrStatement<WhereStatement> or = new BooleanOrStatement<>(layout, this);
+        
+        clauses.add(or);
+        
+        return or;
+    }
+    
+    public WhereStatement where()
+    {
+        return this;
     }
     
     public P done()

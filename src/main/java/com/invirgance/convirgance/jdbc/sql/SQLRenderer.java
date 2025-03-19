@@ -45,6 +45,7 @@ public class SQLRenderer
     
     private boolean requireNewline = false;
     private int depth = 0;
+    private int parenthenses = 0;
     private int line = 1;
     private int lineOffset = 0;
     private Object last;
@@ -147,6 +148,7 @@ public class SQLRenderer
         
         requireNewline = false;
         depth = 0;
+        parenthenses = 0;
         line = 1;
         lineOffset = 0;
         last = null;
@@ -255,6 +257,34 @@ public class SQLRenderer
         push();
         statement.render(this);
         pop();
+        
+        return this;
+    }
+    
+    public SQLRenderer openParenthesis()
+    {
+        prefix("(");
+        
+        buffer.append("(");
+        
+        if(prettyPrint) requireNewline = true;
+        
+        depth++;
+        parenthenses++;
+        
+        return this;
+    }
+    
+    public SQLRenderer closeParenthesis()
+    {
+        depth--;
+        parenthenses--;
+        
+        if(!prettyPrint) buffer.append(" ");
+        else newline();
+        
+        buffer.append(")");
+        last = ")";
         
         return this;
     }

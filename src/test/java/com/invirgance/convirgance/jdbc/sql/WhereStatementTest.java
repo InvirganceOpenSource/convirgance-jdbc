@@ -62,4 +62,25 @@ public class WhereStatementTest
         assertEquals("where '90210' is not null", new WhereStatement(layout).isNotNull("90210").toString());
         assertEquals("where :test is not null", new WhereStatement(layout).isNotNull(new BindVariable("test")).toString());
     }
+    
+    @Test
+    public void testOr()
+    {
+        DatabaseSchemaLayout layout = TableTest.getLayout();
+        Table table = layout.getCurrentSchema().getTable("customer");
+        SQLStatement statement;
+        
+        statement = new WhereStatement(layout)
+            .or()
+                .equals(table.getColumn("zip"), "90210")
+                .isNull(table.getColumn("zip"))
+                .where()
+            .or()
+                .equals(table.getColumn("name"), "Mike")
+                .equals(table.getColumn("name"), "Bob")
+                .where();
+
+        assertEquals("where ( \"ZIP\" = '90210' or \"ZIP\" is null ) and ( \"NAME\" = 'Mike' or \"NAME\" = 'Bob' )", statement.toString());
+        assertEquals("\nwhere (\n    \"ZIP\" = '90210'\n    or \"ZIP\" is null\n)\nand (\n    \"NAME\" = 'Mike'\n    or \"NAME\" = 'Bob'\n)", statement.render(new SQLRenderer().pretty(true)).toString());
+    }
 }
