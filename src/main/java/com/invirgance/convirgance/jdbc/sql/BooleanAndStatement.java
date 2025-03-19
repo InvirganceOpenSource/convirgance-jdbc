@@ -30,14 +30,14 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  * @author jbanes
  * @param <P>
  */
-public class BooleanOrStatement<P extends WhereStatement> extends WhereStatement implements ComparisonStatement
+public class BooleanAndStatement<P extends WhereStatement> extends WhereStatement implements ComparisonStatement
 {
-    public BooleanOrStatement(DatabaseSchemaLayout layout)
+    public BooleanAndStatement(DatabaseSchemaLayout layout)
     {
         super(layout);
     }
     
-    BooleanOrStatement(DatabaseSchemaLayout layout, P parent)
+    BooleanAndStatement(DatabaseSchemaLayout layout, P parent)
     {
         super(layout, parent);
     }
@@ -68,7 +68,7 @@ public class BooleanOrStatement<P extends WhereStatement> extends WhereStatement
             }
             else
             {
-                renderer.keyword(Keyword.OR);
+                renderer.keyword(Keyword.AND);
             }
             
             renderer.statement(statement);

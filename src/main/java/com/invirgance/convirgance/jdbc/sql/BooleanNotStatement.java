@@ -30,14 +30,14 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  * @author jbanes
  * @param <P>
  */
-public class BooleanOrStatement<P extends WhereStatement> extends WhereStatement implements ComparisonStatement
+public class BooleanNotStatement<P extends WhereStatement> extends WhereStatement implements ComparisonStatement
 {
-    public BooleanOrStatement(DatabaseSchemaLayout layout)
+    public BooleanNotStatement(DatabaseSchemaLayout layout)
     {
         super(layout);
     }
     
-    BooleanOrStatement(DatabaseSchemaLayout layout, P parent)
+    BooleanNotStatement(DatabaseSchemaLayout layout, P parent)
     {
         super(layout, parent);
     }
@@ -58,23 +58,27 @@ public class BooleanOrStatement<P extends WhereStatement> extends WhereStatement
     public SQLRenderer render(SQLRenderer renderer)
     {
         boolean written = false;
+        ComparisonStatement[] clauses = getClauses();
         
-        for(ComparisonStatement statement : getClauses())
+        for(ComparisonStatement statement : clauses)
         {
             if(!written)
             {
-                renderer.openParenthesis();
+                renderer.keyword(Keyword.NOT);
+                
+                if(clauses.length > 1) renderer.openParenthesis();
+                
                 written = true;
             }
             else
             {
-                renderer.keyword(Keyword.OR);
+                renderer.keyword(Keyword.AND);
             }
             
             renderer.statement(statement);
         }
         
-        if(written) renderer.closeParenthesis();
+        if(written && clauses.length > 1) renderer.closeParenthesis();
         
         return renderer;
     }

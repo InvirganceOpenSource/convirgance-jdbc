@@ -312,6 +312,15 @@ public class WhereStatement<P extends SQLStatement> implements SQLStatement
         return isNotNull(new BindExpressionStatement(layout, column));
     }
     
+    public BooleanAndStatement<WhereStatement> and()
+    {
+        BooleanAndStatement<WhereStatement> and = new BooleanAndStatement<>(layout, this);
+        
+        clauses.add(and);
+        
+        return and;
+    }
+    
     public BooleanOrStatement<WhereStatement> or()
     {
         BooleanOrStatement<WhereStatement> or = new BooleanOrStatement<>(layout, this);
@@ -321,7 +330,21 @@ public class WhereStatement<P extends SQLStatement> implements SQLStatement
         return or;
     }
     
+    public BooleanNotStatement<WhereStatement> not()
+    {
+        BooleanNotStatement<WhereStatement> not = new BooleanNotStatement<>(layout, this);
+        
+        clauses.add(not);
+        
+        return not;
+    }
+    
     public WhereStatement where()
+    {
+        return this;
+    }
+    
+    public WhereStatement end()
     {
         return this;
     }

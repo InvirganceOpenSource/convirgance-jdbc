@@ -74,13 +74,59 @@ public class WhereStatementTest
             .or()
                 .equals(table.getColumn("zip"), "90210")
                 .isNull(table.getColumn("zip"))
-                .where()
+                .end()
             .or()
                 .equals(table.getColumn("name"), "Mike")
                 .equals(table.getColumn("name"), "Bob")
-                .where();
+                .end();
 
         assertEquals("where ( \"ZIP\" = '90210' or \"ZIP\" is null ) and ( \"NAME\" = 'Mike' or \"NAME\" = 'Bob' )", statement.toString());
         assertEquals("\nwhere (\n    \"ZIP\" = '90210'\n    or \"ZIP\" is null\n)\nand (\n    \"NAME\" = 'Mike'\n    or \"NAME\" = 'Bob'\n)", statement.render(new SQLRenderer().pretty(true)).toString());
+    }
+    
+    @Test
+    public void testAnd()
+    {
+        DatabaseSchemaLayout layout = TableTest.getLayout();
+        Table table = layout.getCurrentSchema().getTable("customer");
+        SQLStatement statement;
+        
+        statement = new WhereStatement(layout)
+            .and()
+                .equals(table.getColumn("zip"), "90210")
+                .equals(table.getColumn("name"), "Mike")
+                .or()
+                    .equals(table.getColumn("state"), "IL")
+                    .greaterThanOrEquals(table.getColumn("credit_limit"), 50000)
+                .where();
+
+        assertEquals("where ( \"ZIP\" = '90210' and \"NAME\" = 'Mike' and ( \"STATE\" = 'IL' or \"CREDIT_LIMIT\" >= 50000 ) )", statement.toString());
+        assertEquals("\nwhere (\n    \"ZIP\" = '90210'\n    and \"NAME\" = 'Mike'\n    and (\n        \"STATE\" = 'IL'\n        or \"CREDIT_LIMIT\" >= 50000\n    )\n)", statement.render(new SQLRenderer().pretty(true)).toString());
+    }
+    
+    @Test
+    public void testNot()
+    {
+        DatabaseSchemaLayout layout = TableTest.getLayout();
+        Table table = layout.getCurrentSchema().getTable("customer");
+        SQLStatement statement;
+        
+        
+        statement = new WhereStatement(layout)
+            .not()
+                .equals(table.getColumn("zip"), "90210")
+                .end();
+
+        assertEquals("where not \"ZIP\" = '90210'", statement.toString());
+        assertEquals("\nwhere not \"ZIP\" = '90210'", statement.render(new SQLRenderer().pretty(true)).toString());
+        
+        statement = new WhereStatement(layout)
+            .not()
+                .equals(table.getColumn("zip"), "90210")
+                .equals(table.getColumn("name"), "Mike")
+                .end();
+
+        assertEquals("where not ( \"ZIP\" = '90210' and \"NAME\" = 'Mike' )", statement.toString());
+        assertEquals("\nwhere not (\n    \"ZIP\" = '90210'\n    and \"NAME\" = 'Mike'\n)", statement.render(new SQLRenderer().pretty(true)).toString());
     }
 }
