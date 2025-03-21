@@ -23,10 +23,7 @@
  */
 package com.invirgance.convirgance.jdbc.sql;
 
-import com.invirgance.convirgance.jdbc.schema.Column;
-import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
-import com.invirgance.convirgance.jdbc.schema.Table;
-import com.invirgance.convirgance.jdbc.schema.TabularStructure;
+import com.invirgance.convirgance.jdbc.schema.*;
 import com.invirgance.convirgance.json.JSONArray;
 
 /**
@@ -41,6 +38,7 @@ public class SelectStatement implements SQLStatement
     private DatabaseSchemaLayout layout;
     private FromStatement from;
     private WhereStatement where;
+    private OrderByStatement order;
     
     public SelectStatement(DatabaseSchemaLayout layout)
     {
@@ -103,6 +101,31 @@ public class SelectStatement implements SQLStatement
         
         return where;
     }
+    
+    
+    public SelectStatement order(ExpressionStatement column)
+    {
+        return order(column, OrderBy.ASCENDING);
+    }
+    
+    public SelectStatement order(ExpressionStatement column, OrderBy order)
+    {
+        if(this.order == null) this.order = new OrderByStatement(layout, this);
+        
+        this.order.order(column, order);
+        
+        return this;
+    }
+    
+    public SelectStatement order(Column column)
+    {
+        return order(new ColumnExpressionStatement(layout, column), OrderBy.ASCENDING);
+    }
+    
+    public SelectStatement order(Column column, OrderBy order)
+    {
+        return order(new ColumnExpressionStatement(layout, column), order);
+    }
 
     @Override
     public SQLRenderer render(SQLRenderer renderer)
@@ -124,6 +147,7 @@ public class SelectStatement implements SQLStatement
         renderer
             .statement(from)
             .statement(where)
+            .statement(order)
             .endStatement();
         
         return renderer;

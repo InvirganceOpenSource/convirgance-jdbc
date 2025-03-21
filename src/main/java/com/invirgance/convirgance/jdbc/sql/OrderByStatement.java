@@ -24,66 +24,80 @@
 package com.invirgance.convirgance.jdbc.sql;
 
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
+import com.invirgance.convirgance.json.JSONArray;
 
 /**
  *
  * @author jbanes
- * @param <P>
  */
-public class BooleanAndStatement<P extends WhereStatement> extends WhereStatement implements ComparisonStatement
+public class OrderByStatement implements SQLStatement
 {
-    public BooleanAndStatement(DatabaseSchemaLayout layout)
+    private DatabaseSchemaLayout layout;
+    private SQLStatement parent;
+    
+    private JSONArray<ExpressionStatement> clauses = new JSONArray<>();
+    private JSONArray<OrderBy> orders = new JSONArray<>();
+
+    
+    public OrderByStatement(DatabaseSchemaLayout layout)
     {
-        super(layout);
+        this(layout, null);
     }
     
-    BooleanAndStatement(DatabaseSchemaLayout layout, P parent)
+    OrderByStatement(DatabaseSchemaLayout layout, SQLStatement parent)
     {
-        super(layout, parent);
+        this.layout = layout;
+        this.parent = parent;
     }
 
     @Override
-    public SQLStatement done()
+    public SQLStatement getParent()
     {
-        return ((WhereStatement)getParent()).done();
+        return this.parent;
+    }
+
+    @Override
+    public void setParent(SQLStatement parent)
+    {
+        this.parent = parent;
     }
     
-    @Override
-    public WhereStatement end()
+    public OrderByStatement order(ExpressionStatement clause, OrderBy order)
     {
-        return (WhereStatement)getParent();
-    }
-    
-    @Override
-    public WhereStatement where()
-    {
-        if(getParent() == null) return this;
+        clause.setParent(this);
+        this.clauses.add(clause);
+        this.orders.add(order);
         
-        return ((WhereStatement)getParent()).where();
+        return this;
     }
-    
+
     @Override
     public SQLRenderer render(SQLRenderer renderer)
     {
         boolean written = false;
+        ExpressionStatement clause;
         
-        for(ComparisonStatement statement : getClauses())
+        for(int i=0; i<clauses.size(); i++)
         {
+            clause = clauses.get(i);
+            
             if(!written)
             {
-                renderer.openParenthesis();
+                renderer.keyword(Keyword.ORDER);
+                renderer.keyword(Keyword.BY);
+                
                 written = true;
             }
-            else
-            {
-                renderer.keyword(Keyword.AND);
-            }
             
-            renderer.statement(statement);
+            renderer.order(clause, orders.get(i));
         }
         
-        if(written) renderer.closeParenthesis();
-        
         return renderer;
+    }
+
+    @Override
+    public String toString()
+    {
+        return render(new SQLRenderer()).toString();
     }
 }

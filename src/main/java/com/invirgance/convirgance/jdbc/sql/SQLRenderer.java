@@ -118,7 +118,8 @@ public class SQLRenderer
                 newline();
             }
         }
-        else if(buffer.length() > lineOffset && !whitespace()) 
+        
+        if(buffer.length() > lineOffset && !whitespace()) 
         {
             buffer.append(" ");
         }
@@ -177,6 +178,7 @@ public class SQLRenderer
                 case WHERE:
                 case AND:
                 case OR:
+                case ORDER:
                     newline();
             }
         }
@@ -185,10 +187,15 @@ public class SQLRenderer
         
         buffer.append(capitalizeKeywords ? keyword.getUpperCase() : keyword.getLowerCase());
         
-        if(prettyPrint && keyword == Keyword.SELECT ) 
+        if(prettyPrint) 
         {
-            requireNewline = true;
-            depth++;
+            switch(keyword)
+            {
+                case SELECT:
+                case BY:
+                    requireNewline = true;
+                    depth++;
+            }
         }
         
         return this;
@@ -210,6 +217,17 @@ public class SQLRenderer
         prefix(column);
         
         buffer.append(column.getQuotedName());
+
+        return this;
+    }
+    
+    public SQLRenderer order(NamedSchema column, OrderBy order)
+    {
+        prefix(column);
+        
+        buffer.append(column.getQuotedName());
+        buffer.append(" ");
+        buffer.append(capitalizeKeywords ? order.getUpperCase() : order.getLowerCase());
 
         return this;
     }

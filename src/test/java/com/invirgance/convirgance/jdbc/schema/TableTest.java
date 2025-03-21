@@ -30,6 +30,9 @@ import com.invirgance.convirgance.jdbc.AutomaticDriver;
 import com.invirgance.convirgance.jdbc.AutomaticDrivers;
 import com.invirgance.convirgance.jdbc.StoredConnection;
 import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
+import com.invirgance.convirgance.jdbc.sql.BindVariable;
+import com.invirgance.convirgance.jdbc.sql.SQLRenderer;
+import com.invirgance.convirgance.jdbc.sql.SQLStatement;
 import com.invirgance.convirgance.json.JSONObject;
 import com.invirgance.convirgance.source.FileSource;
 import java.io.File;
@@ -182,5 +185,19 @@ public class TableTest
         }
         
         assertEquals(1, table.getForeignKeys().length);
+    }
+    
+    @Test
+    public void testSelect()
+    {
+        DatabaseSchemaLayout layout = getLayout();
+        Table table = layout.getCurrentSchema().getTable("CUSTOMER");
+        SQLStatement statement = table
+                .select()
+                .where()
+                    .equals(table.getColumn("zip"), new BindVariable("zipcode"))
+                    .done();
+        
+        assertEquals("select \"CUSTOMER_ID\", \"DISCOUNT_CODE\", \"ZIP\", \"NAME\", \"ADDRESSLINE1\", \"ADDRESSLINE2\", \"CITY\", \"STATE\", \"PHONE\", \"FAX\", \"EMAIL\", \"CREDIT_LIMIT\" from \"PUBLIC\".\"CUSTOMER\" where \"ZIP\" = :zipcode;", statement.toString());
     }
 }

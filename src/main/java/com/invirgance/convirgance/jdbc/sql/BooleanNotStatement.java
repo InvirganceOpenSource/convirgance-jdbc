@@ -55,6 +55,14 @@ public class BooleanNotStatement<P extends WhereStatement> extends WhereStatemen
     }
     
     @Override
+    public WhereStatement where()
+    {
+        if(getParent() == null) return this;
+        
+        return ((WhereStatement)getParent()).where();
+    }
+    
+    @Override
     public SQLRenderer render(SQLRenderer renderer)
     {
         boolean written = false;

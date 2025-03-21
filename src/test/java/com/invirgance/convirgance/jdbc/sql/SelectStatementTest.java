@@ -203,4 +203,21 @@ public class SelectStatementTest
         assertEquals(13, count);
     }
     
+    @Test
+    public void testOrderBy()
+    {
+        DatabaseSchemaLayout layout = getHSQLLayout();
+        Table table = layout.getCurrentSchema().getTable("customer");
+        
+        SelectStatement select = new SelectStatement(layout)
+                .column(table.getColumn("name"))
+                .column(table.getColumn("zip"))
+                .order(table.getColumn("name"))
+                .order(table.getColumn("zip"), OrderBy.DESCENDING);
+        
+        System.out.println(select.render(new SQLRenderer().pretty(true)).toString());
+        
+        assertEquals("select \"NAME\", \"ZIP\" from \"PUBLIC\".\"CUSTOMER\" order by \"NAME\" asc, \"ZIP\" desc;", select.toString());
+        assertEquals("select\n    \"NAME\",\n    \"ZIP\"\nfrom \"PUBLIC\".\"CUSTOMER\" \norder by\n    \"NAME\" asc,\n    \"ZIP\" desc;", select.render(new SQLRenderer().pretty(true)).toString());
+    }
 }

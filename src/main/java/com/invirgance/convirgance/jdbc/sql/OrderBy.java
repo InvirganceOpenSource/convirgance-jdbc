@@ -23,67 +23,37 @@
  */
 package com.invirgance.convirgance.jdbc.sql;
 
-import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
-
 /**
  *
  * @author jbanes
- * @param <P>
  */
-public class BooleanOrStatement<P extends WhereStatement> extends WhereStatement implements ComparisonStatement
+public enum OrderBy
 {
-    public BooleanOrStatement(DatabaseSchemaLayout layout)
+    ASCENDING("asc"),
+    DESCENDING("desc");
+    
+    private final String order;
+    private final String upper;
+        
+    private OrderBy(String order)
     {
-        super(layout);
+        this.order = order;
+        this.upper = order.toUpperCase();
     }
     
-    BooleanOrStatement(DatabaseSchemaLayout layout, P parent)
+    public String getLowerCase()
     {
-        super(layout, parent);
+        return this.order;
+    }
+    
+    public String getUpperCase()
+    {
+        return this.upper;
     }
 
     @Override
-    public SQLStatement done()
+    public String toString()
     {
-        return ((WhereStatement)getParent()).done();
-    }
-    
-    @Override
-    public WhereStatement end()
-    {
-        return (WhereStatement)getParent();
-    }
-    
-    @Override
-    public WhereStatement where()
-    {
-        if(getParent() == null) return this;
-        
-        return ((WhereStatement)getParent()).where();
-    }
-    
-    @Override
-    public SQLRenderer render(SQLRenderer renderer)
-    {
-        boolean written = false;
-        
-        for(ComparisonStatement statement : getClauses())
-        {
-            if(!written)
-            {
-                renderer.openParenthesis();
-                written = true;
-            }
-            else
-            {
-                renderer.keyword(Keyword.OR);
-            }
-            
-            renderer.statement(statement);
-        }
-        
-        if(written) renderer.closeParenthesis();
-        
-        return renderer;
+        return getLowerCase();
     }
 }
