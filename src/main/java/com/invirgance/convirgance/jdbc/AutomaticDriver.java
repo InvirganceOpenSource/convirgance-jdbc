@@ -63,6 +63,16 @@ public class AutomaticDriver
     }
     
     /**
+     * Return the class name of the Driver without initializing the object
+     * 
+     * @return the name of the Driver class
+     */
+    public String getDriverClassName()
+    {
+        return record.getString("driver");
+    }
+    
+    /**
      * Returns an unconfigured <code>DataSource</code> instance for this 
      * database. Consult the documentation for the database to find what properties
      * are available to setup the connection.
