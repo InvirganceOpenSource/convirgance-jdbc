@@ -84,6 +84,16 @@ public class AutomaticDriver
     {
         record.put("datasource", dataSourceClass);
     }
+    
+    /**
+     * Return the class name of the DataSource without initializing the object
+     * 
+     * @return the name of the DataSource class
+     */
+    public String getDataSourceClassName()
+    {
+        return record.getString("datasource");
+    }
 
     /**
      * Returns the artifacts that will be loaded from maven.
