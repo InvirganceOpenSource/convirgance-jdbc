@@ -50,6 +50,11 @@ class ConnectionDatabase implements Iterable<JSONObject>
         this.config = new Config(location, "name");
     }
     
+    /**
+     * Finds the connection descriptor that has the provided name.
+     * @param name The name.
+     * @return A JSONObject representing the connection descriptor.
+     */
     public JSONObject findDescriptorByName(String name)
     {
         for(JSONObject descriptor : this)
@@ -60,11 +65,21 @@ class ConnectionDatabase implements Iterable<JSONObject>
         return null;
     }
     
+    /**
+     * Saves or updates the connections descriptor in the users configuration file.
+     * 
+     * @param descriptor 
+     */
     public void saveDescriptor(JSONObject descriptor)
     {
         config.insert(descriptor);
     }
     
+    /**
+     * Removes the connections descriptor from the users configuration. 
+     * 
+     * @param descriptor 
+     */
     public void deleteDescriptor(JSONObject descriptor)
     {
         config.delete(descriptor);
