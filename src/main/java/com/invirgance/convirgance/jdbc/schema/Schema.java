@@ -42,6 +42,10 @@ public class Schema implements NamedSchema
         this.layout = schema;
     }
     
+    /**
+     * Returns the schema's table catalog.
+     * @return Catalog.
+     */
     public Catalog getCatalog()
     {
         if(catalog != null) return catalog;
@@ -51,11 +55,16 @@ public class Schema implements NamedSchema
         return this.catalog;
     }
     
+    /**
+     * Returns the value of TABLE_SCHEM 
+     * @return String.
+     */
     @Override
     public String getName()
     {
         return record.getString("TABLE_SCHEM");
     }
+    
     
     @Override
     public String getQuotedName()
@@ -63,11 +72,20 @@ public class Schema implements NamedSchema
         return layout.quoteIdentifier(getName());
     }
     
+    /**
+     * Returns if this is the default schema.
+     * @return True is default, otherwise false.
+     */
     public boolean isDefault()
     {
         return record.getBoolean("IS_DEFAULT", false);
     }
     
+    /**
+     * Gets the table with the provided name (case-insensitive)
+     * @param name Table name.
+     * @return The requested table.
+     */
     public Table getTable(String name)
     {
         for(Table table : getTables())
@@ -78,6 +96,10 @@ public class Schema implements NamedSchema
         return null;
     }
     
+    /**
+     * Returns all the Tables in the schema.
+     * @return Array of Tables.
+     */
     public Table[] getTables()
     {
         TabularStructure[] structures = layout.getStructures(record.getString("TABLE_CATALOG"), getName(), layout.tableType);
@@ -88,6 +110,11 @@ public class Schema implements NamedSchema
         return Arrays.asList(structures).toArray(Table[]::new);
     }
     
+    /**
+     * Gets the view with the provided name.
+     * @param name The name.
+     * @return The specified View.
+     */
     public View getView(String name)
     {
         for(View view : getViews())
@@ -98,6 +125,10 @@ public class Schema implements NamedSchema
         return null;
     }
     
+    /**
+     * Gets all the views of the schema.
+     * @return An array of Views.
+     */
     public View[] getViews()
     {
         TabularStructure[] structures = layout.getStructures(record.getString("TABLE_CATALOG"), getName(), layout.viewType);
