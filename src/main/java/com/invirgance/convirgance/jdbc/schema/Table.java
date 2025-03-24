@@ -23,7 +23,6 @@ package com.invirgance.convirgance.jdbc.schema;
 
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.dbms.DBMS;
-import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.jdbc.sql.SelectStatement;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
@@ -42,6 +41,10 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
         super(record, layout, schema);
     }
     
+    /**
+     * Returns the PrimaryKey of this table.
+     * @return PrimaryKey
+     */
     public PrimaryKey getPrimaryKey()
     {
         DatabaseSchemaLayout layout = getLayout();
@@ -65,6 +68,10 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
         return record1.getString("PKTABLE_SCHEM", "").equals(record2.getString("PKTABLE_SCHEM", ""));
     }
     
+    /**
+     * Returns all the ForeignKeys of this table.
+     * @return an array of ForeignKeys.
+     */
     public ForeignKey[] getForeignKeys()
     {
         JSONArray<ForeignKey> keys = new JSONArray<>();
@@ -106,6 +113,10 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
         return keys.toArray(ForeignKey[]::new);
     }
     
+    /**
+     * Returns a SelectStatement based on this table.
+     * @return A SelectStatement.
+     */
     public SelectStatement select()
     {
         SelectStatement select = new SelectStatement(getLayout());
@@ -152,10 +163,10 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
         
         /**
          * Obtain the primary key {@link Column}. Throws an exception if the primary key is 
-         * multi-column.
+         * multi-column/composite.
          * 
          * @return the primary key {@link Column}
-         * @throws ConvirganceException if primary key is multi-column
+         * @throws ConvirganceException if primary key is multi-column/composite
          */
         public Column getColumn()
         {
@@ -189,7 +200,13 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
             
             return columns;
         }
-
+        
+        /**
+         * Checks that the comparison PrimaryKey has the same table and record count as this.
+         * 
+         * @param obj A PrimaryKey to compare against.
+         * @return Boolean
+         */
         @Override
         public boolean equals(Object obj)
         {
