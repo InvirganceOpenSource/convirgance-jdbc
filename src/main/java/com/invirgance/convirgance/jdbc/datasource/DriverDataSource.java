@@ -26,6 +26,7 @@ package com.invirgance.convirgance.jdbc.datasource;
 import com.invirgance.convirgance.jdbc.AutomaticDrivers;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.SQLException;
 import java.sql.SQLFeatureNotSupportedException;
 import java.util.Properties;
@@ -41,6 +42,8 @@ public class DriverDataSource implements DataSource
     private String url;
     private String username;
     private String password;
+    
+    private Driver driver;
 
     public DriverDataSource()
     {
@@ -56,6 +59,16 @@ public class DriverDataSource implements DataSource
     public static DriverDataSource getDataSource(String url, String username, String password)
     {
         return new DriverDataSource(url, username, password);
+    }
+    
+    private Driver getDriver()
+    {
+        if(driver == null) 
+        {
+            driver = AutomaticDrivers.getDriverByURL(url).getDriver();
+        }
+        
+        return driver;
     }
     
     public String getUrl()
@@ -96,7 +109,7 @@ public class DriverDataSource implements DataSource
         properties.put("user", this.username);
         if(this.password != null) properties.put("password", this.password);
         
-        return AutomaticDrivers.getDriverByURL(url).getDriver().connect(url, properties);
+        return getDriver().connect(url, properties);
     }
 
     @Override
@@ -107,7 +120,7 @@ public class DriverDataSource implements DataSource
         properties.put("user", username);
         properties.put("password", password);
         
-        return AutomaticDrivers.getDriverByURL(url).getDriver().connect(url, properties);
+        return getDriver().connect(url, properties);
     }
 
     @Override
