@@ -26,12 +26,12 @@ package com.invirgance.convirgance.jdbc.schema;
 import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.jdbc.AutomaticDriver;
 import com.invirgance.convirgance.jdbc.callback.ConnectionCallback;
+import com.invirgance.convirgance.jdbc.callback.DatabaseMetaDataCallback;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import java.sql.*;
 import java.util.Arrays;
 import javax.sql.DataSource;
-import com.invirgance.convirgance.jdbc.callback.DatabaseMetaDataCallback;
 
 /**
  *
@@ -45,6 +45,11 @@ public class DatabaseSchemaLayout
     String tableType;
     String viewType;
 
+    /**
+     * Creates a new DataBaseSchemaLayout using the drivers configuration.
+     * @param driver The driver.
+     * @param source The data source.
+     */
     public DatabaseSchemaLayout(AutomaticDriver driver, DataSource source)
     {
         this.driver = driver;
@@ -59,11 +64,19 @@ public class DatabaseSchemaLayout
         ConnectionCallback.execute(source, callback);
     }
     
+    /**
+     * Returns the driver whose configuration was used to create this.
+     * @return The driver.
+     */
     public AutomaticDriver getDriver()
     {
         return driver;
     }
     
+    /**
+     * Returns the data source used to create this.
+     * @return The data source.
+     */
     public DataSource getDataSource()
     {
         return source;
@@ -155,16 +168,30 @@ public class DatabaseSchemaLayout
         return structures.toArray(TabularStructure[]::new);
     }
     
+    /**
+     * Returns an array containing all views, tables and other structures.
+     * @return An array of TabularStructures.
+     */
     public TabularStructure[] getAllStructures()
     {
         return getAllStructures(null);
     }
     
+    /**
+     * Returns an array containing structures matching the provided type.
+     * 
+     * @param type A string representing a type.
+     * @return An array.
+     */
     public TabularStructure[] getAllStructures(String type)
     {
         return getStructures(null, null, type);
     }
     
+    /**
+     * Gets the databases most recent table catalog.
+     * @return A Catalog.
+     */
     public Catalog getCurrentCatalog()
     {
         JSONObject record = new JSONObject();
@@ -230,16 +257,29 @@ public class DatabaseSchemaLayout
         return null;
     }
     
+    /**
+     * Returns all the tables found matching the current table type.
+     * @return An array of tables.
+     */
     public Table[] getAllTables()
     {
         return Arrays.asList(getAllStructures(tableType)).toArray(Table[]::new);
     }
     
+    /**
+     * Returns all the views found matching the current view type.
+     * @return An array of views.
+     */    
     public View[] getAllViews()
     {
         return Arrays.asList(getAllStructures(viewType)).toArray(View[]::new);
     }
     
+    /**
+     * Returns the table types included in the schema layout.
+     * Ex: for MySQL this could be "BASE TABLE" , "VIEW", "SYSTEM VIEW"
+     * @return A string of table types
+     */
     public String[] getTypes()
     {
         JSONArray<String> types = new JSONArray<>();
