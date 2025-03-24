@@ -137,8 +137,8 @@ class DriverDatabase implements Iterable<JSONObject>
     }
     
     /**
-     * Adds a new database descriptor.
-     * This also save the updates to the disk
+     * Adds or updates the database's descriptor in the users configuration file.
+     * 
      * @param descriptor A JSONObject.
      */
     public void saveDescriptor(JSONObject descriptor)
