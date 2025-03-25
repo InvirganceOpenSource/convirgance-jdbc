@@ -34,7 +34,10 @@ import java.util.Arrays;
 import javax.sql.DataSource;
 
 /**
- *
+ * For working with the Database Objects with a given Driver.
+ * Each database has their own way of interacting with views, tables and catalogs.
+ * This serves as a way of providing standardized interaction when creating reusable logic.
+ * 
  * @author jbanes
  */
 public class DatabaseSchemaLayout
@@ -208,6 +211,10 @@ public class DatabaseSchemaLayout
         }
     }
     
+    /**
+     * Returns the current {@link Schema} of the source.
+     * @return A Schema.
+     */
     public Schema getCurrentSchema()
     {
         Catalog catalog = getCurrentCatalog();
@@ -230,6 +237,10 @@ public class DatabaseSchemaLayout
         }
     }
     
+    /**
+     * Returns all catalogs.
+     * @return Array of {@link Catalog}s
+     */
     public Catalog[] getCatalogs()
     {
         JSONArray<Catalog> catalogs = new JSONArray<>();
@@ -247,6 +258,11 @@ public class DatabaseSchemaLayout
         return catalogs.toArray(Catalog[]::new);
     }
     
+    /**
+     * Gets the catalog with the specified name (case-insensitive)
+     * @param name Name
+     * @return Catalog
+     */
     public Catalog getCatalog(String name)
     {
         for(Catalog catalog : getCatalogs())
@@ -258,7 +274,7 @@ public class DatabaseSchemaLayout
     }
     
     /**
-     * Returns all the tables found matching the current table type.
+     * Returns all the tables found matching the current drivers table type.
      * @return An array of tables.
      */
     public Table[] getAllTables()
@@ -267,7 +283,7 @@ public class DatabaseSchemaLayout
     }
     
     /**
-     * Returns all the views found matching the current view type.
+     * Returns all the views found matching the current drivers view type.
      * @return An array of views.
      */    
     public View[] getAllViews()
