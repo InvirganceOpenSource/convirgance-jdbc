@@ -26,7 +26,8 @@ package com.invirgance.convirgance.jdbc.schema;
 import com.invirgance.convirgance.json.JSONObject;
 
 /**
- *
+ * A way to represent different database schema objects like Tables and Views.
+ * 
  * @author jbanes
  */
 public class TabularStructure implements NamedSchema
@@ -69,6 +70,11 @@ public class TabularStructure implements NamedSchema
         return layout.quoteIdentifier(getName());
     }
     
+    /**
+     * Returns the schema this object is apart of.
+     * 
+     * @return The Schema
+     */
     public Schema getSchema()
     {
         if(this.schema != null) return schema;
@@ -78,11 +84,23 @@ public class TabularStructure implements NamedSchema
         return this.schema;
     }
     
+    /**
+     * Returns the TABLE_TYPE this object is recognized as.
+     * 
+     * @return A String of the objects table type.
+     */
     public String getType()
     {
         return record.getString("TABLE_TYPE", "UNKNOWN");
     }
     
+    /**
+     * Returns the column with the provided name.
+     * For example getting the column for first_names.
+     * 
+     * @param name The name of a column.
+     * @return The column.
+     */
     public Column getColumn(String name)
     {
         for(Column column : getColumns())
@@ -93,11 +111,22 @@ public class TabularStructure implements NamedSchema
         return null;
     }
     
+    /**
+     * Returns all columns of this object.
+     * 
+     * @return Array of Columns.
+     */
     public Column[] getColumns()
     {
         return layout.getColumns(this);
     }
 
+    /**
+     * Returns the hash code.
+     * Hash-code is retrieved from the record used to create this object.
+     * 
+     * @return A integer.
+     */
     @Override
     public int hashCode()
     {
