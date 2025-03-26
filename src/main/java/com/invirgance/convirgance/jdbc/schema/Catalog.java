@@ -28,7 +28,9 @@ import com.invirgance.convirgance.json.JSONObject;
 import java.sql.ResultSet;
 
 /**
- *
+ * Represents a database catalog. 
+ * This can be used to get the {@link Schema} of a database through {@link DatabaseSchemaLayout#getCatalog(name)}.
+ * 
  * @author jbanes
  */
 public class Catalog implements NamedSchema
@@ -55,6 +57,11 @@ public class Catalog implements NamedSchema
         return layout.quoteIdentifier(getName());
     }
     
+    /**
+     * Returns all Schemas.
+     * 
+     * @return An array of Schemas.
+     */
     public Schema[] getSchemas()
     {
         JSONArray<Schema> schemas = new JSONArray<>();
@@ -72,6 +79,12 @@ public class Catalog implements NamedSchema
         return schemas.toArray(Schema[]::new);
     }
     
+    /**
+     * Returns the Schema that has the provided name.
+     * 
+     * @param name The Schema's name.
+     * @return The Schema.
+     */
     public Schema getSchema(String name)
     {
         for(Schema schema : getSchemas())
