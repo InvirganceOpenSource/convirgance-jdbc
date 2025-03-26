@@ -172,6 +172,12 @@ public class StoredConnection
         return new DBMS(getDataSource());
     }
     
+    /**
+     * Returns the DatabaseSchemaLayout from this connection's driver and data source.
+     * This can be used to interact with tables, views, and metadata of the schema.
+     * 
+     * @return DatabaseSchemaLayout.
+     */
     public DatabaseSchemaLayout getSchemaLayout()
     {
         return new DatabaseSchemaLayout(getDriver(), getDataSource());
