@@ -154,6 +154,13 @@ public class Column implements NamedSchema
         }
     }
     
+    /**
+     * The default value for this column
+     * Example: if the column is of type DATE, and CURRENT_DATE is set 
+     * as the default value.
+     * 
+     * @return Object.
+     */
     public Object getDefault()
     {
         return record.get("COLUMN_DEF");
