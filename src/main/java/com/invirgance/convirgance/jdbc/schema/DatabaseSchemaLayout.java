@@ -34,9 +34,15 @@ import java.util.Arrays;
 import javax.sql.DataSource;
 
 /**
- * For working with the Database Objects with a given Driver.
+ * For working with Database Object metadata for a given AutomaticDriver and DataSource.
  * Each database has their own way of interacting with views, tables and catalogs.
- * This serves as a way of providing standardized interaction when creating reusable logic.
+ * This serves as a way to create standardized reusable logic.
+ *
+ * DatabaseSchemaLayout supports operations such as:
+ * - Retrieving catalogs, schemas, tables, and views
+ * - Getting the current catalog and schema
+ * - Accessing column information for tabular structures
+ * - Handling database-specific naming and quoting conventions
  * 
  * @author jbanes
  */
@@ -173,6 +179,7 @@ public class DatabaseSchemaLayout
     
     /**
      * Returns an array containing all views, tables and other structures.
+     * 
      * @return An array of TabularStructures.
      */
     public TabularStructure[] getAllStructures()
@@ -181,7 +188,8 @@ public class DatabaseSchemaLayout
     }
     
     /**
-     * Returns an array containing structures matching the provided type.
+     * Returns an array containing structures matching the provided table type.
+     * Ex: for MySQL this could be "SYSTEM VIEW"
      * 
      * @param type A string representing a type.
      * @return An array.
@@ -193,6 +201,7 @@ public class DatabaseSchemaLayout
     
     /**
      * Gets the databases most recent table catalog.
+     * 
      * @return A Catalog.
      */
     public Catalog getCurrentCatalog()
@@ -213,6 +222,7 @@ public class DatabaseSchemaLayout
     
     /**
      * Returns the current {@link Schema} of the source.
+     * 
      * @return A Schema.
      */
     public Schema getCurrentSchema()
@@ -239,6 +249,7 @@ public class DatabaseSchemaLayout
     
     /**
      * Returns all catalogs.
+     * 
      * @return Array of {@link Catalog}s
      */
     public Catalog[] getCatalogs()
@@ -260,8 +271,9 @@ public class DatabaseSchemaLayout
     
     /**
      * Gets the catalog with the specified name (case-insensitive)
-     * @param name Name
-     * @return Catalog
+     * 
+     * @param name Catalog name.
+     * @return The specified catalog.
      */
     public Catalog getCatalog(String name)
     {
@@ -275,6 +287,7 @@ public class DatabaseSchemaLayout
     
     /**
      * Returns all the tables found matching the current drivers table type.
+     * 
      * @return An array of tables.
      */
     public Table[] getAllTables()
@@ -284,6 +297,7 @@ public class DatabaseSchemaLayout
     
     /**
      * Returns all the views found matching the current drivers view type.
+     * 
      * @return An array of views.
      */    
     public View[] getAllViews()
@@ -293,8 +307,9 @@ public class DatabaseSchemaLayout
     
     /**
      * Returns the table types included in the schema layout.
-     * Ex: for MySQL this could be "BASE TABLE" , "VIEW", "SYSTEM VIEW"
-     * @return A string of table types
+     * Ex: for MySQL this could be "BASE TABLE", "VIEW", "SYSTEM VIEW"
+     * 
+     * @return A String array of table types.
      */
     public String[] getTypes()
     {
