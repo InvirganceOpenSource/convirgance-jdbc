@@ -28,6 +28,10 @@ import java.math.BigDecimal;
 import java.sql.*;
 
 /**
+ * Represents a column in a table. Can be used to create logic that depends 
+ * on column metadata like data-type, null-ability or parent.
+ * You can get this object through {@link DatabaseSchemaLayout#getAllStructures()} 
+ * and use the returned array then calling {@link TabularStructure#getColumn(name)}.
  *
  * @author jbanes
  */
@@ -54,21 +58,41 @@ public class Column implements NamedSchema
         return getParent().getLayout().quoteIdentifier(getName());
     }
 
+    /**
+     * Returns the parent object of this, like a view or table.
+     * 
+     * @return TabularStructure
+     */
     public TabularStructure getParent()
     {
         return parent;
     }
     
+    /**
+     * Returns if this column can store null values.
+     * 
+     * @return True if null values are allowed.
+     */
     public boolean isNullable()
     {
         return (this.record.getInt("NULLABLE") > 0);
     }
     
+    /**
+     * Returns the column's data type.
+     * 
+     * @return A String representing the data type.
+     */
     public String getType()
     {
         return this.record.getString("TYPE_NAME");
     }
     
+    /**
+     * Returns the JDBCType (data-type) for this column.
+     * 
+     * @return The JDBCType.
+     */
     public JDBCType getJDBCType()
     {
         int type = this.record.getInt("DATA_TYPE");
@@ -90,6 +114,11 @@ public class Column implements NamedSchema
         return JDBCType.valueOf(type);
     }
     
+    /**
+     * Returns the Object class that this column stores.
+     * 
+     * @return A Class.
+     */
     public Class getTypeClass()
     {
         switch(getJDBCType())
