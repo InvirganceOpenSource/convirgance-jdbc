@@ -34,7 +34,13 @@ import java.util.logging.Logger;
 import javax.sql.DataSource;
 
 /**
- *
+ * A JDBC DataSource implementation that wraps a database driver to provide connection services.
+ * 
+ * This class automates the process of establishing database connections using driver-based
+ * connectivity. It determines the appropriate JDBC driver based on the connection URL
+ * and manages connection credentials. This is particularly useful for scenarios where
+ * you need to create {@link DataSource}s dynamically from existing login information.
+ * 
  * @author jbanes
  */
 public class DriverDataSource implements DataSource
@@ -56,6 +62,14 @@ public class DriverDataSource implements DataSource
         this.password = password;
     }
     
+    /**
+     * Returns a DriverDataSource created with the provided info.
+     * 
+     * @param url The connection URL.
+     * @param username The username.
+     * @param password The password.
+     * @return A DriverDataSource.
+     */
     public static DriverDataSource getDataSource(String url, String username, String password)
     {
         return new DriverDataSource(url, username, password);
@@ -71,36 +85,75 @@ public class DriverDataSource implements DataSource
         return driver;
     }
     
+    /**
+     * Get the connection URL.
+     * 
+     * @return The connection string URL.
+     */
     public String getUrl()
     {
         return url;
     }
 
+    /**
+     * Sets the connection URL.
+     * Remember to include the connection prefix.
+     * Ex: "jdbc:oracle:thin:"
+     * 
+     * @param url The new connection URL.
+     */
     public void setUrl(String url)
     {
         this.url = url;
     }
 
+    /**
+     * Returns the username used when connecting to the database.
+     * 
+     * @return The username.
+     */
     public String getUsername()
     {
         return username;
     }
 
+    /**
+     * Sets the username to use for connecting to the database.
+     * 
+     * @param username The username.
+     */
     public void setUsername(String username)
     {
         this.username = username;
     }
 
+    /**
+     * Returns the password.
+     * 
+     * @return The password.
+     */
     public String getPassword()
     {
         return password;
     }
 
+    /**
+     * Sets the password that will be used with the username when connecting.
+     * 
+     * @param password The password.
+     */
     public void setPassword(String password)
     {
         this.password = password;
     }
 
+    /**
+     * Returns a connection to the database using the current username and password.
+     * The password is optional when connecting with this method.
+     * 
+     * @return A connection.
+     * @throws SQLException When the username and password are incorrect or the something else.
+     */
     @Override
     public Connection getConnection() throws SQLException
     {
@@ -112,6 +165,14 @@ public class DriverDataSource implements DataSource
         return getDriver().connect(url, properties);
     }
 
+    /**
+     * Returns a connection to the database using the provided username and password.
+     * 
+     * @param username The username.
+     * @param password The password.
+     * @return A connection.
+     * @throws SQLException When the username and password are incorrect or the something else.
+     */
     @Override
     public Connection getConnection(String username, String password) throws SQLException
     {
