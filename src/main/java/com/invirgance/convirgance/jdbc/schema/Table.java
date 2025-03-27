@@ -31,7 +31,11 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 /**
- *
+ * For working with table metadata.  Used when creating logic that involves 
+ * table metadata, such as comparing table equality, retrieving 
+ * primary keys/foreign keys. 
+ * 
+ * To get a table object use {@link DatabaseSchemaLayout#getAllTables()} 
  * @author jbanes
  */
 public class Table extends TabularStructure implements Iterable<JSONObject>
@@ -43,6 +47,7 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
     
     /**
      * Returns the PrimaryKey of this table.
+     * 
      * @return PrimaryKey
      */
     public PrimaryKey getPrimaryKey()
@@ -70,6 +75,7 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
     
     /**
      * Returns all the ForeignKeys of this table.
+     * 
      * @return an array of ForeignKeys.
      */
     public ForeignKey[] getForeignKeys()
@@ -115,6 +121,7 @@ public class Table extends TabularStructure implements Iterable<JSONObject>
     
     /**
      * Returns a SelectStatement based on this table.
+     * 
      * @return A SelectStatement.
      */
     public SelectStatement select()
