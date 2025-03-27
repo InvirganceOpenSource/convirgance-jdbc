@@ -34,7 +34,9 @@ import java.lang.reflect.InvocationTargetException;
 import javax.sql.DataSource;
 
 /**
- *
+ * Used to create logic that works with data sources directly. 
+ * Can be used to set/retrieve data source properties. 
+ * 
  * @author jbanes
  */
 public class DataSourceManager
@@ -115,12 +117,12 @@ public class DataSourceManager
     }
     
     /**
-     * Assign a value to the data source. 
+     * Assign a value to one of the data source's properties. 
      * This will modify how drivers that utilize this data source create connections.
      * Such as configuring SSL, setting cache properties etc...
      * 
-     * @param name Name.
-     * @param value Value.
+     * @param name Property name.
+     * @param value Value to set.
      */
     public void setProperty(String name, String value)
     {
@@ -202,6 +204,14 @@ public class DataSourceManager
         throw new ConvirganceException("Unable to transform " + source + " to " + target + " for [" + value + "]");
     }
     
+    /**
+     * Sets a property value on the data source.
+     * A list of properties can be found with {@link #getProperties()}
+     * 
+     * The values are set for the current run-time and do not persist.
+     * @param name Property name.
+     * @param value Property value.
+     */
     public void setProperty(String name, Object value)
     {
         BeanInfo info = getBeanInfo();
