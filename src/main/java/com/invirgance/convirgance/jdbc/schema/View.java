@@ -22,13 +22,11 @@ SOFTWARE.
 package com.invirgance.convirgance.jdbc.schema;
 
 import com.invirgance.convirgance.dbms.DBMS;
-import com.invirgance.convirgance.dbms.Query;
 import com.invirgance.convirgance.jdbc.sql.SelectStatement;
 import com.invirgance.convirgance.json.JSONObject;
 import java.util.Iterator;
 
 /**
- *
  * @author jbanes
  */
 public class View extends TabularStructure implements Iterable<JSONObject>
@@ -38,6 +36,10 @@ public class View extends TabularStructure implements Iterable<JSONObject>
         super(record, layout, schema);
     }
     
+    /**
+     * Creates a select statement for this view.
+     * @return SelectStatement to query against this view.
+     */
     public SelectStatement select()
     {
         SelectStatement select = new SelectStatement(getLayout());
