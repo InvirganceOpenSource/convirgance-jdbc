@@ -48,8 +48,6 @@ public interface ConnectionCallback
     /**
     * Utility method that handles connection lifecycle (open/close)
     * and exception handling. 
-    * This uses try-with-resources, which implements auto-closable
-    * ensuring the connection is closed.
     * 
     * @param source The data source to obtain a connection from.
     * @param callback The callback defining operations to perform.
