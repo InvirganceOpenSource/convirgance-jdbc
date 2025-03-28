@@ -43,6 +43,7 @@ public class StoredConnection
 {
     private JSONObject record;
     private ConnectionDatabase database;
+    private DataSource source;
 
     StoredConnection(JSONObject record, ConnectionDatabase database)
     {
@@ -98,6 +99,9 @@ public class StoredConnection
         if(source == null) throw new ConvirganceException("Automatic driver " + record.getString("driver") + " does not have a DataSource.");
         if(record.isNull("datasourceConfig")) record.put("datasourceConfig", new JSONObject());
         
+        // Reset the cache
+        this.source = null;
+        
         return new DataSourceConfig(record.getJSONObject("datasourceConfig"), new DataSourceManager(source).getConfig());
     }
     
@@ -144,18 +148,24 @@ public class StoredConnection
         DataSourceManager manager;
         DataSource source;
         
+        if(this.source != null) return this.source;
+        
         if(!record.isNull("datasourceConfig"))
         {
             manager = new DataSourceManager(getDriver().getDataSource());
             
             manager.setConfig(record.getJSONObject("datasourceConfig"));
             
-            return manager.getDataSource();
+            this.source = manager.getDataSource();
+            
+            return this.source;
         }
         
         if(config != null) 
         {
-            return DriverDataSource.getDataSource(config.getURL(), config.getUsername(), config.getPassword());
+            this.source = DriverDataSource.getDataSource(config.getURL(), config.getUsername(), config.getPassword());
+            
+            return this.source;
         }
         
         throw new ConvirganceException("Connection not configured!");
