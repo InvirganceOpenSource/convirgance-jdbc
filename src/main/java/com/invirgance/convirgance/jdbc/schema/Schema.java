@@ -27,7 +27,10 @@ import com.invirgance.convirgance.json.JSONObject;
 import java.util.Arrays;
 
 /**
- *
+ * Used when creating logic based on database schema properties.
+ * Example: Getting a specific table from a imaginary "unlicensed_users" schema.
+ * Or comparing the tables between two different schemas.
+ * 
  * @author jbanes
  */
 public class Schema implements NamedSchema
@@ -43,8 +46,9 @@ public class Schema implements NamedSchema
     }
     
     /**
-     * Returns the schema's table catalog.
-     * @return Catalog.
+     * Returns the table {@link Catalog}.
+     * 
+     * @return The Catalog.
      */
     public Catalog getCatalog()
     {
@@ -56,8 +60,9 @@ public class Schema implements NamedSchema
     }
     
     /**
-     * Returns the value of TABLE_SCHEM 
-     * @return String.
+     * Returns the value Schema's name.
+     * 
+     * @return The name.
      */
     @Override
     public String getName()
@@ -74,7 +79,8 @@ public class Schema implements NamedSchema
     
     /**
      * Returns if this is the default schema.
-     * @return True is default, otherwise false.
+     * 
+     * @return True if default, otherwise false.
      */
     public boolean isDefault()
     {
@@ -82,7 +88,8 @@ public class Schema implements NamedSchema
     }
     
     /**
-     * Gets the table with the provided name (case-insensitive)
+     * Gets the {@link Table} with the provided name (case-insensitive).
+     * 
      * @param name Table name.
      * @return The requested table.
      */
@@ -97,8 +104,9 @@ public class Schema implements NamedSchema
     }
     
     /**
-     * Returns all the Tables in the schema.
-     * @return Array of Tables.
+     * Returns all the {@link Table}s in the current Schema.
+     * 
+     * @return An array of Tables.
      */
     public Table[] getTables()
     {
@@ -111,8 +119,9 @@ public class Schema implements NamedSchema
     }
     
     /**
-     * Gets the view with the provided name.
-     * @param name The name.
+     * Gets the {@link View} with the provided name (case-insensitive).
+     * 
+     * @param name The View's name.
      * @return The specified View.
      */
     public View getView(String name)
@@ -126,7 +135,8 @@ public class Schema implements NamedSchema
     }
     
     /**
-     * Gets all the views of the schema.
+     * Gets all the {@link View}s of the current schema.
+     * 
      * @return An array of Views.
      */
     public View[] getViews()
