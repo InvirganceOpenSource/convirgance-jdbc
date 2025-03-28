@@ -31,19 +31,7 @@ import javax.sql.DataSource;
 /**
  * A callback interface for executing database operations.
  * This provides lifecycle management, by using this you don't need to 
- * worry about forgetting to close a connection.
- * 
- * Example: Using the StoredConnection's execute implementation
- * 
- * TransactionOperation transaction = new TransactionOperation(new QueryOperation(new Query("truncate table " + tableName)));
- * 
- * // The StoredConnection executed here calls ConnectionCallback.execute(source, callback), 
- * // using the StoredConnection's {@link DataSource} to get the connection.
- * 
- * // 'connection' is the callback parameter that you see below in the static execute function
- * storedConnection.execute(connection -> {
- *    transaction.execute(connection);
- * });
+ * worry about closing the database connection.
  * 
  * @author jbanes
  */
