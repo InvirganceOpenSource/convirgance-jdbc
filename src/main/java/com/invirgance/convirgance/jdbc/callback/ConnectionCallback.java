@@ -29,13 +29,44 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 /**
- *
+ * A callback interface for executing database operations.
+ * This provides lifecycle management, by using this you don't need to 
+ * worry about forgetting to close a connection.
+ * 
+ * Example: Using the StoredConnection's execute implementation
+ * 
+ * TransactionOperation transaction = new TransactionOperation(new QueryOperation(new Query("truncate table " + tableName)));
+ * 
+ * // The StoredConnection executed here calls ConnectionCallback.execute(source, callback), 
+ * // using the StoredConnection's {@link DataSource} to get the connection.
+ * 
+ * // 'connection' is the callback parameter that you see below in the static execute function
+ * storedConnection.execute(connection -> {
+ *    transaction.execute(connection);
+ * });
+ * 
  * @author jbanes
  */
 public interface ConnectionCallback
 {
+    /**
+     * Executes database operations with the provided connection.
+     * 
+     * @param connection The JDBC connection to use
+     * @throws SQLException If a database access error occurs
+     */    
     public void execute(Connection connection) throws SQLException;
     
+    /**
+    * Utility method that handles connection lifecycle (open/close)
+    * and exception handling. 
+    * This uses try-with-resources, which implements auto-closable
+    * ensuring the connection is closed.
+    * 
+    * @param source The data source to obtain a connection from.
+    * @param callback The callback defining operations to perform.
+    * @throws ConvirganceException Wrapping any SQLExceptions that occur
+    */
     public static void execute(DataSource source, ConnectionCallback callback)
     {
         try(Connection connection = source.getConnection())

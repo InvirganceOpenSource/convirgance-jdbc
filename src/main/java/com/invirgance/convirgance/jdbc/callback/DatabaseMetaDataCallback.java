@@ -28,16 +28,33 @@ import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
 /**
- *
+ * Provides a connection callback specifically for database metadata.
+ * This interface safely retrieves the database metadata from a connection 
+ * and closes the connection after execution.
+ * 
  * @author jbanes
  */
 public interface DatabaseMetaDataCallback extends ConnectionCallback
-{
+{    
+    /**
+     * Default implementation that obtains metadata from the connection and passes it
+     * to the {@link #execute(DatabaseMetaData)} method.
+     *
+     * @param connection the JDBC connection to use.
+     * @throws SQLException if a database access error occurs.
+     */
     @Override
     public default void execute(Connection connection) throws SQLException
     {
         execute(connection.getMetaData());
     }
     
+    /**
+     * Executes operations using the database metadata.
+     * Implementations should perform their metadata operations within this method/lambda.
+     *
+     * @param metadata the database metadata object to use.
+     * @throws SQLException if a database access error occurs.
+     */    
     public void execute(DatabaseMetaData metadata) throws SQLException;
 }
