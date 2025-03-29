@@ -26,13 +26,27 @@ package com.invirgance.convirgance.jdbc.sql;
 import com.invirgance.convirgance.jdbc.schema.NamedSchema;
 
 /**
- *
+ * A named parameter that is used when creating SQL queries with {@link SQLStatement}.
+ * 
+ * Example:
+ *   SQLStatement statement = table
+ *        .select()
+ *        .where()
+ *            .equals(table.getColumn("zip"), new BindVariable("zipcode"))
+ *           .done();
+ * // The built query would result in something like this. "... from "PUBLIC"."CUSTOMER" where "ZIP" = :zipcode"
  * @author jbanes
  */
 public class BindVariable implements NamedSchema
 {
     private String name;
 
+    /**
+     * The name to use for the binding variable.
+     * Example: "zipcode"
+     * 
+     * @param name A name.
+     */
     public BindVariable(String name)
     {
         char c;

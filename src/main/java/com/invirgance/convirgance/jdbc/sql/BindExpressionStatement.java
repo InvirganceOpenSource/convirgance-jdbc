@@ -26,6 +26,28 @@ package com.invirgance.convirgance.jdbc.sql;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 
 /**
+ * This is used to create an expression with named bindings in a SQL query.
+ * Additionally the name can be modified and still point to the same underlying
+ * {@link BindVariable}.
+ *
+ * Example:
+ * BindVariable ageValue = new BindVariable("customerAge");
+ *
+ * BindExpressionStatement trialAccountPeriod = new
+ * BindExpressionStatement(layout, ageValue, "trialAccountPeriod");
+ * 
+ * BindExpressionStatement longStandingAccount = new
+ * BindExpressionStatement(layout, ageValue, "longStandingAccount");
+ *
+ * SQLStatement query = customerTable.select()
+ *  .column(customerTable.getColumn("name")) 
+ *  .from(customerTable) 
+ *  .where()
+ *  .greaterThanOrEquals(customerTable.getColumn("age"), trialAccountPeriod)
+ *  .and() 
+ *  .lessThan(customerTable.getColumn("age"), longStandingAccount) 
+ *   .end()
+ *  .done();
  *
  * @author jbanes
  */
@@ -36,11 +58,26 @@ public class BindExpressionStatement implements ExpressionStatement
     private BindVariable bind;
     private String name;
 
+    /**
+     * Creates a BindExpression from a BindVariable using the database metadata from 
+     * {@link DatabaseSchemaLayout}.
+     * 
+     * @param layout The layout.
+     * @param bind The BindVariable.
+     */
     public BindExpressionStatement(DatabaseSchemaLayout layout, BindVariable bind)
     {
         this(layout, bind, null);
     }
     
+    /**
+     * Creates a BindExpression from a BindVariable using the database metadata from 
+     * {@link DatabaseSchemaLayout}, you can provide an optional name to reuse the bind variable under another name.
+     * 
+     * @param layout The DatabaseSchemaLayout.
+     * @param bind The BindVariable.
+     * @param name Another name to reference the same BindVariable.
+     */
     public BindExpressionStatement(DatabaseSchemaLayout layout, BindVariable bind, String name)
     {
         this(layout, bind, name, null);
@@ -54,6 +91,11 @@ public class BindExpressionStatement implements ExpressionStatement
         this.name = name;
     }
 
+    /**
+     * Get the {@link BindVariable} for this expression.
+     * 
+     * @return The bind variable.
+     */
     public BindVariable getBind()
     {
         return bind;
