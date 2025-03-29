@@ -26,9 +26,24 @@ package com.invirgance.convirgance.jdbc.sql;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 
 /**
- *
+ * Creates a logical OR grouping in SQL. This wraps conditions in parentheses 
+ * and joins them with OR keywords.
+ * 
+ * Example: 
+ * SQLStatement query = table
+ *     .select()
+ *     .column(table.getColumn("name"))
+ *     .where()
+ *         .or() // BooleanOrStatement                             
+ *             .equals(table.getColumn("type"), "fish")
+ *             .equals(table.getColumn("type"), "crustacean")
+ *         .end()
+ *     .done();
+ * 
+ * Produces SQL like: WHERE (column = value OR column = value)
+ * 
  * @author jbanes
- * @param <P>
+ * @param <P> The parent WhereStatement type this returns to when done.
  */
 public class BooleanOrStatement<P extends WhereStatement> extends WhereStatement implements ComparisonStatement
 {

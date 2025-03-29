@@ -26,9 +26,24 @@ package com.invirgance.convirgance.jdbc.sql;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 
 /**
- *
+ * Creates a logical NOT operator in SQL, negating the conditions it contains.
+ * This prepends NOT to a condition or group of conditions joined with AND.
+ * 
+ * Example: 
+ * SQLStatement query = table
+ *     .select()
+ *     .column(table.getColumn("name"))
+ *     .where()
+ *         .not() // BooleanNotStatement
+ *             .equals(column, value)
+ *             .greaterThan(column, value)
+ *         .end()
+ *     .done();
+ * 
+ * Produces SQL like: WHERE NOT (column = value AND column > value)
+ * 
  * @author jbanes
- * @param <P>
+ * @param <P> The parent WhereStatement type this returns to when done.
  */
 public class BooleanNotStatement<P extends WhereStatement> extends WhereStatement implements ComparisonStatement
 {

@@ -26,9 +26,25 @@ package com.invirgance.convirgance.jdbc.sql;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 
 /**
- *
+ * Creates a logical AND grouping in SQL, combining multiple conditions that all must be true.
+ * This wraps conditions in parentheses and joins them with AND keywords.
+ * 
+ * Example: 
+ * SQLStatement query = table
+ *     .select()
+ *     .column(table.getColumn("name"))
+ *     .where()
+ *         .equals(column, value)
+ *         .and() // BooleanAndStatement
+ *             .greaterThan(column, value)
+ *             .lessThan(column, value)
+ *         .end()
+ *     .done();
+ * 
+ * Produces SQL like: WHERE (column = value AND column > value)
+ * 
  * @author jbanes
- * @param <P>
+ * @param <P> The parent WhereStatement type this returns to when done.
  */
 public class BooleanAndStatement<P extends WhereStatement> extends WhereStatement implements ComparisonStatement
 {
