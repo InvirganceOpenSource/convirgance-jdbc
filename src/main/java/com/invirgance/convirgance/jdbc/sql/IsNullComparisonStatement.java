@@ -26,7 +26,10 @@ package com.invirgance.convirgance.jdbc.sql;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 
 /**
- *
+ * Represents the SQL "IS NULL" comparison operator in conditions.
+ * This class creates SQL expressions that check whether a column or expression
+ * is NULL (contains no value) in database queries.
+ * 
  * @author jbanes
  */
 public class IsNullComparisonStatement implements ComparisonStatement
@@ -36,12 +39,22 @@ public class IsNullComparisonStatement implements ComparisonStatement
     
     private ExpressionStatement expression;
     
-    
+    /**
+     * Creates the statement using the provided database layout.
+     * 
+     * @param layout The layout.
+     */
     public IsNullComparisonStatement(DatabaseSchemaLayout layout)
     {
         this(layout, null);
     }
     
+    /**
+     * Creates the statement using the provided layout and expression.
+     * 
+     * @param layout The layout.
+     * @param expression The expression.
+     */
     public IsNullComparisonStatement(DatabaseSchemaLayout layout, ExpressionStatement expression)
     {
         this(layout, expression, null);
@@ -60,16 +73,27 @@ public class IsNullComparisonStatement implements ComparisonStatement
         return this.parent;
     }
 
+    @Override
     public void setParent(SQLStatement parent)
     {
         this.parent = parent;
     }
 
+    /**
+     * Returns the current expression that will be evaluated in the query.
+     * 
+     * @return ExpressionStatement
+     */
     public ExpressionStatement getExpression()
     {
         return expression;
     }
 
+    /**
+     * Sets the expression to evaluate in the comparison.
+     * 
+     * @param expression ExpressionStatement
+     */
     public void setExpression(ExpressionStatement expression)
     {
         this.expression = expression;

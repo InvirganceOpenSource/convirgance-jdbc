@@ -26,16 +26,28 @@ package com.invirgance.convirgance.jdbc.sql;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 
 /**
- *
+ * Represents the "IS NOT NULL" expression, for creating comparisons on expressions.
+ * 
  * @author jbanes
  */
 public class IsNotNullComparisonStatement extends IsNullComparisonStatement
 {
+    /**
+     * Creates the statement with only the layout...
+     * 
+     * @param layout The database layout.
+     */
     public IsNotNullComparisonStatement(DatabaseSchemaLayout layout)
     {
         super(layout);
     }
     
+    /**
+     * Creates the statement with the provided database layout and expression.
+     * 
+     * @param layout Database layout.
+     * @param expression Expression statement.
+     */
     public IsNotNullComparisonStatement(DatabaseSchemaLayout layout, ExpressionStatement expression)
     {
         super(layout, expression);
