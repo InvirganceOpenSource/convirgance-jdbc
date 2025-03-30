@@ -23,11 +23,14 @@
  */
 package com.invirgance.convirgance.jdbc.sql;
 
-import com.invirgance.convirgance.jdbc.schema.Column;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 
-/**
- *
+/** 
+ * Represents a literal value within an SQL expression.
+ * This class handles literal values (strings, numbers, null, etc.) in SQL statements.
+ * It properly escapes string literals and handles type conversion when required 
+ * ex for Null or Number. Optionally, literals can be given an alias using the AS keyword.
+ * 
  * @author jbanes
  */
 public class LiteralExpressionStatement implements ExpressionStatement
