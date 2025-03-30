@@ -26,16 +26,23 @@ package com.invirgance.convirgance.jdbc.sql;
 import com.invirgance.convirgance.dbms.Query;
 
 /**
- *
+ * Core interface for all SQL statement components.
+ * 
+ * This interface defines the contract for objects that represent SQL statements
+ * or parts of statements within the compositional SQL building hierarchy. 
+ * 
+ * Implementing classes represent specific SQL constructs (SELECT, WHERE, 
+ * FROM, JOIN, etc.).
+ * 
  * @author jbanes
  */
 public interface SQLStatement
 {
     /**
      * If this statement is part of a larger statement, this returns the parent
-     * statement. Null is returned if this is the top-level statement.
+     * statement.
      * 
-     * @return the parent statement or null if there is no parent
+     * @return the parent statement
      */
     public default SQLStatement getParent()
     {

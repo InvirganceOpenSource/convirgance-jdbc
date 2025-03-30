@@ -32,7 +32,11 @@ import static com.invirgance.convirgance.jdbc.sql.Keyword.WHERE;
 import java.util.Stack;
 
 /**
- *
+ * Core SQL generation engine that renders SQL statements into properly 
+ * formatted SQL strings. This class handles all SQL syntax details including 
+ * keyword formatting, proper spacing, parentheses balancing, and identifier 
+ * quoting based on database type.
+ * 
  * @author jbanes
  */
 public class SQLRenderer
@@ -50,32 +54,64 @@ public class SQLRenderer
     private int lineOffset = 0;
     private Object last;
     
-
+    /**
+     * If SQL keywords will be capitalized.
+     * 
+     * @return If the keywords will be capitalized.
+     */
     public boolean isCapitalizeKeywords()
     {
         return capitalizeKeywords;
     }
 
+    /**
+     * Will change the query to use capitalized keywords.
+     * 
+     * @param capitalizeKeywords True to enable.
+     */
     public void setCapitalizeKeywords(boolean capitalizeKeywords)
     {
         this.capitalizeKeywords = capitalizeKeywords;
     }
 
+    /**
+     * If the query will use pretty printing.
+     * 
+     * @return True is enabled.
+     */
     public boolean isPrettyPrint()
     {
         return prettyPrint;
     }
 
+    /**
+     * This will make it easier for other people to read the query. If
+     * you don't intend on other people reading the query leave this disabled
+     * to save a few bytes.
+     * 
+     * @param pretty True to enable.
+     */
     public void setPrettyPrint(boolean pretty)
     {
         this.prettyPrint = pretty;
     }
     
+    /**
+     * Returns the current line count of the query.
+     * 
+     * @return An int.
+     */
     public int getLine()
     {
         return line;
     }
     
+    /**
+     * Gets the current character index. 
+     * Note: This will change depending on the state of pretty print.
+     * 
+     * @return The character index.
+     */
     public int getCharacter()
     {
         return (buffer.length() - lineOffset) + 1;
@@ -128,6 +164,12 @@ public class SQLRenderer
         last = value;
     }
     
+    /**
+     * Keywords will be capitalized if this is enabled.
+     * 
+     * @param capitalize True to enable.
+     * @return this
+     */
     public SQLRenderer capitialize(boolean capitalize)
     {
         this.capitalizeKeywords = capitalize;
@@ -135,6 +177,12 @@ public class SQLRenderer
         return this;
     }
     
+    /**
+     * Enables pretty printing for this renderer.
+     * 
+     * @param pretty True to enable.
+     * @return this
+     */
     public SQLRenderer pretty(boolean pretty)
     {
         this.prettyPrint = pretty;
@@ -142,6 +190,10 @@ public class SQLRenderer
         return this;
     }
     
+    /**
+     * Resets this object.
+     * @return this
+     */
     public SQLRenderer reset()
     {
         buffer.setLength(0);
@@ -169,6 +221,12 @@ public class SQLRenderer
         last = stack.pop();
     }
     
+    /**
+     * Adds a provided SQL keyword to the query.
+     * 
+     * @param keyword A SQL {@link Keyword}
+     * @return this
+     */
     public SQLRenderer keyword(Keyword keyword)
     {
         if(prettyPrint)
@@ -201,6 +259,12 @@ public class SQLRenderer
         return this;
     }
     
+    /**
+     * Adds a comparison operator to the SQL query.
+     * 
+     * @param operator A {@link ComparisonOperator}
+     * @return this
+     */
     public SQLRenderer operator(ComparisonOperator operator)
     {
         prefix(operator);
@@ -212,6 +276,12 @@ public class SQLRenderer
         return this;
     }
     
+    /**
+     * Adds a column to the SQL query.
+     * 
+     * @param column A {@link Column}
+     * @return this
+     */
     public SQLRenderer column(Column column)
     {
         prefix(column);
@@ -221,6 +291,13 @@ public class SQLRenderer
         return this;
     }
     
+    /**
+     * Sets the ordering of a Column/NamedSchema.
+     * 
+     * @param column A {@link NamedSchema}
+     * @param order The ordering to use {@link OrderBy}
+     * @return this
+     */
     public SQLRenderer order(NamedSchema column, OrderBy order)
     {
         prefix(column);
@@ -239,6 +316,14 @@ public class SQLRenderer
         buffer.append("'");
     }
     
+    /**
+     * Adds a literal to the query.
+     * Specific handling for Null, Number and String, otherwise the object is
+     * toString()-ed
+     * 
+     * @param literal An object.
+     * @return this
+     */
     public SQLRenderer literal(Object literal)
     {
         prefix(literal);
@@ -251,6 +336,15 @@ public class SQLRenderer
         return this;
     }
     
+    /**
+     * Appends a named schema element into the SQL query.
+     * This method handles proper formatting of schema identifiers, including
+     * automatically adding schema qualification (e.g., "schema.table") for
+     * TabularStructure objects.
+     * 
+     * @param named The NamedSchema object to render (table, column, etc.)
+     * @return this
+     */
     public SQLRenderer schema(NamedSchema named)
     {
         prefix(named);
@@ -266,6 +360,12 @@ public class SQLRenderer
         return this;
     }
     
+    /**
+     * Adds a SQLStatement to the query.
+     * 
+     * @param statement A SQLStatement.
+     * @return this
+     */
     public SQLRenderer statement(SQLStatement statement)
     {
         if(statement == null) return this;
@@ -279,6 +379,11 @@ public class SQLRenderer
         return this;
     }
     
+    /**
+     * Adds a left parenthesis to the query.
+     * 
+     * @return this
+     */
     public SQLRenderer openParenthesis()
     {
         prefix("(");
@@ -293,6 +398,11 @@ public class SQLRenderer
         return this;
     }
     
+    /**
+     * Adds a right parenthesis to the query.
+     * 
+     * @return this
+     */    
     public SQLRenderer closeParenthesis()
     {
         depth--;
@@ -307,6 +417,11 @@ public class SQLRenderer
         return this;
     }
     
+    /**
+     * Ends the current query statement.
+     * 
+     * @return this
+     */
     public SQLRenderer endStatement()
     {
         // Right trim
