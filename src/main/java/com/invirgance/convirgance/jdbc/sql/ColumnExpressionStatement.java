@@ -27,7 +27,18 @@ import com.invirgance.convirgance.jdbc.schema.Column;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 
 /**
- *
+ * Represents a database column in SQL queries, with optional column aliasing (naming).
+ * 
+ * Example:
+ * BindVariable customerThreshold = new BindVariable("trailPeriod");
+ * 
+ * SQLStatement query = table
+ *     .select()
+ *     .column(table.getColumn("customer_id"), "ID")  // Creates "customer_id AS ID"
+ *     .where()
+ *         .greaterThan(table.getColumn("customer_id"), customerThreshold)
+ *     .done();
+ * 
  * @author jbanes
  */
 public class ColumnExpressionStatement implements ExpressionStatement
@@ -38,12 +49,24 @@ public class ColumnExpressionStatement implements ExpressionStatement
     private Column column;
     private String name;
     
-    
+    /**
+     * Creates a column expression that can be used in SQL statements like SELECT, WHERE, etc.
+     * 
+     * @param layout The database schema layout with table and driver information.
+     * @param column The database column to reference.
+     */
     public ColumnExpressionStatement(DatabaseSchemaLayout layout, Column column)
     {
         this(layout, column, null);
     }
     
+    /**
+     * Creates a column expression with an alias (for "AS" clauses in SELECT statements).
+     * 
+     * @param layout The database schema layout with table and driver information.
+     * @param column The database column to reference.
+     * @param name The alias to give this column (creates "column AS name" in SQL)
+     */    
     public ColumnExpressionStatement(DatabaseSchemaLayout layout, Column column, String name)
     {
         this(layout, column, name, null);
@@ -63,6 +86,7 @@ public class ColumnExpressionStatement implements ExpressionStatement
         return this.parent;
     }
     
+    @Override
     public void setParent(SQLStatement parent)
     {
         this.parent = parent;

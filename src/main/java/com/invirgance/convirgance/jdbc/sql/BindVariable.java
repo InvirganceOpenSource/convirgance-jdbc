@@ -26,7 +26,7 @@ package com.invirgance.convirgance.jdbc.sql;
 import com.invirgance.convirgance.jdbc.schema.NamedSchema;
 
 /**
- * A named parameter that is used when creating SQL queries with {@link SQLStatement}.
+ * A named parameter that can be used when creating SQL queries with {@link SQLStatement}.
  * 
  * Example:
  *   SQLStatement statement = table
@@ -34,7 +34,8 @@ import com.invirgance.convirgance.jdbc.schema.NamedSchema;
  *        .where()
  *            .equals(table.getColumn("zip"), new BindVariable("zipcode"))
  *           .done();
- * // The built query would result in something like this. "... from "PUBLIC"."CUSTOMER" where "ZIP" = :zipcode"
+ * 
+ * // The query would result in something like this. "... from "PUBLIC"."CUSTOMER" where "ZIP" = :zipcode"
  * @author jbanes
  */
 public class BindVariable implements NamedSchema
