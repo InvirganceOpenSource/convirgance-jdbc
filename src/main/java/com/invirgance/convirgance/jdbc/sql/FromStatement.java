@@ -28,7 +28,9 @@ import com.invirgance.convirgance.jdbc.schema.NamedSchema;
 import com.invirgance.convirgance.jdbc.schema.TabularStructure;
 
 /**
- *
+ * Creates the FROM clause for a SQL query with the provided {@link TabularStructure}. 
+ * Additionally supports table aliasing with the "AS" syntax when a name is provided.
+ * 
  * @author jbanes
  */
 public class FromStatement implements SQLStatement, NamedSchema
@@ -38,12 +40,24 @@ public class FromStatement implements SQLStatement, NamedSchema
     private SQLStatement parent;
     private String name;
 
-    
+    /**
+     * Creates the from statement using the provided layout and {@link TabularStructure}.
+     * 
+     * @param layout Database layout.
+     * @param table The table.
+     */
     public FromStatement(DatabaseSchemaLayout layout, TabularStructure table)
     {
         this(layout, table, null);
     }
     
+    /**
+     * Creates the from statement using the provided layout and {@link TabularStructure}.
+     * 
+     * @param layout Database layout.
+     * @param table The table.
+     * @param name The alias to use.
+     */    
     public FromStatement(DatabaseSchemaLayout layout, TabularStructure table, String name)
     {
         this(layout, table, name, null);
@@ -63,6 +77,7 @@ public class FromStatement implements SQLStatement, NamedSchema
         return this.parent;
     }
     
+    @Override
     public void setParent(SQLStatement parent)
     {
         this.parent = parent;
