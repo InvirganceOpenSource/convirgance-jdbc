@@ -28,8 +28,7 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 /**
  * Creates a logical NOT operator in SQL, negating the conditions it contains.
  * This prepends NOT to a condition or group of conditions joined with AND.
- * 
- * Example: 
+ * <pre><code>
  * SQLStatement query = table
  *     .select()
  *     .column(table.getColumn("name"))
@@ -39,7 +38,7 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  *             .greaterThan(column, value)
  *         .end()
  *     .done();
- * 
+ * </code></pre>
  * Produces SQL like: WHERE NOT (column = value AND column > value)
  * 
  * @author jbanes

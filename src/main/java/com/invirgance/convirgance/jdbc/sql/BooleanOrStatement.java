@@ -29,7 +29,7 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  * Creates a logical OR grouping in SQL. This wraps conditions in parentheses 
  * and joins them with OR keywords.
  * 
- * Example: 
+ * <pre><code>
  * SQLStatement query = table
  *     .select()
  *     .column(table.getColumn("name"))
@@ -39,7 +39,7 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  *             .equals(table.getColumn("type"), "crustacean")
  *         .end()
  *     .done();
- * 
+ * </code></pre>
  * Produces SQL like: WHERE (column = value OR column = value)
  * 
  * @author jbanes

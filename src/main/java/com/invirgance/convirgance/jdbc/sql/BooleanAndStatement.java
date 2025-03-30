@@ -29,7 +29,7 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  * Creates a logical AND grouping in SQL, combining multiple conditions that all must be true.
  * This wraps conditions in parentheses and joins them with AND keywords.
  * 
- * Example: 
+ * <pre><code>
  * SQLStatement query = table
  *     .select()
  *     .column(table.getColumn("name"))
@@ -40,7 +40,7 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  *             .lessThan(column, value)
  *         .end()
  *     .done();
- * 
+ * </code></pre>
  * Produces SQL like: WHERE (column = value AND column > value)
  * 
  * @author jbanes
