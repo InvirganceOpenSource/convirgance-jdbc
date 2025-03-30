@@ -24,13 +24,9 @@ SOFTWARE.
  * Provides classes for managing JDBC data sources.
  * 
  * This package contains implementations for database connectivity
- * through the JDBC API, including a DataSourceManager for property configuration
- * and a DriverDataSource for database connections.
- * 
- * A DriverDataSource(DataSource) can be created with 
- * DriverDataSource.getDataSource(url, name, pass) and retrieved 
- * off existing AutomaticDriver(s) or StoredConnection(s);
- * this can then be passed into DataSourceManager if needed.
+ * using the {@link javax.sql.DataSource} API, including a <code>DataSource</code> 
+ * wrapper for {@link java.sql.Driver} and a <code>DataSourceManager</code> 
+ * to explore and configure  <code>DataSource</code> instances.
  * 
  * @author jbanes
  * @since 1.0

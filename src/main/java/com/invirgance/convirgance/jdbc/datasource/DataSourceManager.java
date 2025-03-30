@@ -34,8 +34,8 @@ import java.lang.reflect.InvocationTargetException;
 import javax.sql.DataSource;
 
 /**
- * Used to create logic that works with data sources directly. 
- * Can be used to set/retrieve data source properties. 
+ * Exposes data source properties at runtime, allowing for dynamic configuration
+ * of {@link javax.sql.DataSource} instances.
  * 
  * @author jbanes
  */

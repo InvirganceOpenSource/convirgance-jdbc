@@ -23,8 +23,6 @@
  */
 
 /**
- * Provides callback interfaces for safe and efficient JDBC connection management.
- * 
  * <p>This package implements the callback pattern to ensure proper lifecycle 
  * management of database connections. It handles resource acquisition, operation
  * execution, and automatic resource release, even when exceptions occur. The
