@@ -27,7 +27,28 @@ import com.invirgance.convirgance.jdbc.schema.*;
 import com.invirgance.convirgance.json.JSONArray;
 
 /**
- *
+ * Represents a SQL SELECT statement builder.
+ * 
+ * This class implements the builder pattern to construct SQL SELECT queries
+ * through method chaining. It manages columns, tables, filtering conditions,
+ * and ordering specifications, automatically tracking table dependencies
+ * when columns are added.
+ * 
+ * <pre><code>
+ * SelectStatement query = database
+ *     .select()
+ *     .column(customerTable.getColumn("name"))
+ *     .column(customerTable.getColumn("email"), "contact_email")
+ *     .from(customerTable, "c")
+ *     .where()
+ *         .equals(customerTable.getColumn("status"), "active")
+ *         .and()
+ *             .greaterThan(customerTable.getColumn("last_order"), dateVariable)
+ *         .end()
+ *     .done()
+ *     .order(customerTable.getColumn("name"));
+ * </code></pre>
+ * 
  * @author jbanes
  */
 public class SelectStatement implements SQLStatement
@@ -40,21 +61,31 @@ public class SelectStatement implements SQLStatement
     private WhereStatement where;
     private OrderByStatement order;
     
+    /**
+     * Creates a new Statement using the provided database layout.
+     * 
+     * @param layout The database layout.
+     */
     public SelectStatement(DatabaseSchemaLayout layout)
     {
         this.layout = layout;
     }
 
+    /**
+     * Gets the columns of the current statement.
+     * 
+     * @return An array.
+     */
     public ExpressionStatement[] getColumns()
     {
         return columns.toArray(ExpressionStatement[]::new);
     }
     
     /**
-     * Adds a column to the select clause
+     * Adds a column to the select query.
      * 
-     * @param column Column to select
-     * @return this object for chaining
+     * @param column Column to include.
+     * @return this
      */
     public SelectStatement column(Column column)
     {
@@ -68,9 +99,9 @@ public class SelectStatement implements SQLStatement
     /**
      * Adds a column to the select clause with the specified result set name
      * 
-     * @param column Column to select
+     * @param column Column to include
      * @param name to generate "as" clause
-     * @return this object for chaining
+     * @return this
      */
     public SelectStatement column(Column column, String name)
     {
@@ -81,11 +112,24 @@ public class SelectStatement implements SQLStatement
         return this;
     }
     
+    /**
+     * Creates a SelectStatement from the provided {@link Table}.
+     * 
+     * @param table The table.
+     * @return this.
+     */
     public SelectStatement from(TabularStructure table)
     {
         return from(table, null);
     }
     
+    /**
+     * Creates a SelectStatement from the provided table, with optional aliasing.
+     * 
+     * @param table The table/view to use.
+     * @param name The name.
+     * @return this.
+     */
     public SelectStatement from(TabularStructure table, String name)
     {
         this.from = new FromStatement(layout, table, name, this);
@@ -95,6 +139,22 @@ public class SelectStatement implements SQLStatement
         return this;
     }
     
+    /**
+     * Creates a WHERE clause for this SELECT statement to filter results.
+     * 
+     * This method begins a new context for adding filter conditions. After adding
+     * all desired conditions, you must call .done() on the returned WhereStatement
+     * to return to the SelectStatement context.
+     * 
+     * <pre><code>
+     * selectStatement
+     *     .where()  // Enter WHERE context
+     *         .equals(customerTable.getColumn("id"), 1)
+     *     .done(); // Return to SELECT context
+     * </code></pre>
+     * 
+     * @return A WhereStatement builder attached to this SelectStatement
+     */
     public WhereStatement<SelectStatement> where()
     {
         this.where = new WhereStatement<>(layout, this);
@@ -102,12 +162,24 @@ public class SelectStatement implements SQLStatement
         return where;
     }
     
-    
+    /**
+     * Sets a column's ordering to ascending.
+     * 
+     * @param column The column to order.
+     * @return this.
+     */
     public SelectStatement order(ExpressionStatement column)
     {
         return order(column, OrderBy.ASCENDING);
     }
     
+    /**
+     * Sets a columns ordering.
+     * 
+     * @param column The column.
+     * @param order The ordering to use.
+     * @return this.
+     */
     public SelectStatement order(ExpressionStatement column, OrderBy order)
     {
         if(this.order == null) this.order = new OrderByStatement(layout, this);
@@ -117,11 +189,24 @@ public class SelectStatement implements SQLStatement
         return this;
     }
     
+    /**
+     * Sets a columns ordering to ascending.
+     * 
+     * @param column The column.
+     * @return this.
+     */   
     public SelectStatement order(Column column)
     {
         return order(new ColumnExpressionStatement(layout, column), OrderBy.ASCENDING);
     }
     
+    /**
+     * Sets a columns ordering.
+     * 
+     * @param column The column.
+     * @param order The ordering to use.
+     * @return this.
+     */    
     public SelectStatement order(Column column, OrderBy order)
     {
         return order(new ColumnExpressionStatement(layout, column), order);
