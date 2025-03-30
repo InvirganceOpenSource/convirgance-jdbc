@@ -27,7 +27,8 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 import com.invirgance.convirgance.json.JSONArray;
 
 /**
- *
+ * Creates an OrderByStatement, this is used to add an order by clause.
+ * 
  * @author jbanes
  */
 public class OrderByStatement implements SQLStatement
@@ -38,7 +39,11 @@ public class OrderByStatement implements SQLStatement
     private JSONArray<ExpressionStatement> clauses = new JSONArray<>();
     private JSONArray<OrderBy> orders = new JSONArray<>();
 
-    
+    /**
+     * Creates a new statement.
+     * 
+     * @param layout The Database schema layout.
+     */
     public OrderByStatement(DatabaseSchemaLayout layout)
     {
         this(layout, null);
@@ -62,6 +67,14 @@ public class OrderByStatement implements SQLStatement
         this.parent = parent;
     }
     
+    /**
+     * Creates an OrderByStatement with the provided clause and order.
+     * This will update the rendered query to order the clause/column by the provided order.
+     * 
+     * @param clause ExpressionStatement
+     * @param order The order
+     * @return An OrderByStatement.
+     */
     public OrderByStatement order(ExpressionStatement clause, OrderBy order)
     {
         clause.setParent(this);
