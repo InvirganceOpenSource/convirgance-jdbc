@@ -24,7 +24,10 @@
 package com.invirgance.convirgance.jdbc.sql;
 
 /**
- *
+ * Different comparison operators. These are used by SQL statements to properly 
+ * generate the correct SQL when different filters are used 
+ * such as with {@link WhereStatement}.
+ * 
  * @author jbanes
  */
 public enum ComparisonOperator

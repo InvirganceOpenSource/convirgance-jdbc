@@ -26,7 +26,10 @@ package com.invirgance.convirgance.jdbc.sql;
 import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 
 /**
- *
+ * Represents a binary comparison operation in SQL with a left expression, 
+ * comparison operator, and right expression. Forms the foundation of 
+ * conditional logic in WHERE clauses and other filter expressions.
+ * 
  * @author jbanes
  */
 public class ComparisonOperatorStatement implements ComparisonStatement
@@ -38,11 +41,25 @@ public class ComparisonOperatorStatement implements ComparisonStatement
     private ExpressionStatement right;
     private ComparisonOperator operator;
 
+    /**
+     * Creates an empty comparison statement with just the database layout.
+     * 
+     * @param layout The database layout.
+     */
     public ComparisonOperatorStatement(DatabaseSchemaLayout layout)
     {
         this(layout, null, null, null);
     }
     
+    /**
+    * Creates a complete comparison statement ready for use in WHERE clauses.
+    * This builds expressions like "column = value" or "price > :minPrice".
+    * 
+    * @param layout The database layout.
+    * @param left The left side of the comparison.
+    * @param operator The comparison type {@link ComparisonOperator}
+    * @param right The right side of the comparison (value, variable, or another column)
+    */
     public ComparisonOperatorStatement(DatabaseSchemaLayout layout, ExpressionStatement left, ComparisonOperator operator, ExpressionStatement right)
     {
         this(layout, left, operator, right, null);
@@ -63,36 +80,68 @@ public class ComparisonOperatorStatement implements ComparisonStatement
         return this.parent;
     }
 
+    @Override
     public void setParent(SQLStatement parent)
     {
         this.parent = parent;
     }
 
+    /**
+     * Returns the left expression.
+     * 
+     * @return ExpressionStatement.
+     */
     public ExpressionStatement getLeft()
     {
         return left;
     }
 
+    /**
+     * Sets the left expression to use in the comparison.
+     * 
+     * @param left ExpressionStatement.
+     */
     public void setLeft(ExpressionStatement left)
     {
         this.left = left;
     }
 
+    /**
+     * Returns the right expression.
+     * 
+     * @return ExpressionStatement.
+     */
     public ExpressionStatement getRight()
     {
         return right;
     }
 
+    /**
+     * Sets the right expression that will be used in the comparison.
+     * 
+     * @param right ExpressionStatement.
+     */
     public void setRight(ExpressionStatement right)
     {
         this.right = right;
     }
 
+    /**
+     * Returns the operator that will be used in for the comparison.
+     * 
+     * @return ComparisonOperator.
+     */
     public ComparisonOperator getOperator()
     {
         return operator;
     }
 
+    /**
+     * Sets the comparison operator that will be used in the query when comparing the 
+     * expressions.
+     * 
+     * @param operator ComparisonOperator.
+     */
     public void setOperator(ComparisonOperator operator)
     {
         this.operator = operator;
