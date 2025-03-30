@@ -30,25 +30,25 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  * Additionally the name can be modified and still point to the same underlying
  * {@link BindVariable}.
  *
- * Example:
- * BindVariable ageValue = new BindVariable("customerAge");
+ * <pre><code>
+ * BindVariable age = new BindVariable("customerAge");
  *
- * BindExpressionStatement trialAccountPeriod = new
- * BindExpressionStatement(layout, ageValue, "trialAccountPeriod");
+ * BindExpressionStatement period = new
+ * BindExpressionStatement(layout, age, "trialAccountPeriod");
  * 
- * BindExpressionStatement longStandingAccount = new
- * BindExpressionStatement(layout, ageValue, "longStandingAccount");
+ * BindExpressionStatement standing = new
+ * BindExpressionStatement(layout, age, "longStandingAccount");
  *
  * SQLStatement query = customerTable.select()
  *  .column(customerTable.getColumn("name")) 
  *  .from(customerTable) 
  *  .where()
- *  .greaterThanOrEquals(customerTable.getColumn("age"), trialAccountPeriod)
+ *  .greaterThanOrEquals(customerTable.getColumn("age"), period)
  *  .and() 
- *  .lessThan(customerTable.getColumn("age"), longStandingAccount) 
+ *  .lessThan(customerTable.getColumn("age"), standing) 
  *   .end()
  *  .done();
- *
+ * </code></pre>
  * @author jbanes
  */
 public class BindExpressionStatement implements ExpressionStatement
