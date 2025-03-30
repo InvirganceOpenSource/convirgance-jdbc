@@ -29,16 +29,15 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 /**
  * Represents a database column in SQL queries, with optional column aliasing (naming).
  * 
- * Example:
- * BindVariable customerThreshold = new BindVariable("trailPeriod");
- * 
+ * <pre><code>
+ * BindVariable threshold = new BindVariable("trailPeriod");
  * SQLStatement query = table
  *     .select()
  *     .column(table.getColumn("customer_id"), "ID")  // Creates "customer_id AS ID"
  *     .where()
- *         .greaterThan(table.getColumn("customer_id"), customerThreshold)
+ *         .greaterThan(table.getColumn("customer_id"), threshold)
  *     .done();
- * 
+ * </code></pre>
  * @author jbanes
  */
 public class ColumnExpressionStatement implements ExpressionStatement
@@ -92,6 +91,10 @@ public class ColumnExpressionStatement implements ExpressionStatement
         this.parent = parent;
     }
     
+    /**
+     * Returns the column.
+     * @return Column
+     */
     public Column getColumn()
     {
         return this.column;
@@ -103,6 +106,11 @@ public class ColumnExpressionStatement implements ExpressionStatement
         return (name == null) ? column.getName() : name;
     }
     
+    /**
+     * Sets the alias name for this expression.
+     * 
+     * @param name Name.
+     */
     public void setName(String name)
     {
         this.name = name;
