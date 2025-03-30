@@ -24,7 +24,10 @@
 package com.invirgance.convirgance.jdbc.sql;
 
 /**
- *
+ * Represents the order key words for the SQL ORDER BY clauses.
+ * Provides constants for the two possible ordering directions:
+ * ascending and descending.
+ * 
  * @author jbanes
  */
 public enum OrderBy

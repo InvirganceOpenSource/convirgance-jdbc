@@ -24,7 +24,9 @@
 package com.invirgance.convirgance.jdbc.sql;
 
 /**
- *
+ * Enumerations for SQL keywords. These are used for rendering 
+ * different {@link ExpressionStatement}s
+ * 
  * @author jbanes
  */
 public enum Keyword
