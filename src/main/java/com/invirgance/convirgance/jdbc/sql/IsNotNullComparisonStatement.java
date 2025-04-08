@@ -28,6 +28,17 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 /**
  * Represents the "IS NOT NULL" expression, for creating comparisons on expressions.
  * 
+ * <pre><code>
+ * DatabaseSchemaLayout layout = new DatabaseSchemaLayout(driver, getHSQLDataSource());
+ * 
+ * Table table = layout.getCurrentSchema().getTable("customer");
+ * 
+ * ExpressionStatement children = new ColumnExpressionStatement(layout, table.getColumn("children"));
+ * 
+ * IsNotNullComparisonStatement statement = 
+ * new IsNotNullComparisonStatement(layout, children);
+ * </code></pre>
+ * 
  * @author jbanes
  */
 public class IsNotNullComparisonStatement extends IsNullComparisonStatement

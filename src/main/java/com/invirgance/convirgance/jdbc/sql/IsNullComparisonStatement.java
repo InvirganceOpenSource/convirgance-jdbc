@@ -30,6 +30,17 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  * This class creates SQL expressions that check whether a column or expression
  * is NULL (contains no value) in database queries.
  * 
+ * <pre><code>
+ * DatabaseSchemaLayout layout = new DatabaseSchemaLayout(driver, getHSQLDataSource());
+ * 
+ * Table table = layout.getCurrentSchema().getTable("customer");
+ * 
+ * ExpressionStatement children = new ColumnExpressionStatement(layout, table.getColumn("children"));
+ * 
+ * IsNullComparisonStatement statement = 
+ * new IsNullComparisonStatement(layout, children);
+ * </code></pre>
+ * 
  * @author jbanes
  */
 public class IsNullComparisonStatement implements ComparisonStatement

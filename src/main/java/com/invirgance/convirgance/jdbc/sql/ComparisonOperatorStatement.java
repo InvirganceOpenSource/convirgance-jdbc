@@ -30,6 +30,18 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  * comparison operator, and right expression. Forms the foundation of 
  * conditional logic in WHERE clauses and other filter expressions.
  * 
+ * <pre><code>
+ * DatabaseSchemaLayout layout = new DatabaseSchemaLayout(driver, getHSQLDataSource());
+ * 
+ * Table table = layout.getCurrentSchema().getTable("customer");
+ * 
+ * ExpressionStatement left = new ColumnExpressionStatement(layout, table.getColumn("height"));
+ * ExpressionStatement right = new ColumnExpressionStatement(layout, table.getColumn("width"));
+ * 
+ * ComparisonOperatorStatement statement = 
+ * new ComparisonOperatorStatement(layout, left, GREATER_THAN, right);
+ * </code></pre>
+ * 
  * @author jbanes
  */
 public class ComparisonOperatorStatement implements ComparisonStatement
