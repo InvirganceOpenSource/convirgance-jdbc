@@ -29,13 +29,16 @@ import com.invirgance.convirgance.jdbc.schema.NamedSchema;
  * A named parameter that can be used when creating SQL queries.
  * 
  * <pre><code>
- *   SQLStatement statement = table
+ * DatabaseSchemaLayout layout = getHSQLLayout();
+ * Table table = layout.getCurrentSchema().getTable("customer");
+ *   
+ * SQLStatement statement = table
  *        .select()
  *        .where()
  *            .equals(table.getColumn("zip"), new BindVariable("zipcode"))
  *           .done();
  * </code></pre>
- * // The query would result in something like this. "... from "PUBLIC"."CUSTOMER" where "ZIP" = :zipcode"
+ * 
  * @author jbanes
  */
 public class BindVariable implements NamedSchema

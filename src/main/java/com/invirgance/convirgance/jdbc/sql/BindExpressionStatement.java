@@ -31,24 +31,22 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  * {@link BindVariable}.
  *
  * <pre><code>
+ * DatabaseSchemaLayout layout = getHSQLLayout();
+ * Table table = layout.getCurrentSchema().getTable("customer");
+ *
  * BindVariable age = new BindVariable("customerAge");
  *
  * BindExpressionStatement period = new
  * BindExpressionStatement(layout, age, "trialAccountPeriod");
- * 
- * BindExpressionStatement standing = new
- * BindExpressionStatement(layout, age, "longStandingAccount");
  *
- * SQLStatement query = customerTable.select()
- *  .column(customerTable.getColumn("name")) 
- *  .from(customerTable) 
+ * SQLStatement query = table.select()
+ *  .column(table.getColumn("name"))
+ *  .from(table)
  *  .where()
- *  .greaterThanOrEquals(customerTable.getColumn("age"), period)
- *  .and() 
- *  .lessThan(customerTable.getColumn("age"), standing) 
- *   .end()
+ *  .greaterThanOrEquals(table.getColumn("age"), period)
  *  .done();
  * </code></pre>
+ * 
  * @author jbanes
  */
 public class BindExpressionStatement implements ExpressionStatement
