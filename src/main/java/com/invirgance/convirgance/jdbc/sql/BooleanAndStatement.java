@@ -30,18 +30,20 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  * This wraps conditions in parentheses and joins them with AND keywords.
  * 
  * <pre><code>
+ * DatabaseSchemaLayout layout = getHSQLLayout();
+ * Table table = layout.getCurrentSchema().getTable("customer");
+ * 
  * SQLStatement query = table
  *     .select()
  *     .column(table.getColumn("name"))
  *     .where()
  *         .equals(column, value)
  *         .and() // BooleanAndStatement
- *             .greaterThan(column, value)
- *             .lessThan(column, value)
+ *             .greaterThan(table.getColumn("height"), value)
+ *             .lessThan(table.getColumn("maximum"), value)
  *         .end()
  *     .done();
  * </code></pre>
- * Produces SQL like: WHERE (column = value AND column > value)
  * 
  * @author jbanes
  * @param <P> The parent WhereStatement type this returns to when done.

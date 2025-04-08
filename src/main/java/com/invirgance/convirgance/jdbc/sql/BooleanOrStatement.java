@@ -30,6 +30,8 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  * and joins them with OR keywords.
  * 
  * <pre><code>
+ * Table table = layout.getCurrentSchema().getTable("customer");
+ * 
  * SQLStatement query = table
  *     .select()
  *     .column(table.getColumn("name"))
@@ -40,7 +42,6 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  *         .end()
  *     .done();
  * </code></pre>
- * Produces SQL like: WHERE (column = value OR column = value)
  * 
  * @author jbanes
  * @param <P> The parent WhereStatement type this returns to when done.

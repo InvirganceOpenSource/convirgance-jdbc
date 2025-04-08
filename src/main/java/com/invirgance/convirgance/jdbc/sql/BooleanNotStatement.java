@@ -28,18 +28,20 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 /**
  * Creates a logical NOT operator in SQL, negating the conditions it contains.
  * This prepends NOT to a condition or group of conditions joined with AND.
+ * 
  * <pre><code>
+ * Table table = layout.getCurrentSchema().getTable("customer");
+ * 
  * SQLStatement query = table
  *     .select()
  *     .column(table.getColumn("name"))
  *     .where()
  *         .not() // BooleanNotStatement
- *             .equals(column, value)
- *             .greaterThan(column, value)
+ *             .equals(table.getColumn("type"), value)
+ *             .greaterThan(table.getColumn("height"), value)
  *         .end()
  *     .done();
  * </code></pre>
- * Produces SQL like: WHERE NOT (column = value AND column > value)
  * 
  * @author jbanes
  * @param <P> The parent WhereStatement type this returns to when done.
