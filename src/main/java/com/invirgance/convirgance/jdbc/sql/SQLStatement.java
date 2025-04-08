@@ -33,7 +33,21 @@ import com.invirgance.convirgance.dbms.Query;
  * 
  * Implementing classes represent specific SQL constructs (SELECT, WHERE, 
  * FROM, JOIN, etc.).
+ * <pre><code>
+ * DatabaseSchemaLayout layout = new DatabaseSchemaLayout(driver, getHSQLDataSource())
+ * Table table = layout.getCurrentSchema().getTable("customer");
  * 
+ * SQLStatement select = new SelectStatement(layout)
+ *              .column(table.getColumn("name"))
+ *              .column(table.getColumn("zip"))
+ *              .from(table,"c")
+ *              .where()
+ *                  .equals(table.getColumn("bridge"), bridgeId)
+ *                  .and()
+ *                      .greaterThan(table.getColumn("bridgeHeight"), 6)
+ *                  .end()
+ *                  .done();
+ * </code></pre>
  * @author jbanes
  */
 public interface SQLStatement

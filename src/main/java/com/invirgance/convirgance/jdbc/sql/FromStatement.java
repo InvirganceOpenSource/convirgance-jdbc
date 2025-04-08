@@ -31,6 +31,13 @@ import com.invirgance.convirgance.jdbc.schema.TabularStructure;
  * Creates the FROM clause for a SQL query with the provided {@link TabularStructure}. 
  * Additionally supports table aliasing with the "AS" syntax when a name is provided.
  * 
+ * <pre><code>
+ * DatabaseSchemaLayout layout = new DatabaseSchemaLayout(driver, getHSQLDataSource());
+ * Table table = layout.getCurrentSchema().getTable("customer");
+ * 
+ * FromStatement from = new FromStatement(layout, table);
+ * </code></pre>
+ * 
  * @author jbanes
  */
 public class FromStatement implements SQLStatement, NamedSchema

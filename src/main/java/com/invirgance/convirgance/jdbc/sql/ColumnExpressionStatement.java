@@ -30,14 +30,16 @@ import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
  * Represents a database column in SQL queries, with optional column aliasing (naming).
  * 
  * <pre><code>
- * BindVariable threshold = new BindVariable("trailPeriod");
- * SQLStatement query = table
- *     .select()
- *     .column(table.getColumn("customer_id"), "ID")  // Creates "customer_id AS ID"
- *     .where()
- *         .greaterThan(table.getColumn("customer_id"), threshold)
- *     .done();
+ * DatabaseSchemaLayout layout = getHSQLLayout();
+ * 
+ * Column column = layout.getCurrentSchema().getTable("customer").getColumn("zip");
+ * 
+ * ColumnExpressionStatement expression = new 
+ * ColumnExpressionStatement(layout, column);
+ * 
+ * expression.setName("zipcode");
  * </code></pre>
+ * 
  * @author jbanes
  */
 public class ColumnExpressionStatement implements ExpressionStatement

@@ -35,18 +35,14 @@ import com.invirgance.convirgance.json.JSONArray;
  * when columns are added.
  * 
  * <pre><code>
- * SelectStatement query = database
+ * DatabaseSchemaLayout layout = new DatabaseSchemaLayout(driver, getHSQLDataSource())
+ * Table table = layout.getCurrentSchema().getTable("customer");
+ * 
+ * SelectStatement query = new SelectStatement(layout)
  *     .select()
- *     .column(customerTable.getColumn("name"))
- *     .column(customerTable.getColumn("email"), "contact_email")
- *     .from(customerTable, "c")
- *     .where()
- *         .equals(customerTable.getColumn("status"), "active")
- *         .and()
- *             .greaterThan(customerTable.getColumn("last_order"), dateVariable)
- *         .end()
- *     .done()
- *     .order(customerTable.getColumn("name"));
+ *     .column(table.getColumn("name"))
+ *     .column(table.getColumn("email"), "contact_email")
+ *     .from(table, "c");
  * </code></pre>
  * 
  * @author jbanes
