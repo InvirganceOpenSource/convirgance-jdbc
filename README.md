@@ -29,7 +29,9 @@ Add the following dependency to your Maven `pom.xml` file:
 
 ## Documentation
 
-- [JavaDocs](https://docs.invirgance.com/javadocs/convirgance-jdbc/) (Work in Progress)
+📑 [High Level Documentation](https://docs.invirgance.com/convirgance/latest/#/convirgance-jdbc)
+
+📚 [JavaDocs](https://docs.invirgance.com/javadocs/convirgance-jdbc/) (Work in Progress)
 
 
 ## License
