@@ -2,7 +2,7 @@
     {
         "name": "Oracle Thin Driver",
         "artifact": [
-            "com.oracle.database.jdbc:ojdbc11:23.6.0.24.10"
+            "com.oracle.database.jdbc:ojdbc11:23.9.0.25.07"
         ],
         "driver": "oracle.jdbc.driver.OracleDriver",
         "datasource": "oracle.jdbc.pool.OracleDataSource",
@@ -111,7 +111,7 @@
     {
         "name": "PostgreSQL",
         "artifact": [
-            "org.postgresql:postgresql:42.7.5"
+            "org.postgresql:postgresql:42.7.8"
         ],
         "driver": "org.postgresql.Driver",
         "datasource": "org.postgresql.ds.PGSimpleDataSource",
@@ -127,7 +127,7 @@
     {
         "name": "MariaDB/MySQL",
         "artifact": [
-            "org.mariadb.jdbc:mariadb-java-client:3.5.2"
+            "org.mariadb.jdbc:mariadb-java-client:3.5.6"
         ],
         "driver": "org.mariadb.jdbc.Driver",
         "datasource": "org.mariadb.jdbc.MariaDbDataSource",
