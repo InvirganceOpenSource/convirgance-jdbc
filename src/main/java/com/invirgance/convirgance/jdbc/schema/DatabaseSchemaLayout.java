@@ -27,6 +27,7 @@ import com.invirgance.convirgance.ConvirganceException;
 import com.invirgance.convirgance.jdbc.AutomaticDriver;
 import com.invirgance.convirgance.jdbc.callback.ConnectionCallback;
 import com.invirgance.convirgance.jdbc.callback.DatabaseMetaDataCallback;
+import com.invirgance.convirgance.jdbc.datasource.DriverDataSource;
 import com.invirgance.convirgance.json.JSONArray;
 import com.invirgance.convirgance.json.JSONObject;
 import java.sql.*;
@@ -54,6 +55,22 @@ public class DatabaseSchemaLayout
     String tableType;
     String viewType;
 
+    /**
+     * Creates a new DataBaseSchemaLayout using a connection URL.
+     * @param url connection url
+     * @param username connection username
+     * @param password connection password
+     * 
+     */
+    public DatabaseSchemaLayout(String url, String username, String password)
+    {
+        this.source = DriverDataSource.getDataSource(url, username, password);
+        this.driver = ((DriverDataSource)this.source).getAutoDriver();
+        
+        this.tableType = driver.getConfiguration("tableType", "TABLE");
+        this.viewType = driver.getConfiguration("viewType", "VIEW");
+    }
+    
     /**
      * Creates a new DataBaseSchemaLayout using the drivers configuration.
      * @param driver The driver.

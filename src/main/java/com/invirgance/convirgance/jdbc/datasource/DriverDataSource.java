@@ -23,7 +23,9 @@
  */
 package com.invirgance.convirgance.jdbc.datasource;
 
+import com.invirgance.convirgance.jdbc.AutomaticDriver;
 import com.invirgance.convirgance.jdbc.AutomaticDrivers;
+import com.invirgance.convirgance.jdbc.schema.DatabaseSchemaLayout;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Driver;
@@ -49,6 +51,7 @@ public class DriverDataSource implements DataSource
     private String username;
     private String password;
     
+    private AutomaticDriver autoDriver;
     private Driver driver;
 
     public DriverDataSource()
@@ -75,14 +78,29 @@ public class DriverDataSource implements DataSource
         return new DriverDataSource(url, username, password);
     }
     
+    public AutomaticDriver getAutoDriver()
+    {
+        if(autoDriver == null) 
+        {
+            autoDriver = AutomaticDrivers.getDriverByURL(url);
+        }
+
+        return autoDriver;
+    }
+    
     private Driver getDriver()
     {
         if(driver == null) 
         {
-            driver = AutomaticDrivers.getDriverByURL(url).getDriver();
+            driver = getAutoDriver().getDriver();
         }
         
         return driver;
+    }
+    
+    public DatabaseSchemaLayout getSchemaLayout()
+    {
+        return new DatabaseSchemaLayout(getAutoDriver(), this);
     }
     
     /**
