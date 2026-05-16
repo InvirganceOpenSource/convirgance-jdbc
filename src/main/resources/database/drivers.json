@@ -157,5 +157,21 @@
             "jdbc:db2://<SERVER>[:<PORT>]/<DATABASE_NAME>",
             "jdbc:db2://localhost:50000/sample"
         ]
+    },
+    {
+        "name": "Snowflake",
+        "artifact": [
+            "net.snowflake:snowflake-jdbc:4.2.0",
+            "net.java.dev.jna:jna:5.13.0",
+            "net.java.dev.jna:jna-platform:5.13.0"
+        ],
+        "driver": "net.snowflake.client.api.driver.SnowflakeDriver",
+        "datasource": "net.snowflake.client.internal.api.implementation.datasource.SnowflakeBasicDataSource",
+        "prefixes": [
+            "jdbc:snowflake:"
+        ],
+         "examples": [
+            "jdbc:snowflake://<SERVER>[?key=value&key=value]"
+        ]
     }
 ]
